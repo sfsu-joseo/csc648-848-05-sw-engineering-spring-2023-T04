@@ -11,7 +11,9 @@ export default function Parth(){
         <Link to='/'>
             <h1 className="redirect">Go to Home Page</h1>
         </Link>
-        <p>*Your introduction here*</p>
+        <br></br>
+        <h1>Hello! Welcome to my about page!</h1>
+        <p>I just joined this Spring 2023. I've had 2+ years of experience as a full stack developer and looking forward to build on my computer science foundations during my time here in SFSU. I love writing poems📝, listening to music🎶, photography📸, reading philosophy📚 & travelling✈️! </p>
         </div>
         </>
         );
