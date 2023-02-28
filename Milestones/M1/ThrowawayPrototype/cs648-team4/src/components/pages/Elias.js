@@ -11,7 +11,10 @@ export default function Elias(){
         <Link to='/'>
             <h1 className="redirect">Go to Home Page</h1>
         </Link>
-        <p>*Your introduction here*</p>
+        <p>*I am Elias Abay and I am pursuing an undergraduate degree in Computer Science at SFSU*</p>
+        <p>I have also completed a minor in Mathematics in addition to completing my Bachelor's degree</p>
+        <p>This is my second to last semester at San Francisco State University</p>
+        <p>I hope to enjoy it through making new projects and getting to know my teammates</p>
         </div>
         </>
         );
