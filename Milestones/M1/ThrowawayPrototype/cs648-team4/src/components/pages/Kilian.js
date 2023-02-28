@@ -34,7 +34,7 @@ export default function Kilian(){
             <div>
                 My experience in web dev is limited; however,
                 I am very accustomed with picking up new
-                technologies.
+                technologies 
             </div>
 
             
