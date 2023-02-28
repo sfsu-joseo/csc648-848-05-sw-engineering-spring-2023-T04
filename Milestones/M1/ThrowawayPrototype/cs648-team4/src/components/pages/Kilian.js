@@ -11,7 +11,35 @@ export default function Kilian(){
         <Link to='/'>
             <h1 className="redirect">Go to Home Page</h1>
         </Link>
-        <p>*Your introduction here*</p>
+        <p style={{width : "600px", paddingTop : "50px", marginLeft: "50%", transform: "translate(-50%, 0)"}}> 
+            <div>
+                My name is in the header. I do
+                not really have any fun hobbies 
+                at the moment, but I am trying
+                to finish developing a video game 
+                on my free time.
+            </div>
+
+            <br></br>
+
+            <div>
+                I used to work as an aircraft maintenance
+                technician for 2 major airframes for
+                several years before quitting to pursue something 
+                in CS.
+            </div>
+
+            <br></br>
+                
+            <div>
+                My experience in web dev is limited; however,
+                I am very accustomed with picking up new
+                technologies.
+            </div>
+
+            
+            
+        </p>
         </div>
         </>
         );
