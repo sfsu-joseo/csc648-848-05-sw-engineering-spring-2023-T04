@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Main-Class: com.example.backendspring.BackendSpringApplication
+Class-Path: spring-web-5.3.25.jar spring-aspects-5.3.25.jar spring-boot-
+ starter-json-2.7.9.jar jakarta.persistence-api-2.2.3.jar snakeyaml-1.30
+ .jar HikariCP-4.0.3.jar jandex-2.4.2.Final.jar logback-classic-1.2.11.j
+ ar spring-webmvc-5.3.25.jar tomcat-embed-websocket-9.0.71.jar jackson-c
+ ore-2.13.5.jar spring-boot-starter-jdbc-2.7.9.jar logback-core-1.2.11.j
+ ar aspectjweaver-1.9.7.jar spring-boot-starter-logging-2.7.9.jar jaxb-r
+ untime-2.3.8.jar log4j-api-2.17.2.jar jul-to-slf4j-1.7.36.jar spring-co
+ ntext-5.3.25.jar spring-aop-5.3.25.jar jackson-datatype-jsr310-2.13.5.j
+ ar jackson-annotations-2.13.5.jar spring-core-5.3.25.jar istack-commons
+ -runtime-3.0.12.jar txw2-2.3.8.jar tomcat-embed-core-9.0.71.jar classma
+ te-1.5.1.jar spring-boot-2.7.9.jar jakarta.xml.bind-api-2.3.3.jar sprin
+ g-boot-starter-2.7.9.jar jackson-databind-2.13.5.jar spring-tx-5.3.25.j
+ ar antlr-2.7.7.jar jakarta.annotation-api-1.3.5.jar hibernate-commons-a
+ nnotations-5.1.2.Final.jar jakarta.activation-1.2.2.jar spring-orm-5.3.
+ 25.jar jackson-datatype-jdk8-2.13.5.jar spring-boot-starter-aop-2.7.9.j
+ ar hibernate-core-5.6.15.Final.jar jakarta.transaction-api-1.3.3.jar lo
+ g4j-to-slf4j-2.17.2.jar jackson-module-parameter-names-2.13.5.jar sprin
+ g-data-jpa-2.7.8.jar jboss-logging-3.4.3.Final.jar spring-data-commons-
+ 2.7.8.jar spring-boot-starter-tomcat-2.7.9.jar spring-jcl-5.3.25.jar sp
+ ring-expression-5.3.25.jar tomcat-embed-el-9.0.71.jar byte-buddy-1.12.2
+ 3.jar mysql-connector-j-8.0.32.jar jakarta.activation-api-1.2.2.jar spr
+ ing-boot-autoconfigure-2.7.9.jar slf4j-api-1.7.36.jar spring-boot-start
+ er-data-jpa-2.7.9.jar spring-boot-starter-web-2.7.9.jar spring-beans-5.
+ 3.25.jar spring-jdbc-5.3.25.jar
+
