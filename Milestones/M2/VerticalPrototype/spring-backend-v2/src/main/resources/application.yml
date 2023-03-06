@@ -1,0 +1,24 @@
+# configure your keys here to connect with your s3 bucket
+# WARNING: use an IAM user key. Do not use a root access key.
+# WARNING: delete keys/usernames/passwords/urls/endpoints before pushing to GitHub
+
+# Only fill in the commented areas below.
+cloud:
+  aws:
+    credentials:
+      access-key: # put access key here
+      secret-key: # put secret access key here
+    region:
+      static: us-west-1
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: # put bucket name here
+
+server:
+  tomcat:
+    max-swallow-size: -1
+    max-http-form-post-size: -1
+
