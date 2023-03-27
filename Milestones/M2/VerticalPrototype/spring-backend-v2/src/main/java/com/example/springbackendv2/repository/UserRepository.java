@@ -11,4 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 * database and fetched from memory. */
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query("SELECT * FROM registeredUser r WHERE " + "p.username LIKE CONCAT('%',:query,'%')", nativeQuery = true)
+    List<User> searchRegisteredUsers(String query);
 }

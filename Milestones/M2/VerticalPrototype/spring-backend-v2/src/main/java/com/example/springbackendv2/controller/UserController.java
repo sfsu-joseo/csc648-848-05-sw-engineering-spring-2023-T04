@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
-        return userRepository.save(newUser);
+        return userRepository.createUser(newUser);
     }
 
     @GetMapping("/users")
@@ -44,6 +44,11 @@ public class UserController {
     User getUserById(@PathVariable Long id){
         return  userRepository.findById(id)
                     .orElseThrow(()-> new UserNotFoundException(id));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query){
+        return ResponseEntity.ok(UserService.searchUsers(query));
     }
 
     @PutMapping("/user/{id}")
