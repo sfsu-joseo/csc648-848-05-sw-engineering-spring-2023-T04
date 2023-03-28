@@ -1,8 +1,8 @@
-package net.javaguides.springboot.service.impl;
+package com.example.springbackendv2.service.impl;
 
-import net.javaguides.springboot.entity.User;
-import net.javaguides.springboot.repository.UserRepository;
-import net.javaguides.springboot.service.UserService;
+import com.example.springbackendv2.model.User;
+import com.example.springbackendv2.repository.UserRepository;
+import com.example.springbackendv2.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +16,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> searchUsers(String query) {
-        List<User> users = userRepository.searchUsers(query);
+        List<User> users = userRepository.searchRegisteredUsers(query);
         return users;
     }
     @Override
     public User createUser(User user){
-        return UserRepository.save(user);
+        return userRepository.save(user);
     }
 }

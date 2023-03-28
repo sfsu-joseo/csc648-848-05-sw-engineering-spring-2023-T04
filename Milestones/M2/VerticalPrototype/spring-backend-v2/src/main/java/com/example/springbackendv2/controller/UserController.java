@@ -3,7 +3,10 @@ package com.example.springbackendv2.controller;
 import com.example.springbackendv2.exception.UserNotFoundException;
 import com.example.springbackendv2.model.User;
 import com.example.springbackendv2.repository.UserRepository;
+import com.example.springbackendv2.service.UserService;
+import com.example.springbackendv2.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,9 +33,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserServiceImpl userService;
+
     @PostMapping("/user")
     User newUser(@RequestBody User newUser){
-        return userRepository.createUser(newUser);
+        return userService.createUser(newUser);
     }
 
     @GetMapping("/users")
@@ -48,7 +54,7 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query){
-        return ResponseEntity.ok(UserService.searchUsers(query));
+        return ResponseEntity.ok(userService.searchUsers(query));
     }
 
     @PutMapping("/user/{id}")

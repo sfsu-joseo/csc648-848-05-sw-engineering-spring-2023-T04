@@ -1,6 +1,6 @@
-package net.javaguides.springboot.service;
+package com.example.springbackendv2.service;
 
-import net.javaguides.springboot.entity.User;
+import com.example.springbackendv2.model.User;
 
 import java.util.List;
 
