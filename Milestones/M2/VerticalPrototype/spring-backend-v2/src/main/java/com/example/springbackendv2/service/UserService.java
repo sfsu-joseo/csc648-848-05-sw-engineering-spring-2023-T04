@@ -8,4 +8,8 @@ public interface UserService  {
     List<User> searchUsers(String query);
 
     User createUser(User user);
+
+    User encryptPasswordAndCreateUser(User newUser);
+
+    Boolean authorizeUser(String username, String password);
 }

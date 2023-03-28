@@ -41,6 +41,16 @@ public class UserController {
         return userService.createUser(newUser);
     }
 
+    @PostMapping("/user/signup")
+    User signup(@RequestBody User newUser){
+        return userService.encryptPasswordAndCreateUser(newUser);
+    }
+
+    @PostMapping("/user/login")
+    Boolean login(@RequestBody User user){
+        return userService.authorizeUser(user.getUsername(), user.getPassword());
+    }
+
     @GetMapping("/users")
     List<User> getAllUsers(){
         return userRepository.findAll();

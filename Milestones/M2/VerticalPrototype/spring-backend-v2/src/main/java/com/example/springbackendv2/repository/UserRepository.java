@@ -18,4 +18,6 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM registeredUser r WHERE " + "p.username LIKE CONCAT('%',:query,'%')", nativeQuery = true)
     List<User> searchRegisteredUsers(String query);
+
+    User findByUsername(String username);
 }
