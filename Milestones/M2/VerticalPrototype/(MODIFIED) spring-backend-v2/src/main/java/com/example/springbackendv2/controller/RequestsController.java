@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://172.31.21.47:3000/")
+@CrossOrigin("http://54.219.187.71:3000/")
 public class RequestsController {
     @Autowired
     private RequestsRepository requestsRepository;
