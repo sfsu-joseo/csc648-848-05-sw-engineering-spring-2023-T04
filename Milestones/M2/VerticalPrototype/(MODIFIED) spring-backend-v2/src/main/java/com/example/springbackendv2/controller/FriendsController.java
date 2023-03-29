@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://localhost:3000/")
+@CrossOrigin("http://172.31.21.47:3000/")
 public class FriendsController {
     @Autowired
     private FriendsRepository friendsRepository;
