@@ -5,12 +5,14 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Sources from "./pages/Sources";
 import Legal from "./pages/Terms";
 import { useEffect, useState } from "react";
+import axios from "./api/axios";
 
 function App() {
   const [loading, setLoading] = useState(null);
 
   const [data, setData] = useState({
     user: "",
+    password: "",
     currentPoint: "",
     isLoggedIn: false,
     id: -1,
@@ -19,14 +21,29 @@ function App() {
   useEffect(() => {
     // check session status here ???
 
-    if (localStorage.getItem("data"))
-      setData(JSON.parse(localStorage.getItem("data")));
-
-    setLoading(true);
+    if (localStorage.getItem("data")) {
+      handleAuthenticate();
+    } else {
+      setLoading(true);
+    }
   }, []);
 
+  // authenticates that localstorage is still valid
+  const handleAuthenticate = async () => {
+    let tempData = {};
+    setData((tempData = JSON.parse(localStorage.getItem("data"))));
+    const res = await axios.get(
+      `/authenticate/${tempData.user}/${tempData.password}/${tempData.id}`
+    );
+    if (res.data === false) {
+      localStorage.clear();
+      window.location.reload();
+    }
+    setLoading(true);
+  };
+
   if (loading === null) {
-    return <div className="App">Loading...</div>;
+    return <div className="App">{/* invisible loading screen */}</div>;
   }
 
   return (
@@ -40,8 +57,6 @@ function App() {
           <Route path="/sources" element={<Sources data={data} />} />
           <Route path="/terms" element={<Legal />} />
         </Routes>
-
-        {/* {data.isLoggedIn ? <div></div> : <Footer/>} */}
       </Router>
     </div>
   );
