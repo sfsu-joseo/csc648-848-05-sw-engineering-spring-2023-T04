@@ -43,12 +43,12 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    User signup(@RequestBody User newUser){
+    String signup(@RequestBody User newUser){
         return userService.encryptPasswordAndCreateUser(newUser);
     }
 
     @PostMapping("/user/login")
-    Boolean login(@RequestBody User user){
+    String login(@RequestBody User user){
         return userService.authorizeUser(user.getUsername(), user.getPassword());
     }
 

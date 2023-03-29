@@ -1,5 +1,9 @@
 package com.example.springbackendv2.service.impl;
 
+import com.example.springbackendv2.exception.EmailAlreadyExistsException;
+import com.example.springbackendv2.exception.InvalidCredentialsException;
+import com.example.springbackendv2.exception.UserNotFoundException;
+import com.example.springbackendv2.exception.UsernameAlreadyExistsException;
 import com.example.springbackendv2.model.User;
 import com.example.springbackendv2.repository.UserRepository;
 import com.example.springbackendv2.service.UserService;
@@ -24,19 +28,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User encryptPasswordAndCreateUser(User newUser) {
+    public String encryptPasswordAndCreateUser(User newUser) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
+
+        //Check if username is unique
+        User userWithUsername = userRepository.findByUsername(newUser.getUsername());
+        if(userWithUsername != null){
+            throw new UsernameAlreadyExistsException(newUser.getUsername());
+        }
+
+        //Check if email is unique
+        User userWithEmail = userRepository.findByEmail(newUser.getEmail());
+        if(userWithEmail != null){
+            throw new EmailAlreadyExistsException(newUser.getEmail());
+        }
+
         String newPassword = encoder.encode(newUser.getPassword());
         newUser.setPassword(newPassword);
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        return savedUser.getId().toString();
     }
 
     @Override
-    public Boolean authorizeUser(String username, String password) {
+    public String authorizeUser(String username, String password) throws UserNotFoundException, InvalidCredentialsException {
         User user = userRepository.findByUsername(username);
-        if(user != null) {
-            return encoder.matches(password, user.getPassword()); // Returns true if password matches.
+        if(user == null){
+            throw new UserNotFoundException(username);
+        }
+        if(user != null && encoder.matches(password, user.getPassword())) {
+            return user.getId().toString(); // Returns true if password matches.
         } else {
-            return false;
+            throw new InvalidCredentialsException();
         }
     }
 }

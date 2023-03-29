@@ -8,7 +8,7 @@ public interface UserService  {
 
     User createUser(User user);
 
-    User encryptPasswordAndCreateUser(User newUser);
+    String encryptPasswordAndCreateUser(User newUser);
 
-    Boolean authorizeUser(String username, String password);
+    String authorizeUser(String username, String password);
 }
