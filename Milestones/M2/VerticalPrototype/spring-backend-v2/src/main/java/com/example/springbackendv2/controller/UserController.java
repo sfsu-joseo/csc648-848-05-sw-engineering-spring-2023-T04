@@ -6,6 +6,7 @@ import com.example.springbackendv2.repository.UserRepository;
 import com.example.springbackendv2.service.UserService;
 import com.example.springbackendv2.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,10 +63,18 @@ public class UserController {
                     .orElseThrow(()-> new UserNotFoundException(id));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<User>> searchUsers(@RequestParam("query") String query){
-        return ResponseEntity.ok(userService.searchUsers(query));
+    @GetMapping("/search/{query}")
+    List<User> getUser(@PathVariable String query){
+        String newQuery = query.replace(" ","");
+
+        List<User> result = userRepository.searchUsers(newQuery);
+        if(result.isEmpty()){
+            return null;
+        }else{
+            return ResponseEntity.status(HttpStatus.OK).body(result).getBody();
+        }
     }
+
 
     @PutMapping("/user/{id}")
     User updateUser(@RequestBody User newUser, @PathVariable Long id){

@@ -4,6 +4,7 @@ package com.example.springbackendv2.repository;
 import com.example.springbackendv2.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,8 +17,11 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value = "SELECT * FROM registeredUser r WHERE " + "p.username LIKE CONCAT('%',:query,'%')", nativeQuery = true)
-    List<User> searchRegisteredUsers(String query);
+    @Query(value = "SELECT * FROM user WHERE username LIKE :query OR name LIKE :query",nativeQuery = true)
+    List<User> searchUsers(@Param("query") String query);
+
 
     User findByUsername(String username);
+
+
 }

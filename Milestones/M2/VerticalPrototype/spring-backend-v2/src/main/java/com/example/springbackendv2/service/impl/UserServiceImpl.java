@@ -19,11 +19,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> searchUsers(String query) {
-        List<User> users = userRepository.searchRegisteredUsers(query);
-        return users;
-    }
-    @Override
     public User createUser(User user){
         return userRepository.save(user);
     }
