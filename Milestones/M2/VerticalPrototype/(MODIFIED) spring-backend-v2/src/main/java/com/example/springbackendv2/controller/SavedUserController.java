@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://184.169.219.255:3000/")
+//@CrossOrigin("http://184.169.219.255:3000/")
 public class SavedUserController {
     @Autowired
     private SavedUserRepository savedUserRepository;
