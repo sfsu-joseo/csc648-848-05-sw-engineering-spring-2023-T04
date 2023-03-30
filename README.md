@@ -29,8 +29,7 @@
 |             Name of the Project               |                            URL of the Project                          | 
 |                    :---:                      |                                 :---:                                  |
 
-|   StudentSources                              |              Replace this text with your application's URL or IP       |                                                        
-=======
+
 |   StudentSources                              |              http://184.169.219.255/        |                                                        
 
  
