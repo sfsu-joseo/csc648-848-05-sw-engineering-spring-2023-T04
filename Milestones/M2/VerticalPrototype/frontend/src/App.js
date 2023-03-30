@@ -33,7 +33,7 @@ function App() {
     let tempData = {};
     setData((tempData = JSON.parse(localStorage.getItem("data"))));
     const res = await axios.get(
-      `/authenticate/${tempData.user}/${tempData.password}/${tempData.id}`
+      `/authenticate/${tempData.password}/${tempData.id}`
     );
     if (res.data === false) {
       localStorage.clear();
