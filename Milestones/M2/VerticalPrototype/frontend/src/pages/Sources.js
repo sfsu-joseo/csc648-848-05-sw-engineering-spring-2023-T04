@@ -92,8 +92,8 @@ and also call request to update lists */
       console.log(res.data);
     } else {
       const res = await axios.get(`/search/${search}`);
-      setLoadUsers(res.data);
-      console.log(res.data);
+      if (res.data.length === 0) setLoadUsers([]);
+      else setLoadUsers(res.data);
     }
   };
 
