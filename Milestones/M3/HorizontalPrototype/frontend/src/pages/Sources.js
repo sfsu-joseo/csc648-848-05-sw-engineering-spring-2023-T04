@@ -257,6 +257,10 @@ and also call request to update lists */
     }
   }
 
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
     <div className="page">
       <div className="sources">

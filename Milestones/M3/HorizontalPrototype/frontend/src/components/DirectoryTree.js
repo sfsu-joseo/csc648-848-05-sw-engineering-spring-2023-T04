@@ -1,11 +1,31 @@
 import { useState } from "react";
+import { useEffect } from "react";
 
-const DirectoryTree = ({ handleInsertNode, explorer }) => {
+const DirectoryTree = ({
+  handleInsertNode,
+  explorer,
+  setCurrentDirectory,
+  currentDirectory,
+  // loading,
+}) => {
   const [expand, setExpand] = useState(false);
   const [showInput, setShowInput] = useState({
     visible: false,
     isFolder: null,
   });
+
+  // init page to display home contents in dir tree
+  useEffect(() => {
+    if (explorer.name === "Home") setExpand(true);
+  }, []);
+
+  const handleSetExpand = (e) => {
+    // set curr dir
+    setCurrentDirectory(explorer);
+
+    // set expand
+    setExpand(!expand);
+  };
 
   const handleNewFolder = (e, isFolder) => {
     e.stopPropagation();
@@ -28,7 +48,14 @@ const DirectoryTree = ({ handleInsertNode, explorer }) => {
   if (explorer.isFolder) {
     return (
       <div style={{ marginTop: 5 }}>
-        <div className="folder" onClick={() => setExpand(!expand)}>
+        <div
+          className={
+            explorer.name === currentDirectory.name
+              ? "folder select-folder"
+              : "folder"
+          }
+          onClick={() => handleSetExpand(explorer)}
+        >
           <span>📁 {explorer.name}</span>
 
           <div>
@@ -90,6 +117,8 @@ const DirectoryTree = ({ handleInsertNode, explorer }) => {
                 handleInsertNode={handleInsertNode}
                 explorer={exp}
                 key={exp.id}
+                setCurrentDirectory={setCurrentDirectory}
+                currentDirectory={currentDirectory}
               />
             );
           })}

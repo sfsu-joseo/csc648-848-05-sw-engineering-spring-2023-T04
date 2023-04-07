@@ -1033,14 +1033,11 @@ padding: 6px 10px;
 }
 
 .main-panel-grid {
-    display: flex;
-    flex-direction: column;
     padding: 10px;
-    /* width: 100%; */
-
     /* this depends on if the panels are showing or not */
     margin-left: 400px;
-    margin-right: 400px;
+    /* ??? adding 10 centers it somehow */
+    margin-right: 410px;
 }
 
 .right-panel-grid {
@@ -1079,13 +1076,17 @@ padding: 6px 10px;
     width: 400px;
     height: 67.5px;
     padding: 10px;
-    padding-top: 20px;
+    padding-top: 22px;
     text-align: center;
     background: white;
+    color: dimgray;
+
+    font-weight: bolder;
+    font-size: 18px;
 
     border: 1px solid lightgrey;
     border-top: none;
-    /* border-right: none; */
+    border-right: none;
     border-left: none;
     z-index: 1;
 }
@@ -1135,12 +1136,16 @@ padding: 6px 10px;
 /* ----- inner rightside grid content ----- */
 
 .right-panel-title {
+    font-weight: bolder;
+    font-size: 18px;
+    color: dimgray;
+
     position: fixed;
     width: 400px;
     background-color: white;
     height: 67.5px;
     padding: 10px;
-    padding-top: 20px;
+    padding-top: 22px;
     text-align: center;
 
     border: 1px solid lightgrey;
@@ -1243,9 +1248,9 @@ padding: 6px 10px;
 .main-panel-content {
     margin: auto;
     width: 100%;
-    max-width: 800px;
+    max-width: 600px;
     margin-top: 100px;
-    text-align: left;
+    /* text-align: left; */
 }
 
 
@@ -1336,4 +1341,8 @@ padding: 6px 10px;
     height:20px;
     color: grey;
     margin-top: 3px;
+  }
+
+  .select-folder {
+    background-color: whitesmoke;
   }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const StudentSearch = () => {
-  const [selected, setSelected] = useState("users");
+const StudentSearch = ({ currentDirectory }) => {
+  const [selected, setSelected] = useState("");
   const [friends, setFriends] = useState("all");
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
@@ -50,7 +50,7 @@ const StudentSearch = () => {
           <input
             type="text"
             name="searchbar"
-            placeholder={"Search from /Home"}
+            placeholder={`Search from /${currentDirectory.name}`}
             id="search_bar"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
