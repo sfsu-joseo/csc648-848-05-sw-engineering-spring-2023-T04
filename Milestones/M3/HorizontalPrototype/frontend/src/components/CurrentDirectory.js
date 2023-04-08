@@ -5,7 +5,7 @@ const CurrentDirectory = ({ currentDirectory }) => {
 
   return currentDirectory.items.map((loadData) => (
     // <div> {loadData.name} </div>
-    <div className="box" style={{ marginTop: "20px", overflow: "hidden" }}>
+    <div className="box" style={{ marginTop: "10px", overflow: "hidden" }}>
       {/* file type and file name */}
       <div
         className=""

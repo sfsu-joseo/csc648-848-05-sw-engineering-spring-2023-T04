@@ -5,6 +5,8 @@ import useTreeTraversal from "../hooks/useTreeTraversal";
 import StudentSearch from "../components/StudentSearch";
 import CurrentDirectory from "../components/CurrentDirectory";
 import { useEffect } from "react";
+import DropZone from "../components/DropZone";
+import Sources from "./Sources";
 
 const Student = (data, windowDimension) => {
   const [explorerData, setExplorerData] = useState(folderData);
@@ -36,6 +38,8 @@ const Student = (data, windowDimension) => {
 
   return (
     <div className="page">
+      <StudentSearch currentDirectory={currentDirectory} />
+
       <div className="grid-foundation">
         <div className="left-panel-grid">
           <div className="left-panel-title">EXPLORER</div>
@@ -51,8 +55,6 @@ const Student = (data, windowDimension) => {
               explorer={explorerData}
               setCurrentDirectory={handleSetCurrentDirectory}
               currentDirectory={currentDirectory}
-              // currentDirectory={currentDirectory}
-              // loading={loading}
             />
             {/* spacing */}
             <div style={{ height: "20px", width: "20px" }}> </div>
@@ -60,8 +62,13 @@ const Student = (data, windowDimension) => {
           <div className="header-tab" style={{ direction: "ltr" }}>
             Ask Chatbot
           </div>
-          <div className="left-panel-chatbot">{/* ask chatbot */}</div>
-          <div className="left-panel-textbox">textbox</div>
+          <div className="left-panel-chatbot">
+            {/* add CHATBOT components here */}
+          </div>
+          <div className="left-panel-textbox">
+            {/* add INPUT FIELD for CHATBOT here */}
+            chatbot input field
+          </div>
         </div>
 
         <div className="right-panel-grid">
@@ -71,18 +78,26 @@ const Student = (data, windowDimension) => {
           <div className="header-tab" style={{ marginTop: "67.5px" }}>
             Info
           </div>
-          <div className="right-panel-info">{/* info */}</div>
+          <div className="right-panel-info">
+            {/* add INFO components here */}
+          </div>
           <div className="header-tab">Notes</div>
-          <div className="right-panel-notes">{/* notes */}</div>
+          <div className="right-panel-notes">
+            {/* add NOTES components here */}
+          </div>
           <div className="header-tab">Comments</div>
-          <div className="right-panel-coments">{/* comments */}</div>
-          <div className="right-panel-textbox">textbox</div>
+          <div className="right-panel-coments">
+            {/* add COMMENTS components here */}
+          </div>
+          <div className="right-panel-textbox">
+            {/* add INPUT FIELD for COMMENTS here */}
+            comments input field
+          </div>
         </div>
 
         <div className="main-panel-grid">
-          <StudentSearch currentDirectory={currentDirectory} />
           <div className="main-panel-content">
-            {/* main content */}
+            {/* add MAIN CONTENT components here */}
 
             {loading ? (
               <div>loading...</div>
@@ -90,6 +105,9 @@ const Student = (data, windowDimension) => {
               <CurrentDirectory currentDirectory={currentDirectory} />
             )}
           </div>
+
+          <DropZone />
+
           <div className="tiny-footer">
             {/* trash */}
             <svg

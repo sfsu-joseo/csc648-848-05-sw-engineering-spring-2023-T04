@@ -301,7 +301,9 @@ and also call request to update lists */
                 <input
                   type="text"
                   name="searchbar"
-                  placeholder="Filter"
+                  placeholder={
+                    selected === "saved" ? "Filter Bookmarks" : "Filter Friends"
+                  }
                   id="search_bar"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
@@ -311,9 +313,7 @@ and also call request to update lists */
                   type="text"
                   name="searchbar"
                   placeholder={
-                    selected === "folders"
-                      ? "Folders is disabled"
-                      : 'Search "all" to get every user'
+                    selected === "folders" ? "Search Folders" : "Search Users"
                   }
                   id="search_bar"
                   value={search}
