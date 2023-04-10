@@ -28,7 +28,7 @@
 
 |             Name of the Project               |                            URL of the Project                          | 
 |                    :---:                      |                                 :---:                                  |
-|   StudentSources                              |                         http://204.236.189.71/                        |                                                        
+|   StudentSources                              |                         http://54.215.216.18/                        |                                                        
 
  
 
