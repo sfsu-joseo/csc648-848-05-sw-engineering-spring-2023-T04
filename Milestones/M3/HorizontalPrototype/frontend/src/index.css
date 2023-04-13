@@ -1435,3 +1435,38 @@ padding: 6px 10px;
     padding:10px;
     direction: ltr;
 }
+.form-inline {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0px;
+    width:100%;
+}
+.comment-input {
+    margin: 0px;
+    all: unset;
+    width: 70%;
+    border-radius: 2px;
+    border-style: solid;
+    border-color: lightgray;
+    text-align: left;
+}
+.comment-send-button {
+  all: unset;
+  cursor: pointer;
+  vertical-align: auto;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0,0,0,0);
+  border: 0px solid lightgray;
+  border-radius: 2px;
+}
+
+#notesText {
+    height: 100%;
+    width: 100%;
+    line-height: 100%;
+    text-align: left;
+    direction: ltr;
+}

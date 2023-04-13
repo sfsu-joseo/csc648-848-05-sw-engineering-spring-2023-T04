@@ -4,6 +4,8 @@ import folderData from "../data/folderData";
 import useTreeTraversal from "../hooks/useTreeTraversal";
 import StudentSearch from "../components/StudentSearch";
 import Comments from "../components/Comments";
+import CommentBox from "../components/CommentBox";
+import Notes from "../components/Notes";
 import CurrentDirectory from "../components/CurrentDirectory";
 import { useEffect } from "react";
 import DropZone from "../components/DropZone";
@@ -84,15 +86,14 @@ const Student = (data, windowDimension) => {
           </div>
           <div className="header-tab">Notes</div>
           <div className="right-panel-notes">
-            {/* add NOTES components here */}
+            <Notes/>
           </div>
           <div className="header-tab">Comments</div>
           <div className="right-panel-coments">
             <Comments/>
           </div>
           <div className="right-panel-textbox">
-            {/* add INPUT FIELD for COMMENTS here */}
-            comments input field
+            <CommentBox/>
           </div>
         </div>
 
