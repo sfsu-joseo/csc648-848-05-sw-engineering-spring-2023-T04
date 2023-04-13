@@ -9,6 +9,7 @@ import Notes from "../components/Notes";
 import CurrentDirectory from "../components/CurrentDirectory";
 import { useEffect } from "react";
 import DropZone from "../components/DropZone";
+import commentsData from "../data/commentsData";
 import Sources from "./Sources";
 
 const Student = (data, windowDimension) => {
@@ -94,7 +95,8 @@ const Student = (data, windowDimension) => {
           </div>
           <div className="header-tab">Comments</div>
           <div className="right-panel-coments">
-            <Comments/>
+            <Comments
+            commentsData = {commentsData.comments}/>
           </div>
           <div className="right-panel-textbox">
             <CommentBox/>
