@@ -15,6 +15,7 @@ const Student = (data, windowDimension) => {
   const [explorerData, setExplorerData] = useState(folderData);
   const [currentDirectory, setCurrentDirectory] = useState({});
   const [loading, setLoading] = useState(true);
+  const [notesData, setNotesData] = useState("");
 
   const { insertNode } = useTreeTraversal();
   const handleInsertNode = (folderId, item, isFolder) => {
@@ -86,7 +87,10 @@ const Student = (data, windowDimension) => {
           </div>
           <div className="header-tab">Notes</div>
           <div className="right-panel-notes">
-            <Notes/>
+            <Notes
+              notesData = {notesData}
+              setNotesData = {setNotesData}
+              />
           </div>
           <div className="header-tab">Comments</div>
           <div className="right-panel-coments">
