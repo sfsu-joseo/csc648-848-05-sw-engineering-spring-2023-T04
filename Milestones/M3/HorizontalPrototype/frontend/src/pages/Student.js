@@ -17,11 +17,27 @@ const Student = (data, windowDimension) => {
   const [currentDirectory, setCurrentDirectory] = useState({});
   const [loading, setLoading] = useState(true);
   const [notesData, setNotesData] = useState("");
+  const [comment, setComment] = useState("");
+  const [comments, setComments] = useState(commentsData);
 
   const { insertNode } = useTreeTraversal();
   const handleInsertNode = (folderId, item, isFolder) => {
     const finalTree = insertNode(explorerData, folderId, item, isFolder);
     setExplorerData(finalTree);
+  };
+  const addComment = () => {
+    //TODO: Instead of manipulating local data, use api's
+    const commentsCopy = comments.slice();
+    commentsCopy.push({
+      id: commentsCopy.slice(-1).id + 1,
+      commenterImage: "http://placekitten.com/50/50",
+      username: "parthfloyd",
+      commentText: comment,
+      date: "April 13th, 2023"
+
+    });
+    setComments(commentsCopy);
+    setComment("");
   };
 
   useEffect(() => {
@@ -96,10 +112,13 @@ const Student = (data, windowDimension) => {
           <div className="header-tab">Comments</div>
           <div className="right-panel-coments">
             <Comments
-            commentsData = {commentsData.comments}/>
+            commentsData = {comments}/>
           </div>
           <div className="right-panel-textbox">
-            <CommentBox/>
+            <CommentBox
+              comment={comment}
+              setComment={setComment}
+              addComment = {addComment}/>
           </div>
         </div>
 
