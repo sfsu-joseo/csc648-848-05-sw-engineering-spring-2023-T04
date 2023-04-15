@@ -190,21 +190,23 @@ const Student = ({ data, windowDimension }) => {
         <div
           className={
             windowDimension.winWidth > 1200
+              ? "left-panel-title max-panel-width2"
+              : windowDimension.winWidth > 800
+              ? "left-panel-title medium-panel-width2"
+              : "left-panel-title min-left-panel"
+          }
+        >
+          EXPLORER
+        </div>
+        <div
+          className={
+            windowDimension.winWidth > 1200
               ? "left-panel-grid max-panel-width"
               : windowDimension.winWidth > 800
               ? "left-panel-grid medium-panel-width"
               : "left-panel-grid  min-left-panel"
           }
         >
-          <div
-            className={
-              windowDimension.winWidth > 1200
-                ? "left-panel-title max-panel-width"
-                : "left-panel-title medium-panel-width"
-            }
-          >
-            EXPLORER
-          </div>
           <div
             className="header-tab"
             style={{ marginTop: "67.5px", direction: "ltr" }}
@@ -270,43 +272,46 @@ const Student = ({ data, windowDimension }) => {
         <div
           className={
             windowDimension.winWidth > 1200 && showingRightPanel
+              ? "right-panel-title max-panel-width2"
+              : showingRightPanel
+              ? "right-panel-title medium-panel-width2"
+              : "right-panel-title min-right-panel"
+          }
+        >
+          <div
+            style={{
+              width: "300px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {currentFile
+              ? currentFile.name.toUpperCase()
+              : currentDirectory.name.toUpperCase()}
+          </div>
+
+          {/* collapse right panel button */}
+          <div onClick={() => setShowingRightPanel(false)}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="header-icons cursor-enabled"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
+            </svg>
+          </div>
+        </div>
+
+        <div
+          className={
+            windowDimension.winWidth > 1200 && showingRightPanel
               ? "right-panel-grid max-panel-width"
               : showingRightPanel
               ? "right-panel-grid medium-panel-width"
               : "right-panel-grid min-right-panel"
           }
         >
-          <div
-            className={
-              windowDimension.winWidth > 1200
-                ? "right-panel-title max-panel-width"
-                : "right-panel-title medium-panel-width"
-            }
-          >
-            <div
-              style={{
-                width: "300px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
-              {currentFile
-                ? currentFile.name.toUpperCase()
-                : currentDirectory.name.toUpperCase()}
-            </div>
-
-            {/* collapse right panel button */}
-            <div onClick={() => setShowingRightPanel(false)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="header-icons cursor-enabled"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
-              </svg>
-            </div>
-          </div>
           <div className="header-tab" style={{ marginTop: "67.5px" }}>
             Info
             {/* more options button */}

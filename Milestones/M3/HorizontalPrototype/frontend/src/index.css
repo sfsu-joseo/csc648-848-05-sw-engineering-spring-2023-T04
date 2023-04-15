@@ -1013,6 +1013,16 @@ padding: 6px 10px;
     transition: .1s;
 }
 
+.medium-panel-width2 {
+    width: 295px;
+    transition: .1s;
+}
+
+.max-panel-width2 {
+    width: 395px;
+    transition: .1s;
+}
+
 .min-left-panel {
     width: 300px;
     transform: translate(-300px, 0);
@@ -1099,7 +1109,11 @@ padding: 6px 10px;
 
     font: 18px system-ui;
     font-weight: bolder;
-    z-index: 1;
+    z-index: 3;
+    top: 70px;
+    left: 0px;
+    border-bottom: 1px solid #ededed;
+    border-top: 1px solid #ededed;
 }
 
 .left-panel-tree {
@@ -1156,15 +1170,19 @@ padding: 6px 10px;
     padding: 10px;
     padding-left: 20px;
     padding-top: 22px;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
+    z-index: 3;
+    top: 70px;
+    right: 0px;
+    border-bottom: 1px solid #ededed;
+    border-top: 1px solid #ededed;
 }
 
 .right-panel-info {
     /* flipping layout direction so that
     inner scroll appears on inside of page. */
-    direction: rtl;
+    /* direction: rtl; */
     text-align: left;
 
     min-height: 150px;
@@ -1180,7 +1198,7 @@ padding: 6px 10px;
 }
 
 .right-panel-notes {
-    direction: rtl;
+    /* direction: rtl; */
     text-align: left;
 
     min-height: 255px;
@@ -1196,7 +1214,7 @@ padding: 6px 10px;
 }
 
 .right-panel-coments {
-    direction: rtl;
+    /* direction: rtl; */
     text-align: left;
 
     min-height: 255px;
@@ -1393,8 +1411,8 @@ padding: 6px 10px;
   }
 
   .dragging {
-    background-color: #fafafa; 
-    border: 2px dashed lightgrey;
+    background-color: #fdfdfd; 
+    border: 2px dashed #ededed;
     border-radius: 2px;
     display: flex;
     padding-top: 50px;
@@ -1481,12 +1499,13 @@ padding: 6px 10px;
 }
 
 .commentText {
-    direction: ltr;
+    /* direction: ltr; */
 }
 
 .commentText p {
     margin:0;
     font-size: 14px;
+    color: #202020;
 }
 .sub-text {
     color:#aaa;
@@ -1496,7 +1515,7 @@ padding: 6px 10px;
 .commentsContainer {
     overflow: auto;
     padding:10px;
-    direction: ltr;
+    /* direction: ltr; */
 }
 .form-inline {
     display: flex;
@@ -1516,7 +1535,7 @@ padding: 6px 10px;
     text-align: left;
     border: 1px solid lightgrey;
     border-radius: 2px;
-    background-color: white;
+    background-color: #fdfdfd;
 }
 .comment-send-button {
   all: unset;
@@ -1533,8 +1552,11 @@ padding: 6px 10px;
     width: 100%;
     line-height: 100%;
     text-align: left;
-    direction: ltr;
-    border: 1px solid #ececec;
+    /* direction: ltr; */
+    border: none;
     border-radius: 2px;
     outline: none;
+    background-color: #fafafa;
+    color: #202020;
+    font-size: 16px;
 }
