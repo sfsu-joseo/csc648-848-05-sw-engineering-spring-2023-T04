@@ -6,12 +6,15 @@ const DirectoryTree = ({
   explorer,
   setCurrentDirectory,
   currentDirectory,
-  // loading,
+  windowDimension,
+  setCurrentFile,
+  loading,
 }) => {
   const [expand, setExpand] = useState(false);
+  const [specialExpand, setSpecialExpand] = useState(false);
   const [showInput, setShowInput] = useState({
     visible: false,
-    isFolder: null,
+    type: "",
   });
 
   // init page to display home contents in dir tree
@@ -19,47 +22,127 @@ const DirectoryTree = ({
     if (explorer.name === "Home") setExpand(true);
   }, []);
 
+  // update to always expand next current directory. this was made for tree traversing from the main panel.
+  useEffect(() => {
+    if (explorer.pathname === currentDirectory.pathname && !specialExpand)
+      setExpand(true);
+  }, [currentDirectory]);
+
   const handleSetExpand = (e) => {
     // set curr dir
-    setCurrentDirectory(explorer);
+    if (currentDirectory.pathname !== explorer.pathname) {
+      if (specialExpand) {
+        setExpand(!expand);
+        return;
+      } else setExpand(true);
+    } else {
+      // set expand
+      setExpand(!expand);
+    }
 
-    // set expand
-    setExpand(!expand);
+    setCurrentDirectory(explorer, explorer.pathname, -1);
   };
 
-  const handleNewFolder = (e, isFolder) => {
+  const handleNewFolder = (e, type) => {
     e.stopPropagation();
+
+    setCurrentDirectory(explorer, explorer.pathname, -1);
     setExpand(true);
 
     setShowInput({
       visible: true,
-      isFolder,
+      type,
     });
   };
 
   const onAddFolder = (e) => {
     if (e.keyCode === 13 && e.target.value) {
-      console.log("onAddFolder executed");
-      handleInsertNode(explorer.id, e.target.value, showInput.isFolder);
+      handleInsertNode(e.target.value, showInput.type);
       setShowInput({ ...showInput, visible: false });
     }
   };
 
-  if (explorer.isFolder) {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (explorer.type === "folder") {
     return (
-      <div style={{ marginTop: 5 }}>
+      <div>
         <div
           className={
-            explorer.name === currentDirectory.name
-              ? "folder select-folder"
-              : "folder"
+            explorer.pathname === currentDirectory.pathname &&
+            windowDimension.winWidth > 1200
+              ? "folder select-folder max-folder"
+              : explorer.pathname !== currentDirectory.pathname &&
+                windowDimension.winWidth > 1200
+              ? "folder max-folder"
+              : explorer.pathname === currentDirectory.pathname
+              ? "folder select-folder medium-folder"
+              : "folder medium-folder"
           }
           onClick={() => handleSetExpand(explorer)}
         >
-          <span>📁 {explorer.name}</span>
+          <span
+            className="cursor-enabled"
+            style={
+              windowDimension.winWidth > 1200
+                ? {
+                    width: "fit-content",
+                    maxWidth: "260px",
+                    overflow: "hidden",
+                    textOverflow: "ellipses",
+                    whiteSpace: "nowrap",
+                    transition: ".1s",
+                  }
+                : {
+                    width: "fit-content",
+                    maxWidth: "160px",
+                    overflow: "hidden",
+                    textOverflow: "ellipses",
+                    whiteSpace: "nowrap",
+                  }
+            }
+          >
+            {" "}
+            {expand ? (
+              <div
+                onMouseEnter={() => setSpecialExpand(true)}
+                onMouseLeave={() => setSpecialExpand(false)}
+                className="folder-icon"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="tree-icon"
+                  style={{ paddingTop: "5px", width: "18px", height: "18px" }}
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                </svg>
+              </div>
+            ) : (
+              <div
+                onMouseEnter={() => setSpecialExpand(true)}
+                onMouseLeave={() => setSpecialExpand(false)}
+                className="folder-icon"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="tree-icon"
+                  style={{ paddingTop: "5px", width: "18px", height: "18px" }}
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+              </div>
+            )}{" "}
+            📁 {explorer.name}
+          </span>
 
-          <div>
-            <button onClick={(e) => handleNewFolder(e, true)}>
+          <div style={{ whiteSpace: "nowrap" }}>
+            <button onClick={(e) => handleNewFolder(e, "folder")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="tree-icon"
@@ -70,7 +153,8 @@ const DirectoryTree = ({
                 <path d="M13.5 10a.5.5 0 0 1 .5.5V12h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V13h-1.5a.5.5 0 0 1 0-1H13v-1.5a.5.5 0 0 1 .5-.5z" />
               </svg>
             </button>
-            <button onClick={(e) => handleNewFolder(e, false)}>
+            {/* adjust this to where user can seslct filetype to create */}
+            <button onClick={(e) => handleNewFolder(e, "txt")}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="tree-icon"
@@ -84,10 +168,10 @@ const DirectoryTree = ({
           </div>
         </div>
 
-        <div style={{ display: expand ? "block" : "none", paddingLeft: 25 }}>
+        <div style={{ display: expand ? "block" : "none", paddingLeft: 15 }}>
           {showInput.visible && (
             <div className="inputContainer">
-              <span> {showInput.isFolder ? "📁" : "📄"} </span>
+              <span> {showInput.type === "folder" ? "📁" : "📄"} </span>
               <input
                 type="text"
                 onKeyDown={onAddFolder}
@@ -98,22 +182,65 @@ const DirectoryTree = ({
             </div>
           )}
 
-          {explorer.items.map((exp) => {
-            return (
-              <DirectoryTree
-                handleInsertNode={handleInsertNode}
-                explorer={exp}
-                key={exp.id}
-                setCurrentDirectory={setCurrentDirectory}
-                currentDirectory={currentDirectory}
-              />
-            );
+          {explorer.items.map((exp, index) => {
+            if (expand) {
+              // <--------  this if statement is VERY important for time complexity !!!
+              return (
+                <DirectoryTree
+                  handleInsertNode={handleInsertNode}
+                  explorer={exp}
+                  key={index}
+                  setCurrentDirectory={setCurrentDirectory}
+                  currentDirectory={currentDirectory}
+                  windowDimension={windowDimension}
+                  setCurrentFile={setCurrentFile}
+                />
+              );
+            }
           })}
         </div>
       </div>
     );
   } else {
-    return <span className="file"> 📄 {explorer.name} </span>;
+    return (
+      <div
+        className="file cursor-enabled"
+        onClick={() => setCurrentFile(explorer)}
+      >
+        <div
+          className=""
+          style={
+            windowDimension.winWidth > 1200
+              ? {
+                  width: "fit-content",
+                  maxWidth: "200px",
+                  overflow: "hidden",
+                  textOverflow: "ellipses",
+                  whiteSpace: "nowrap",
+                  transition: ".1s",
+                }
+              : {
+                  width: "fit-content",
+                  maxWidth: "100px",
+                  overflow: "hidden",
+                  textOverflow: "ellipses",
+                  whiteSpace: "nowrap",
+                }
+          }
+        >
+          {["jpeg", "jpg", "gif", "png"].includes(explorer.type)
+            ? "🖼️"
+            : "txt" === explorer.type
+            ? "📑"
+            : "pdf" === explorer.type
+            ? "📖"
+            : "mp4" === explorer.type
+            ? "📺"
+            : "💀"}
+          {explorer.name}
+        </div>
+      </div>
+    );
   }
 };
 
