@@ -1,18 +1,23 @@
 import { useEffect } from "react";
 
-const Comments = ({ commentsData }) => {
-  useEffect(() => {
-    // auto scrolls down right-panel
-    var element = document.getElementById("comment");
-    element.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-      inline: "nearest",
-    });
-  }, [commentsData]);
+const Comments = ({ data, commentsData }) => {
+  // useEffect(() => {
+  //   // auto scrolls down right-panel
+  //   var element = document.getElementById("comment");
+  //   element.scrollIntoView({
+  //     behavior: "smooth",
+  //     block: "end",
+  //     inline: "nearest",
+  //   });
+  // }, [commentsData]);
 
   const commentItems = commentsData.map((comment, index) => (
-    <li key={index}>
+    <li
+      key={index}
+      style={
+        comment.username === data.user ? { backgroundColor: "#ededed" } : {}
+      }
+    >
       <div className="commenterImage">
         <img src={comment.commenterImage} />
       </div>

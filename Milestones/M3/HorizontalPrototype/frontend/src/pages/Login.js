@@ -421,7 +421,7 @@ const Login = ({ data, windowDimension }) => {
             </div>
 
             <div className="messages-mobile">
-              <p
+              <div
                 id="uidnote"
                 className={userFocus ? "instructions" : "offscreen"}
               >
@@ -434,9 +434,9 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Please enter an email or username.
                 </div>
-              </p>
+              </div>
 
-              <p
+              <div
                 id="pwdnote"
                 className={passwordFocus ? "instructions " : "offscreen"}
               >
@@ -449,7 +449,7 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Please enter a password.
                 </div>
-              </p>
+              </div>
             </div>
           </div>
 

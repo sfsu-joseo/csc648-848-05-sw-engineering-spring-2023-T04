@@ -4,20 +4,31 @@ const useTreeTraversal = () => {
   function insertNode(
     explorerData,
     currentDirectory,
+    handleSetCurrentDirectory,
     setCurrentDirectory,
     setExplorerData,
     name,
     type
   ) {
-    if (type === "folder") {
+    if (currentDirectory.items.some((item) => item.name === name)) {
+      // prompt skip or replace
+    } else {
+      let dataUrl = "";
+
+      // convert.com to .url file
+      if (type === "url") {
+        dataUrl =
+          "application/octet-stream;base64," + window.btoa("URL=" + name);
+      }
+
       currentDirectory.items.push({
         pathname: currentDirectory.pathname + "/" + name,
         name,
         type,
         size: 0,
         isPinned: false,
-        visibility: false,
-        dataUrl: "",
+        visibility: "Private", // <-default
+        dataUrl: dataUrl,
         items: [],
       });
 
@@ -34,11 +45,29 @@ const useTreeTraversal = () => {
         return 0;
       });
 
-      const tempCurrDir = JSON.parse(JSON.stringify(currentDirectory));
-      const tempExplorer = JSON.parse(JSON.stringify(explorerData));
+      let folders = [];
+      let files = [];
+      for (let i = 0; i < currentDirectory.items.length; i++) {
+        if (currentDirectory.items[i].type === "Folder")
+          folders.push(currentDirectory.items[i]);
+        else files.push(currentDirectory.items[i]);
+      }
+      const updateitems = folders.concat(files);
+      currentDirectory.items = updateitems;
 
-      setCurrentDirectory(tempCurrDir);
-      setExplorerData(tempExplorer);
+      // remove unneccessary data here before parsing with stringify
+      const tempObject = {
+        name: currentDirectory.name,
+        pathname: currentDirectory.pathname,
+        type: currentDirectory.type,
+        size: 0,
+        isPinned: false,
+        visibility: currentDirectory.visibility,
+        dataUrl: "",
+        items: currentDirectory.items,
+      };
+
+      setCurrentDirectory(tempObject);
     }
   }
 

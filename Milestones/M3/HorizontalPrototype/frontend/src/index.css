@@ -14,6 +14,8 @@ html {
     color: #202020;
 }
 
+
+
 h1 {
     font-family: 'Nunito', sans-serif;
     font-size: 24px;
@@ -168,6 +170,7 @@ textarea {
     border-radius: 2px;
     border-style: solid;
     resize: none;
+    outline: none;
 }
 
 button:hover {
@@ -874,6 +877,7 @@ padding: 6px 10px;
     justify-self: center;
     justify-content: space-between;
     padding: 10px;
+    border-radius: 5px;
 
     /* this order will fill the width where 200px < x < 500px */
     max-width: 600px;
@@ -887,7 +891,7 @@ padding: 6px 10px;
 
 /* replace with dragging effect */
 .box:hover {
-    background-color: #f9f9f9; 
+    background-color: #fafafa;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -978,6 +982,9 @@ padding: 6px 10px;
 .cursor-disabled {
 }
 
+.scroll-disabled {
+}
+
 .sent {
     width: 80px;
     color: #adadad;
@@ -1014,12 +1021,12 @@ padding: 6px 10px;
 }
 
 .medium-panel-width2 {
-    width: 295px;
+    width: 299px;
     transition: .1s;
 }
 
 .max-panel-width2 {
-    width: 395px;
+    width: 399px;
     transition: .1s;
 }
 
@@ -1047,6 +1054,10 @@ padding: 6px 10px;
     transition: .1s;
 }
 
+.disable-scroll {
+    overflow: hidden;
+}
+
 .left-panel-grid {
     height: 100vh;
     position: fixed;
@@ -1057,7 +1068,7 @@ padding: 6px 10px;
     border-left: none;      
     direction:rtl;
     z-index: 2;
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -1079,7 +1090,7 @@ padding: 6px 10px;
     border-right: none;
     z-index: 2;
 
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -1104,7 +1115,7 @@ padding: 6px 10px;
     padding-left: 20px;
     padding-top: 22px;
     text-align: left;
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
     color: dimgray;
 
     font: 18px system-ui;
@@ -1151,7 +1162,7 @@ padding: 6px 10px;
     left: 0;
     bottom: 0;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
     border: 1px solid #ededed;
     border-bottom: none;
     border-left: none;
@@ -1165,7 +1176,7 @@ padding: 6px 10px;
     font-weight: bolder;
     color: dimgray;
     position: fixed;
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
     height: 67.5px;
     padding: 10px;
     padding-left: 20px;
@@ -1185,6 +1196,10 @@ padding: 6px 10px;
     /* direction: rtl; */
     text-align: left;
 
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+
     min-height: 150px;
     height: 14.5%;
     padding: 10px;
@@ -1195,6 +1210,19 @@ padding: 6px 10px;
     border-left: none;
 
     background-color: #fafafa;
+
+    overflow-y: scroll;
+}
+
+.info-content {
+    font: 15px system-ui;
+    padding: 10px;
+    /* padding-left: 50px; */
+    line-height: 28px;
+    color: dimgray;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    column-gap: 10px;
 }
 
 .right-panel-notes {
@@ -1218,8 +1246,8 @@ padding: 6px 10px;
     text-align: left;
 
     min-height: 255px;
-    height: 30%;
-    padding: 10px;
+    height: 30.25%;
+    /* padding: 10px; */
     margin-bottom: 150px;
     overflow: scroll;
     
@@ -1233,7 +1261,7 @@ padding: 6px 10px;
     right: 0;
     bottom: 0;
     text-align: center;
-    background-color: #f9f9f9;
+    background-color: #f6f6f6;
 
     border: 1px solid #ededed;
     border-bottom: none;
@@ -1302,6 +1330,10 @@ padding: 6px 10px;
     transition: .1s;
 }
 
+.file-selected {
+    background-color: #ededed;
+}
+
 .folder {
     display: flex;
     justify-content: space-between;
@@ -1309,9 +1341,11 @@ padding: 6px 10px;
     padding-left: 50px;
     width: 100%;
     cursor: pointer;
-    border-radius: 2px;
+    /* border-radius: 2px; */
     font: 14px system-ui;
     user-select: none;
+    /* transition: .1s; */
+    height: 30px;
   }
 
   .folder-icon {
@@ -1356,7 +1390,7 @@ padding: 6px 10px;
   .inputContainer {
     display: flex;
     align-items: center;
-    gap: 5px;
+    /* gap: 5px; */
   }
   
   .inputContainer > span {
@@ -1366,14 +1400,31 @@ padding: 6px 10px;
   .inputContainer__input {
     padding: 5px;
     display: flex;
-    border: 1px solid #ededed;
+    border: 1px solid #e0e0e0;
+    border-right: 0px solid lightgray;
+    border-top: 0px solid lightgray;
     align-items: center;
     justify-content: space-between;
     cursor: text;
-    height: 30px;
-    font-size: 14px;
+    height: 32px;
     width: 100%;
-    margin-right: 10px;
+    /* margin-right: 10px; */
+    /* outline: none; */
+  }
+
+  .inputValid {
+    /* border-top: 1px solid lightgray; */
+    border-bottom: 1px solid #e0e0e0;
+    font: 15px system-ui;
+    height: 32px;
+    width: 50px;
+    background-color: white;
+    text-align: center;
+    padding-top: 7px;
+    color: limegreen;
+    /* background-color: #ededed; */
+    font-size: bolder;
+    transition: .1s;
   }
 
   .tree-icon {
@@ -1381,6 +1432,7 @@ padding: 6px 10px;
     width: 16px;
     color: grey;
     transform: translate(0, -2px);
+    transition: .1s;
   }
 
   .header-icons {
@@ -1424,7 +1476,8 @@ padding: 6px 10px;
 
   /* ---------- for displaying pdf's --------  */
 
- .react-pdf__Page__canvas {width: 100% !important;
+ .react-pdf__Page__canvas {
+    width: 100% !important;
     height: 100% !important;
 }
 
@@ -1432,7 +1485,7 @@ padding: 6px 10px;
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 70px;
+    margin-bottom: 100px;
   }
   
   .react-pdf__Page {
@@ -1466,30 +1519,34 @@ padding: 6px 10px;
 } */
 
 .commentBox {
-    padding:10px;
-    border-top:1px dotted #bbb;
+    /* padding:10px; */
+    /* border-top:1px dotted #bbb; */
 }
 .commentBox .form-group:first-child, 
 .commentBox .form-group:nth-child(2), 
+
+
 
 
 .commentList {
     padding:0;
     list-style:none;
     display: flex;
-    flex-direction: column-reverse;
-    overflow: auto;
+    flex-direction: column;
+    /* overflow: scroll; */
+    bottom: 0;
 }
 .commentList li {
     margin:0;
-    margin-bottom:20px;
+    /* margin-bottom:20px; */
+    padding: 10px;
 }
 .commentList li > div {
     display:table-cell;
 }
 .commenterImage {
     width:30px;
-    margin-right:5px;
+    margin-right:10px;
     height:100%;
     float:left;
 }
@@ -1513,9 +1570,10 @@ padding: 6px 10px;
     font-size:11px;
 }
 .commentsContainer {
-    overflow: auto;
-    padding:10px;
-    /* direction: ltr; */
+    display: flex;
+    flex-direction:column-reverse;
+    height: 100%;
+    overflow: scroll;
 }
 .form-inline {
     display: flex;
@@ -1529,22 +1587,24 @@ padding: 6px 10px;
     margin: 0px;
     all: unset;
     width: 100%;
-    border-radius: 2px;
-    border-style: solid;
     border-color: lightgray;
     text-align: left;
     border: 1px solid lightgrey;
-    border-radius: 2px;
-    background-color: #fdfdfd;
+    border-right: 0px solid lightgrey;
+    background-color: #fafafa;
+    height: 30px;
 }
 .comment-send-button {
   all: unset;
   cursor: pointer;
-  vertical-align: auto;
   padding-left: 10px;
   padding-right: 5px;
-  border: 0px solid lightgray;
-  border-radius: 2px;
+  border: 1px solid lightgray;
+  border-left: none;
+  width: 40px;
+  background-color: #f9f9f9;
+  padding-right: 10px;
+  height: 50px;
 }
 
 #notesText {
@@ -1552,11 +1612,27 @@ padding: 6px 10px;
     width: 100%;
     line-height: 100%;
     text-align: left;
-    /* direction: ltr; */
     border: none;
-    border-radius: 2px;
-    outline: none;
+    /* outline: none; */
     background-color: #fafafa;
     color: #202020;
     font-size: 16px;
+}
+
+.search-results {
+    background-color:#fafafa;
+    border-radius: 5px;
+    font: 18px system-ui;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 45px;
+}
+
+.exit {
+    color: #fafafa;
+    background-color: #3d3d3d;
+    transition: .1s;
+}
+.exit:hover {
+    color: #ff9999;
 }
