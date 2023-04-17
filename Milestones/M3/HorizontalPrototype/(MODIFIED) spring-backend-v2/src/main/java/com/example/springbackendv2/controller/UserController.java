@@ -31,6 +31,7 @@ public class UserController {
             return -2L;
         }
         userRepository.save(newUser);
+
         return newUser.getId();
     }
 
