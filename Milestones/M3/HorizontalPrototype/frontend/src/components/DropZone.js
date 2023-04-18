@@ -1,96 +1,168 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import readDroppedFiles from "../helpers/readDroppedFiles";
-// import { Document, Page, pdfjs } from "react-pdf";
-// import "pdfjs-dist/web/pdf_viewer.css";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
-const DropZone = () => {
-  const [folderJson, setFolderJson] = useState(null);
-  const [pdfDataUrl, setPdfDataUrl] = useState(null);
-  const [numPages, setNumPages] = useState(null);
-  const [imgURL, setImgURL] = useState(null);
-  const [videoURL, setVideoURL] = useState(null);
-  const [textURL, setTextURL] = useState(null);
+const DropZone = ({
+  explorerData,
+  currentDirectory,
+  setLoading,
+  loading,
+  files,
+  setFiles,
+}) => {
   const [dragOver, setDragOver] = useState(false);
+  const inputRef = useRef();
+
+  useEffect(() => {
+    if (files) {
+      console.log(files);
+      handleDrop(files);
+      setFiles(null);
+    }
+  }, [files]);
+
+  const updateParentSize = (node, parsingArr, size) => {
+    parsingArr.shift();
+    if (parsingArr.length === 0) {
+      node.size += size;
+      return node;
+    }
+    node.size += size;
+    for (let i = 0; i < node.items.length; i++) {
+      if (node.items[i].name === parsingArr[0]) {
+        node.items[i] = updateParentSize(node.items[i], parsingArr, size);
+        return node;
+      }
+    }
+  };
 
   const handleDrop = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
+    setLoading(true);
     setDragOver(false);
 
-    const json = await readDroppedFiles(e.dataTransfer.items);
-    setFolderJson(json);
+    console.log("transfering this data");
+    console.log(e);
 
-    console.log("from fdz");
-    console.log(json);
+    const objArr = await readDroppedFiles(e, currentDirectory);
+
+    // --- this will update and sort global currDir --- //
+
+    let size = 0;
+    for (let i = 0; i < objArr.length; i++) {
+      if (currentDirectory.items.some((item) => item.name === objArr[i].name)) {
+        // prompt skip or replace b/c merge is too hard to code :/
+      } else {
+        size += objArr[i].size;
+        currentDirectory.items.push(objArr[i]);
+      }
+    }
+
+    currentDirectory.items.sort((a, b) => {
+      let fa = a.name.toLowerCase(),
+        fb = b.name.toLowerCase();
+
+      if (fa < fb) {
+        return -1;
+      }
+      if (fa > fb) {
+        return 1;
+      }
+      return 0;
+    });
+
+    // this may never be needed here ...
+    let folders = [];
+    let files = [];
+    for (let i = 0; i < currentDirectory.items.length; i++) {
+      if (currentDirectory.items[i].type === "Folder")
+        folders.push(currentDirectory.items[i]);
+      else files.push(currentDirectory.items[i]);
+    }
+    const updateitems = folders.concat(files);
+    currentDirectory.items = updateitems;
+
+    /* parse through tree using pathname from current directory. 
+    then add size to each node in branch */
+
+    let parsingArr = currentDirectory.pathname.split("/");
+
+    console.log("from update parents");
+    console.log(updateParentSize(explorerData, parsingArr, size));
+
+    setLoading(false);
+
+    console.log("snapshot");
+    console.log(explorerData);
+
+    // send req to backend to sync files in cloud
   };
 
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     setDragOver(true);
-
     e.dataTransfer.dropEffect = "copy";
   };
 
-  const renderNode = (node) => {
-    if (node.type !== "folder") {
-      return (
-        <div
-          key={node.name}
-          onClick={() => {
-            if (["jpeg", "jpg", "gif", "png"].includes(node.type)) {
-              setImgURL(node.dataUrl);
-            } else if ("pdf" === node.type) {
-              setPdfDataUrl(node.dataUrl);
-            } else if ("txt" === node.type) {
-              const txtContent = window.atob(node.dataUrl.split(",")[1]);
-            } else if ("mp4" === node.type) {
-              const videoData = window.atob(node.dataUrl.split(",")[1]);
-              const byteArray = new Uint8Array(videoData.length);
-              for (let i = 0; i < videoData.length; i++) {
-                byteArray[i] = videoData.charCodeAt(i);
-              }
-              const blob = new Blob([byteArray.buffer], { type: "video/mp4" });
-              setVideoURL(URL.createObjectURL(blob));
-            }
-          }}
-        >
-          {node.name}
-        </div>
-      );
-    } else if (node.type === "folder") {
-      return (
-        <div key={node.name}>
-          <div>{node.name}</div>
-          <div style={{ paddingLeft: "20px" }}>
-            {node.items.map(renderNode)}
-          </div>
-        </div>
-      );
-    }
-  };
-
-  const renderAllPages = (scale = 1) => {
-    const pages = [];
-    for (let i = 1; i <= numPages; i++) {
-      //   pages.push(<Page key={`page_${i}`} pageNumber={i} scale={scale} />);
-    }
-    return pages;
-  };
+  if (loading) {
+    return (
+      <div
+        style={{
+          marginTop: "10px",
+          width: "100%",
+          height: "70vh",
+          display: "flex",
+          paddingTop: "50px",
+          justifyContent: "center",
+          color: "dimgray",
+          transition: ".2s",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
-    <div
-      className={dragOver ? "dropzone dragging" : "dropzone"}
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragExit={() => setDragOver(false)}
-    >
-      {folderJson && renderNode(folderJson)}
-    </div>
+    <>
+      {dragOver || currentDirectory.items.length === 0 ? (
+        <div
+          className={"dropzone dragging"}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragExit={() => setDragOver(false)}
+        >
+          <span style={{ padding: "10px" }}>
+            <b>Drop files here to upload</b>, or use the{" "}
+            <input
+              type="file"
+              multiple
+              onChange={(e) => setFiles(e)}
+              hidden
+              ref={inputRef}
+            />
+            <span onClick={() => inputRef.current.click()}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="header-icons cursor-enabled"
+                style={{ width: "30px" }}
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
+              </svg>{" "}
+            </span>
+            button.
+          </span>
+        </div>
+      ) : (
+        <div className={"dropzone"} onDragOver={handleDragOver}>
+          {/* no rendering here */}
+        </div>
+      )}
+    </>
   );
 };
 

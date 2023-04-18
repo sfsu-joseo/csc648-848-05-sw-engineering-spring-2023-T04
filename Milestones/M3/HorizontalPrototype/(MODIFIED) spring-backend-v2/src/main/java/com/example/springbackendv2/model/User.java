@@ -1,6 +1,7 @@
 package com.example.springbackendv2.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
@@ -16,6 +17,10 @@ public class User {
     private String email;
     private String password;
     private boolean isPrivate;
+    
+    @OneToMany(mappedBy = "user")
+    private List<Note> notes;
+
 
     public Long getId() {
         return id;
@@ -71,5 +76,13 @@ public class User {
 
     public void setisPrivate(boolean isPrivate) {
         this.isPrivate = isPrivate;
+    }
+    
+    public List<Note> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
     }
 }

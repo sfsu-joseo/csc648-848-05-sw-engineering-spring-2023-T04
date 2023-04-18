@@ -5,10 +5,11 @@ import FriendsAll from "../components/FriendsAll";
 import FriendsPending from "../components/FriendsPending";
 import SavedAll from "../components/SavedAll";
 import Users from "../components/Users";
+import dummyFolder from "../data/dummyFolder";
+import Student from "./Student";
 
 const Sources = ({ data, windowDimension }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   // store these in local browser to remember after refresh
   const [selected, setSelected] = useState("users");
@@ -32,6 +33,9 @@ const Sources = ({ data, windowDimension }) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("");
 
+  const [explorerData, setExplorerData] = useState(null);
+  const [owner, setOwner] = useState(null);
+
   // -------- call essential getters here on re-render ----------
   useEffect(() => {
     if (!data.isLoggedIn) {
@@ -43,42 +47,40 @@ const Sources = ({ data, windowDimension }) => {
     getFriends();
     getPending();
     getSaved();
-
-    setLoading(false);
   }, []);
 
+  const getUsersPage = (user) => {
+    // fetch users folder from efs
+    setOwner(user);
+    setExplorerData(dummyFolder);
+  };
+
   const getFriends = async (e) => {
-    setLoading(true);
     const res = await axios.get(`/findFriends/${data.id}`);
 
+    let temp = [];
     for (let i = 0; i < res.data.length; i++) {
-      friendsList.push(res.data[i].id);
+      temp.push(res.data[i].id);
     }
     setLoadFriends(res.data);
-    setFriendsList(friendsList);
-    setLoading(false);
+    setFriendsList(temp);
   };
 
   /* these functions will set selected to friends, 
 and also call request to update lists */
 
   const handleSetFriends = (selected) => {
-    setLoading(true);
     getFriends();
     setSelected("friends");
     setFriends(selected);
-    setLoading(false);
   };
 
   const handleSetSelected = (select) => {
-    setLoading(true);
     if (selected === "saved") getSaved();
     else if (selected === "friends") getFriends();
     setSelected(select);
-    setLoading(false);
   };
 
-  //  get users with given username, first, or last name
   const handleUserSearch = async (e) => {
     e.preventDefault();
     getFriends();
@@ -86,10 +88,17 @@ and also call request to update lists */
     let str2 = search.toLowerCase();
     str2 = str2.replace(/ +/g, "");
 
-    if (str2 === "all") {
+    // clear results if query is empty
+    if (str2.length === 0) {
+      setLoadUsers([]);
+
+      // get all users if query is all
+    } else if (str2 === "all") {
       const res = await axios.get("/users");
       setLoadUsers(res.data);
       console.log(res.data);
+
+      // fetch query results from backend
     } else {
       const res = await axios.get(`/search/${search}`);
       if (res.data.length === 0) setLoadUsers([]);
@@ -137,8 +146,6 @@ and also call request to update lists */
 
   //   gets all of users saved items
   const getSaved = async () => {
-    setLoading(true);
-
     const res = await axios.get(`/mySavedUsers/${data.id}`);
     let tempSaveUserList = [];
 
@@ -148,7 +155,6 @@ and also call request to update lists */
 
     setLoadSaved(res.data);
     setSavedUserList(tempSaveUserList);
-    setLoading(false);
   };
 
   async function removeSaved(isUser, item_id) {
@@ -252,7 +258,7 @@ and also call request to update lists */
         `/deleteFriends/${sender_id}/${reciever_id}`
       );
 
-      // refresh friends and friends list
+      // refresh friends
       getFriends();
     }
   }
@@ -260,6 +266,18 @@ and also call request to update lists */
   // if (loading) {
   //   return <div>Loading...</div>;
   // }
+  if (explorerData && owner) {
+    return (
+      <Student
+        data={data}
+        windowDimension={windowDimension}
+        owner={owner}
+        setOwner={setOwner}
+        explorerData={explorerData}
+        setExplorerData={setExplorerData}
+      />
+    );
+  }
 
   return (
     <div className="page">
@@ -332,7 +350,7 @@ and also call request to update lists */
                 {/* Users */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="header-icons"
+                  className="header-icons cursor-enabled"
                   fill="currentColor"
                   viewBox="0 0 16 16"
                 >
@@ -349,7 +367,7 @@ and also call request to update lists */
                 {/* Folders */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="header-icons"
+                  className="header-icons cursor-enabled"
                   fill="currentColor"
                   viewBox="0 0 16 16"
                 >
@@ -366,14 +384,11 @@ and also call request to update lists */
                 {/* Saved */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="header-icons"
+                  className="header-icons cursor-enabled"
                   fill="currentColor"
                   viewBox="0 0 16 16"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"
-                  />
+                  <path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z" />
                   <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
                 </svg>
               </div>
@@ -387,7 +402,7 @@ and also call request to update lists */
                 {/* Friends */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="header-icons"
+                  className="header-icons cursor-enabled"
                   fill="currentColor"
                   viewBox="0 0 16 16"
                 >
@@ -449,6 +464,7 @@ and also call request to update lists */
               insertSaved={insertSaved}
               removeSaved={removeSaved}
               pendingList={pendingList}
+              getUsersPage={getUsersPage}
             />
           )}
 
@@ -457,11 +473,11 @@ and also call request to update lists */
               loadFriends={loadFriends}
               handleFilter={handleFilterSearch}
               filter={filter}
-              loading={loading}
               savedUserList={savedUserList}
               insertSaved={insertSaved}
               removeSaved={removeSaved}
               handleFriendRequest={handleFriendRequest}
+              getUsersPage={getUsersPage}
             />
           )}
 
@@ -470,11 +486,11 @@ and also call request to update lists */
               loadPending={loadPending}
               handleFilter={handleFilterSearch}
               filter={filter}
-              loading={loading}
               handleFriendRequest={handleFriendRequest}
               savedUserList={savedUserList}
               insertSaved={insertSaved}
               removeSaved={removeSaved}
+              getUsersPage={getUsersPage}
             />
           )}
 
@@ -484,13 +500,14 @@ and also call request to update lists */
               loadSaved={loadSaved}
               handleFilter={handleFilterSearch}
               filter={filter}
-              loading={loading}
               handleFriendRequest={handleFriendRequest}
               sentList={sentList}
               friendsList={friendsList}
               savedUserList={savedUserList}
               insertSaved={insertSaved}
               removeSaved={removeSaved}
+              pendingList={pendingList}
+              getUsersPage={getUsersPage}
             />
           )}
         </div>

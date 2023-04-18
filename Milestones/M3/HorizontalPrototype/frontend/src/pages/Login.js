@@ -73,7 +73,7 @@ const Login = ({ data, windowDimension }) => {
       } else if (res.data === -2) {
         setErrMsg("Invalid password.");
       } else if (res.data > 0) {
-        data.user = user;
+        data.user = user; // update this to set to username, if email was given
         data.isLoggedIn = true;
         data.id = res.data;
         data.password = password;
@@ -84,7 +84,7 @@ const Login = ({ data, windowDimension }) => {
         setUser("");
         setPassword("");
 
-        navigate("/sources");
+        navigate("/student");
         return;
       }
     } catch (err) {
@@ -239,7 +239,7 @@ const Login = ({ data, windowDimension }) => {
             </div>
 
             <div className="messages">
-              <p
+              <div
                 id="uidnote"
                 className={
                   userFocus
@@ -256,9 +256,9 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Required field.
                 </div>
-              </p>
+              </div>
 
-              <p
+              <div
                 id="pwdnote"
                 className={
                   passwordFocus
@@ -275,7 +275,7 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Required field.
                 </div>
-              </p>
+              </div>
             </div>
           </div>
           <Footer />
@@ -421,7 +421,7 @@ const Login = ({ data, windowDimension }) => {
             </div>
 
             <div className="messages-mobile">
-              <p
+              <div
                 id="uidnote"
                 className={userFocus ? "instructions" : "offscreen"}
               >
@@ -434,9 +434,9 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Please enter an email or username.
                 </div>
-              </p>
+              </div>
 
-              <p
+              <div
                 id="pwdnote"
                 className={passwordFocus ? "instructions " : "offscreen"}
               >
@@ -449,7 +449,7 @@ const Login = ({ data, windowDimension }) => {
                   </span>
                   Please enter a password.
                 </div>
-              </p>
+              </div>
             </div>
           </div>
 

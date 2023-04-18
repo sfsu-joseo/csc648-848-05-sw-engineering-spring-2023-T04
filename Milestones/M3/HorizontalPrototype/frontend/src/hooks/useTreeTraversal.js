@@ -1,22 +1,74 @@
+// const finalTree = insertNode(currentDirectory, id, name, type);
+
 const useTreeTraversal = () => {
-  function insertNode(tree, folderId, item, isFolder) {
-    if (tree.id === folderId && tree.isFolder) {
-      tree.items.unshift({
-        id: new Date().getTime(),
-        name: item,
-        isFolder,
+  function insertNode(
+    explorerData,
+    currentDirectory,
+    handleSetCurrentDirectory,
+    setCurrentDirectory,
+    setExplorerData,
+    name,
+    type
+  ) {
+    if (currentDirectory.items.some((item) => item.name === name)) {
+      // prompt skip or replace
+    } else {
+      let dataUrl = "";
+
+      // convert.com to .url file
+      if (type === "url") {
+        dataUrl =
+          "application/octet-stream;base64," + window.btoa("URL=" + name);
+      }
+
+      currentDirectory.items.push({
+        pathname: currentDirectory.pathname + "/" + name,
+        name,
+        type,
+        size: 0,
+        isPinned: false,
+        visibility: "Private", // <-default
+        dataUrl: dataUrl,
         items: [],
       });
 
-      return tree;
+      currentDirectory.items.sort((a, b) => {
+        let fa = a.name.toLowerCase(),
+          fb = b.name.toLowerCase();
+
+        if (fa < fb) {
+          return -1;
+        }
+        if (fa > fb) {
+          return 1;
+        }
+        return 0;
+      });
+
+      let folders = [];
+      let files = [];
+      for (let i = 0; i < currentDirectory.items.length; i++) {
+        if (currentDirectory.items[i].type === "Folder")
+          folders.push(currentDirectory.items[i]);
+        else files.push(currentDirectory.items[i]);
+      }
+      const updateitems = folders.concat(files);
+      currentDirectory.items = updateitems;
+
+      // remove unneccessary data here before parsing with stringify
+      const tempObject = {
+        name: currentDirectory.name,
+        pathname: currentDirectory.pathname,
+        type: currentDirectory.type,
+        size: 0,
+        isPinned: false,
+        visibility: currentDirectory.visibility,
+        dataUrl: "",
+        items: currentDirectory.items,
+      };
+
+      setCurrentDirectory(tempObject);
     }
-
-    let latestNode = [];
-    latestNode = tree.items.map((obj) => {
-      return insertNode(obj, folderId, item, isFolder);
-    });
-
-    return { ...tree, items: latestNode };
   }
 
   const deleteNode = () => {};
