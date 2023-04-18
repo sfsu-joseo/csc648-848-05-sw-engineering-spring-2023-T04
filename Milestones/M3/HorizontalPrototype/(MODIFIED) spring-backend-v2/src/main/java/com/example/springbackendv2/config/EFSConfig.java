@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EFSConfig {
 
-    @Value("${efs.region}")
+    @Value("${aws.region}")
     private String region;
 
     @Value("${efs.file-system-id}")
     private String fileSystemId;
 
-    @Value("${efs.mount-path}")
+    @Value("${efs.mount.path}")
     private String mountPath;
 
     @Bean
