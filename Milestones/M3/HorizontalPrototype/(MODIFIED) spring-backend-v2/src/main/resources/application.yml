@@ -1,8 +1,8 @@
 cloud:
  aws:
    credentials:
-     access-key: if you could fill out these values :)
-     secret-key:
+     access-key: AKIAT7XIBPZB52ONWOU4
+     secret-key: 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
    region:
      static: us-west-1
    stack:
