@@ -83,9 +83,7 @@ public class StorageController {
     }
 
     /* This endpoint loads the user's saved file directory
-    *  The object keys (bucket paths) are returned as an array
-    *  For example:
-    *   ["testFolder/Yin_Wilson_HW3_Writeup.pdf","testFolder/test01.txt", "testFolder/subFolder/dot.txt"]*/
+    *  The object keys (bucket paths) are returned as an array*/
     @GetMapping("/getUserDir/{userName}")
     public ArrayList<String> listBucket(@PathVariable String userName) {
 
