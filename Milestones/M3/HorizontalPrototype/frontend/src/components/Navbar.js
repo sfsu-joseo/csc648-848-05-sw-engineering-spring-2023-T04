@@ -100,8 +100,6 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             <button
               id="userpanel"
               className="user-panel displaying user-account"
-              onFocus={() => console.log("focused user")}
-              // onBlur={() => setShowUserPanel(false)}
               onBlur={() => setDisplay("")}
             >
               <ul>
@@ -174,8 +172,6 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             <button
               id="notifications"
               className="user-panel displaying notifications"
-              onFocus={() => console.log("focused notifications")}
-              // onBlur={() => setShowNotifications(false)}
               onBlur={() => setDisplay("")}
             >
               ~ TO BE IMPLEMENTED ~
@@ -232,7 +228,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
           <div style={{ justifySelf: "right", minWidth: "90px" }}>
             <Link
               style={{ marginRight: "10px" }}
-              onFocus={() => {
+              onClick={() => {
                 handleSetFocus("notifications");
               }}
             >
@@ -253,7 +249,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
               // to="/"
               className="top-right-nav"
               // onClick={testLogout}
-              onFocus={() => {
+              onClick={() => {
                 handleSetFocus("userpanel");
               }}
             >
