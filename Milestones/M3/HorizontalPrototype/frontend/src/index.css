@@ -1228,7 +1228,7 @@ padding: 6px 10px;
 .left-panel-tree {
     direction:ltr;
     min-height: 350px;
-    height: 50%;
+    height: 46.75%;
     background-color: #fafafa;
 
     border: 1px solid #ededed;
@@ -1299,7 +1299,7 @@ padding: 6px 10px;
     /* justify-content: center; */
 
     min-height: 100px;
-    height: 20%;
+    height: 18%;
     padding: 10px;
 
     border: 1px solid #ededed;
@@ -1329,7 +1329,7 @@ padding: 6px 10px;
     /* width: 100%; */
 
     min-height: 230px;
-    height: 40%;
+    height: 37.75%;
     padding-left: 10px;
 
     border: 1px solid #ededed;
@@ -1345,7 +1345,7 @@ padding: 6px 10px;
     text-align: left;
 
     min-height: 230px;
-    height: 40%;
+    height: 37.75%;
     /* padding: 10px; */
     /* margin-bottom: 150px; */
     /* overflow: scroll; */

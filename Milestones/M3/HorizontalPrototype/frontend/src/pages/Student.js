@@ -418,7 +418,7 @@ const Student = ({
 
           <div
             className="left-panel-tree"
-            style={owner.user !== data.user ? { height: "90%" } : {}}
+            style={owner.user !== data.user ? { height: "100%" } : {}}
           >
             <DirectoryTree
               handleInsertNode={handleInsertNode}
@@ -630,7 +630,7 @@ const Student = ({
           </div>
           <div
             className="right-panel-info"
-            style={owner.user !== data.user ? { height: "19.5%" } : {}}
+            style={owner.user !== data.user ? { height: "19.25%" } : {}}
           >
             {/* add INFO components here */}
             <Info
@@ -781,7 +781,7 @@ const Student = ({
           </div>
           <div
             className="right-panel-coments"
-            style={owner.user !== data.user ? { height: "58%" } : {}}
+            style={owner.user !== data.user ? { height: "77.5%" } : {}}
           >
             {/* add COMMENTS components here */}
             <Comments commentsData={comments} data={data} />
