@@ -1,14 +1,22 @@
 package com.example.springbackendv2.controller;
 
+import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.example.springbackendv2.config.StorageConfig;
 import com.example.springbackendv2.exception.UserNotFoundException;
 import com.example.springbackendv2.model.User;
 import com.example.springbackendv2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -18,6 +26,12 @@ import java.util.Objects;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+
+    @Value("${application.bucket.name}")
+    private String bucketName;
+
+    @Autowired
+    private StorageConfig s3;
 
     // --------------------- BASIC POST, GET, DELETE MAPPING BY UNIQUE ID
     // --------------------
@@ -30,7 +44,11 @@ public class UserController {
         else if (userRepository.checkEmail(newUser.getEmail()) != null) {
             return -2L;
         }
+        String rootFolder = newUser.getUser() + newUser.getId() + "/";
         userRepository.save(newUser);
+
+        s3.s3Client().putObject(bucketName,rootFolder, new ByteArrayInputStream(new byte[0]), new ObjectMetadata());
+
 
         return newUser.getId();
     }
