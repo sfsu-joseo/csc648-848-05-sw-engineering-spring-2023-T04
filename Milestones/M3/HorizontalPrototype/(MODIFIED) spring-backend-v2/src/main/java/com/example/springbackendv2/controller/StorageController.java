@@ -89,13 +89,11 @@ public class StorageController {
     @GetMapping("/getUserDir")
     public ArrayList<String> listBucket() {
 
-        // !!! FIX: change {bucketName} to correct name !!!
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
                 .withBucketName(bucketName);
                 // !!! not sure abt s3 structure yet so will uncomment when certain !!!
                 // .withPrefix("{username}").withDelimiter("");
 
-        // !!! FIX: change {s3Client} to correct name !!!
         ObjectListing objects = s3Client.listObjects(listObjectsRequest);
 
         List<S3ObjectSummary> summaries = objects.getObjectSummaries();
