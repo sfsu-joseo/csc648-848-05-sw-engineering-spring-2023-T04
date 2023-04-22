@@ -86,13 +86,12 @@ public class StorageController {
     *  The object keys (bucket paths) are returned as an array
     *  For example:
     *   ["testFolder/Yin_Wilson_HW3_Writeup.pdf","testFolder/test01.txt", "testFolder/subFolder/dot.txt"]*/
-    @GetMapping("/getUserDir")
-    public ArrayList<String> listBucket() {
+    @GetMapping("/getUserDir/{userName}")
+    public ArrayList<String> listBucket(@PathVariable String userName) {
 
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-                .withBucketName(bucketName);
-                // !!! not sure abt s3 structure yet so will uncomment when certain !!!
-                // .withPrefix("{username}").withDelimiter("");
+                .withBucketName(bucketName)
+                .withPrefix(userName).withDelimiter("");
 
         ObjectListing objects = s3Client.listObjects(listObjectsRequest);
 
