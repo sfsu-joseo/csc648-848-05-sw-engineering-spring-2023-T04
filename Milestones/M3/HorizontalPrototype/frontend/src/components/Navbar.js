@@ -151,7 +151,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                   className="option"
                   onClick={testLogout}
                   // --------- TESTING TOUCH -------- //
-                  onTouchStart={testLogout}
+                  onTouchEnd={testLogout}
                 >
                   Logout
                 </div>
