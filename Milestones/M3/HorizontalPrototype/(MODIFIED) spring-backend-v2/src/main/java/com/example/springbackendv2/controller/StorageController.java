@@ -1,6 +1,10 @@
 package com.example.springbackendv2.controller;
 
 import java.io.IOException;
+
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.example.springbackendv2.service.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -10,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.NoSuchFileException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 * This class will handle requests for file
@@ -66,5 +72,27 @@ public class StorageController {
         } catch (IOException ex) {
             return new ResponseEntity<>("Failed to delete file", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /* This endpoint loads the user's saved file directory
+    *  The object keys (bucket paths) are returned as an array
+    *  For example:
+    *   ["testFolder/Yin_Wilson_HW3_Writeup.pdf","testFolder/test01.txt", "testFolder/subFolder/dot.txt"]*/
+    @GetMapping("/getUserDir")
+    public ArrayList<String> listBucket() {
+
+        // !!! FIX: change {bucketName} to correct name !!!
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucketName);
+
+        // !!! FIX: change {s3Client} to correct name !!!
+        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
+
+        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+        ArrayList<String> obj_keys = new ArrayList<>();
+        for (S3ObjectSummary objectSummary : summaries){
+            obj_keys.add(objectSummary.getKey());
+        }
+        return obj_keys;
     }
 }
