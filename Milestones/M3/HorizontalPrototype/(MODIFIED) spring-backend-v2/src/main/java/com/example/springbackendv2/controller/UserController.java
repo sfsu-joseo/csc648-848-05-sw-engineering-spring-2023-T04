@@ -151,8 +151,9 @@ public class UserController {
             @PathVariable("other_user_id") Long otherUser_id) {
 
         // Check if the other user's account is private
-        User otherUser = userRepository.findById(otherUserId)
+        User otherUser = userRepository.findById(otherUser_id)
                 .orElseThrow(() -> new UserNotFoundException(otherUser_id));
+
         boolean isPrivate = otherUser.isPrivateAccount();
 
         // Check if the current user is the owner of the other user's account
@@ -165,7 +166,7 @@ public class UserController {
         }
 
         // If the other user's account is not private or the current user is the owner,
-        // return the root folder of the other user's account
+        // return the root folder of the other user's account as a string
         return otherUser.getRootFolder();
     }
 
