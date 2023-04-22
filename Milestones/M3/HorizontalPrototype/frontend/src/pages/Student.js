@@ -13,6 +13,7 @@ import CommentBox from "../components/CommentBox";
 import commentsData from "../data/commentsData";
 import Notes from "../components/Notes";
 import Info from "../components/Info";
+import Message from "../components/Message";
 
 const Student = ({
   data,
@@ -21,6 +22,8 @@ const Student = ({
   setOwner,
   explorerData,
   setExplorerData,
+  message,
+  setMessage,
 }) => {
   const navigate = useNavigate();
 
@@ -30,6 +33,7 @@ const Student = ({
   const [showingRightPanel, setShowingRightPanel] = useState(true);
   const [currentFile, setCurrentFile] = useState(null);
   const [loading, setLoading] = useState(null);
+  const [display, setDisplay] = useState("");
 
   const [pinSelected, setPinSelected] = useState(false);
   const [format, setFormat] = useState("list");
@@ -39,19 +43,18 @@ const Student = ({
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(commentsData);
   const [files, setFiles] = useState(null);
-  const [scale, setScale] = useState(800);
+  // const [loadingPDF, setLoadingPDF] = useState(null);
+  const [scale, setScale] = useState({
+    render: 1,
+    width: 800,
+    height: 500,
+  });
 
   const [searchResults, setSearchResults] = useState([]);
-
-  const handleSetScale = (num) => {
-    const temp = scale + num;
-    if (temp < 600) setScale(600);
-    else if (temp > 1500) {
-      setScale(1500);
-    } else {
-      setScale(temp);
-    }
-  };
+  const [pdfController, setPdfController] = useState({
+    currentPage: 0,
+    pageLimit: 0,
+  });
 
   const { insertNode } = useTreeTraversal();
   const handleInsertNode = (name, type) => {
@@ -92,7 +95,81 @@ const Student = ({
     }
   }, [showingRightPanel, windowDimension.mobileMode]);
 
+  // const handleSetPanel = (state) => {
+  //   const element1 = document.getElementById(state);
+  //   const element2 = document.getElementById("minipanel");
+
+  //   if (state === "notestab") {
+  //     console.log("first");
+  //     element2.style.top = elDistanceToTop;
+  //   }
+  // };
+
+  const handleSetScale = (multiplier, state) => {
+    if (state === "pdf") {
+      const weight = 0.1;
+      const temp = scale.render + weight * multiplier;
+      if (temp < 0.5)
+        setScale({
+          render: 0.5,
+          width: scale.width,
+          height: scale.height,
+        });
+      else if (temp > 3) {
+        setScale({
+          render: 3,
+          width: scale.width,
+          height: scale.height,
+        });
+      } else {
+        setScale({
+          render: temp,
+          width: scale.width,
+          height: scale.height,
+        });
+      }
+    } else {
+      const weight1 = 100;
+      const weight2 = 62.5;
+      const temp1 = scale.width + weight1 * multiplier;
+      const temp2 = scale.height + weight2 * multiplier;
+
+      if (temp1 < 600)
+        setScale({
+          render: scale.render,
+          width: 600,
+          height: 375,
+        });
+      else if (temp1 > 1500) {
+        setScale({
+          render: scale.render,
+          width: 1500,
+          height: 937.5,
+        });
+      } else {
+        setScale({
+          render: scale.render,
+          width: temp1,
+          height: temp2,
+        });
+      }
+    }
+    console.log("scale");
+    console.log(scale);
+  };
+
   // ---------------------------------------------- //
+
+  const handleSetFocus = (state) => {
+    console.log(state);
+    const element = document.getElementById(state);
+
+    setDisplay(state);
+
+    element.focus({
+      preventScroll: true,
+    });
+  };
 
   const parseTree = (node, pathname, state) => {
     // setup parsing array
@@ -230,13 +307,15 @@ const Student = ({
         data={data}
         setOwner={setOwner}
         setExplorerData={setExplorerData}
+        message={message}
+        setMessage={setMessage}
       />
 
       <span
         style={{
           right: "0",
           position: "fixed",
-          zIndex: "1",
+          zIndex: "2",
           marginRight: "10px",
           marginTop: "90px",
         }}
@@ -256,9 +335,9 @@ const Student = ({
         <div
           className={
             windowDimension.winWidth > 1200
-              ? "left-panel-title max-panel-width2"
+              ? "left-panel-title max-panel-width"
               : windowDimension.winWidth > 800
-              ? "left-panel-title medium-panel-width2"
+              ? "left-panel-title medium-panel-width"
               : "left-panel-title min-left-panel"
           }
         >
@@ -273,13 +352,59 @@ const Student = ({
               : "left-panel-grid  min-left-panel"
           }
         >
-          <div
-            className="header-tab"
-            style={{ marginTop: "67.5px", direction: "ltr" }}
-          >
+          <div className="header-tab" style={{ direction: "ltr" }}>
             Files
             {/* more options button */}
-            <span style={{ float: "right" }}>
+            {display === "filespanel" ? (
+              <span style={{ float: "right" }}>
+                <button
+                  id="filespanel"
+                  className="header-more-options"
+                  onFocus={() => console.log("focusing")}
+                  onBlur={() => setDisplay("")}
+                  style={{ height: "80px" }}
+                >
+                  <ul>
+                    <div
+                      className="cursor-enabled"
+                      onClick={() => {
+                        setMessage({
+                          title: "Expand All",
+                          body: "This feature shall provide an option to expand their entire directory tree, for the purpose of file hunting.",
+                        });
+                        setDisplay("");
+                      }}
+                    >
+                      Expand all
+                    </div>
+                    <div
+                      className="cursor-enabled"
+                      onClick={() => {
+                        setMessage({
+                          title: "Collapse All",
+                          body: "This feature shall provide an option to collapse their entire directory tree, for the purpose simplifying the directory tree.",
+                        });
+                        setDisplay("");
+                      }}
+                    >
+                      Collapse all
+                    </div>
+                  </ul>
+                </button>
+              </span>
+            ) : (
+              <span style={{ float: "right" }}>
+                <button
+                  id="filespanel"
+                  className="header-more-options hiding"
+                  style={{}}
+                ></button>
+              </span>
+            )}
+            <span
+              style={{ float: "right" }}
+              onClick={() => handleSetFocus("filespanel")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="header-icons cursor-enabled"
@@ -322,7 +447,98 @@ const Student = ({
             <div className="header-tab" style={{ direction: "ltr" }}>
               Ask Chatbot
               {/* more options button */}
-              <span style={{ float: "right" }}>
+              {display === "chatbotpanel" ? (
+                <span style={{ float: "right" }}>
+                  <button
+                    id="chatbotpanel"
+                    className="header-more-options"
+                    onFocus={() => console.log("focusing")}
+                    onBlur={() => setDisplay("")}
+                    style={{ height: "170px" }}
+                  >
+                    <ul>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Disable Chatbot",
+                            body: "This feature shall provide an option to disable their chatbot, as a way to ensure that users do not accidently send requests to OpenAI's API services.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Disable
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Read Current File",
+                            body: "Using OpenAI's API services, this feature shall provide an option to store the current file in context, so that users can ask questions about the file without having to provide context every time.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Read current file
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Regenerate Response",
+                            body: "Using OpenAI's API services, this feature shall provide an option to regenerate the previous response.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Regenerate Response
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Download Conversation",
+                            body: "This feature shall provide an option to download the conversation between the user and the chatbot.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Download
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Clear Conversation",
+                            body: "This feature shall provide an option to clear the entire conversation, as way to clean up storage space.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    </ul>
+                  </button>
+                </span>
+              ) : (
+                <span style={{ float: "right" }}>
+                  <button
+                    id="chatbotpanel"
+                    className="header-more-options hiding"
+                    style={{}}
+                  ></button>
+                </span>
+              )}
+              <span
+                style={{ float: "right" }}
+                onClick={() => handleSetFocus("chatbotpanel")}
+                // onClick={() =>
+                //   setMessage({
+                //     title: "More Options for Chatbot",
+                //     body: "This feature shall provide more options for the user to copy a conversation to clipboard, read an entire file (as opposed to a single page of a document), and clear conversation.",
+                //   })
+                // }
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="header-icons cursor-enabled"
@@ -351,16 +567,16 @@ const Student = ({
             }
           >
             {/* add INPUT FIELD for CHATBOT here */}
-            chatbot input field
+            {/* chatbot input field */}
           </div>
         )}
 
         <div
           className={
             windowDimension.winWidth > 1200 && showingRightPanel
-              ? "right-panel-title max-panel-width2"
+              ? "right-panel-title max-panel-width"
               : showingRightPanel
-              ? "right-panel-title medium-panel-width2"
+              ? "right-panel-title medium-panel-width"
               : "right-panel-title min-right-panel"
           }
         >
@@ -398,10 +614,10 @@ const Student = ({
               : "right-panel-grid min-right-panel"
           }
         >
-          <div className="header-tab" style={{ marginTop: "67.5px" }}>
+          <div className="header-tab">
             Info
             {/* more options button */}
-            <span style={{ float: "right" }}>
+            {/* <span style={{ float: "right" }}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="header-icons cursor-enabled"
@@ -410,7 +626,7 @@ const Student = ({
               >
                 <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
               </svg>
-            </span>
+            </span> */}
           </div>
           <div
             className="right-panel-info"
@@ -424,10 +640,67 @@ const Student = ({
           </div>
 
           {owner.user === data.user && (
-            <div className="header-tab">
+            <div className="header-tab" id="notestab">
               Notes
               {/* more options button */}
-              <span style={{ float: "right" }}>
+              {display === "notespanel" ? (
+                <span style={{ float: "right" }}>
+                  <button
+                    id="notespanel"
+                    className="header-more-options"
+                    onBlur={() => setDisplay("")}
+                    style={{ height: "110px" }}
+                  >
+                    <ul>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Copy to Clipboard",
+                            body: "This feature shall provide the option to copy notes to clipboard for the purpose of pasting it somewhere else.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Copy to clipboard
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Download Notes",
+                            body: "This feature shall provide the option to download notes as a text file to the users local machine.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Download
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setNotesData("");
+                          setDisplay("");
+                        }}
+                      >
+                        Clear
+                      </div>
+                    </ul>
+                  </button>
+                </span>
+              ) : (
+                <span style={{ float: "right" }}>
+                  <button
+                    id="notespanel"
+                    className="header-more-options hiding"
+                    style={{}}
+                  ></button>
+                </span>
+              )}
+              <span
+                style={{ float: "right" }}
+                onClick={() => handleSetFocus("notespanel")}
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="header-icons cursor-enabled"
@@ -449,7 +722,53 @@ const Student = ({
           <div className="header-tab">
             Comments
             {/* more options button */}
-            <span style={{ float: "right" }}>
+            {display === "commentspanel" ? (
+              <span style={{ float: "right" }}>
+                <button
+                  id="commentspanel"
+                  className="header-more-options"
+                  onFocus={() => console.log("focusing")}
+                  onBlur={() => setDisplay("")}
+                  style={{ height: "80px" }}
+                >
+                  <ul>
+                    <div
+                      className="cursor-enabled"
+                      onClick={() => {
+                        setMessage({
+                          title: "Disable Comments",
+                          body: "This feature shall provide the option to disable comments, such that other users cannot view or send comments.",
+                        });
+                        setDisplay("");
+                      }}
+                    >
+                      Disable
+                    </div>
+                    <div
+                      className="cursor-enabled"
+                      onClick={() => {
+                        setComments([]);
+                        setDisplay("");
+                      }}
+                    >
+                      Clear
+                    </div>
+                  </ul>
+                </button>
+              </span>
+            ) : (
+              <span style={{ float: "right" }}>
+                <button
+                  id="commentspanel"
+                  className="header-more-options hiding"
+                  style={{}}
+                ></button>
+              </span>
+            )}
+            <span
+              style={{ float: "right" }}
+              onClick={() => handleSetFocus("commentspanel")}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="header-icons cursor-enabled"
@@ -501,6 +820,11 @@ const Student = ({
           }
         >
           {/* add MAIN CONTENT components here */}
+          {currentFile && (
+            <div style={{ marginTop: "100px" }}>
+              <Message message={message} setMessage={setMessage} />
+            </div>
+          )}
 
           {/* if a file is selected, then load file here */}
           {currentFile ? (
@@ -514,6 +838,11 @@ const Student = ({
               scale={scale}
               owner={owner}
               data={data}
+              pdfController={pdfController}
+              setPdfController={setPdfController}
+              setScale={setScale}
+              message={message}
+              setMessage={setMessage}
             />
           ) : (
             <FolderContent
@@ -534,6 +863,8 @@ const Student = ({
               setSearchResults={setSearchResults}
               owner={owner}
               data={data}
+              message={message}
+              setMessage={setMessage}
             />
           )}
         </div>

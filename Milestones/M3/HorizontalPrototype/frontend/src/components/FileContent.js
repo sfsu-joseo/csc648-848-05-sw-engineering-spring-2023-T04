@@ -2,6 +2,7 @@ import TinyFooter from "./TinyFooter";
 import { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "pdfjs-dist/web/pdf_viewer.css";
+import Message from "./Message";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -15,6 +16,11 @@ const FileContent = ({
   scale,
   owner,
   data,
+  pdfController,
+  setPdfController,
+  setScale,
+  message,
+  setMessage,
 }) => {
   const [numPages, setNumPages] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
@@ -40,7 +46,7 @@ const FileContent = ({
         console.log(err);
         setTextURL("");
       }
-    } else if (["mp4, mov"].includes(currentFile.type)) {
+    } else if (["mp4", "mov"].includes(currentFile.type)) {
       try {
         // convert to streaming data from backend.
 
@@ -121,6 +127,13 @@ const FileContent = ({
         console.log(err);
         setTextURL("");
       }
+    } else if (currentFile.type === "pdf") {
+      setScale({
+        render: windowDimension.winWidth / 1050,
+        width: 1500,
+        height: scale.height,
+      });
+      setTextURL("");
     }
   }, [currentFile]);
 
@@ -137,23 +150,9 @@ const FileContent = ({
     return match ? match[1] : null;
   };
 
-  const renderAllPages = (scale = 1) => {
-    const pages = [];
-    for (let i = 1; i <= numPages; i++) {
-      pages.push(<Page key={`page_${i}`} pageNumber={i} scale={scale} />);
-    }
-
-    return pages;
-  };
-
   const handleSaveChanges = () => {
     let temp = "application/octet-stream;base64," + window.btoa(textURL);
     currentFile.dataUrl = temp;
-  };
-
-  const loadPages = (numPages) => {
-    if (numPages > 20) return 20;
-    else return numPages;
   };
 
   if (loading) {
@@ -163,91 +162,117 @@ const FileContent = ({
   return (
     <div
       className={"main-panel-content"}
-      style={{ maxWidth: `${scale}px`, height: "600px" }}
+      style={{ maxWidth: `${scale.width}px` }}
     >
-      {["jpeg", "jpg", "gif", "png"].includes(currentFile.type) ? (
-        <img
-          src={currentFile.dataUrl}
-          style={{ width: "100%", borderRadius: "2px" }}
-        ></img>
-      ) : "txt" === currentFile.type ? (
-        <textarea
-          onBlur={() => handleSaveChanges()}
-          style={{
-            width: "100%",
-            height: "55vh",
-            marginBottom: "100px",
-            border: "1px solid lightgrey",
-            borderRadius: "2px",
-            color: "dimgray",
-          }}
-          value={textURL}
-          onChange={(e) => setTextURL(e.target.value)}
-        ></textarea>
-      ) : "pdf" === currentFile.type ? (
-        <Document
-          file={currentFile.dataUrl}
-          onLoadSuccess={({ numPages }) => {
-            console.log(`PDF loaded with ${numPages} pages.`);
-
-            // load more when user scrolls near bottom of page
-            setNumPages(() => loadPages(numPages));
-          }}
-        >
-          {renderAllPages(3)}
-        </Document>
-      ) : "mp4" === currentFile.type || "mov" === currentFile.type ? (
-        <video
-          src={videoURL}
-          style={{ width: "100%", padding: "10px" }}
-          controls
-        >
-          Your browser does not support the video tag.
-        </video>
-      ) : "mp3" === currentFile.type ? (
-        <audio
-          src={audioURL}
-          style={{ width: "100%", padding: "10px" }}
-          controls
-        >
-          Your browser does not support the audio tag.
-        </audio>
-      ) : "url" === currentFile.type ? (
-        videoType === "youtube" && videoId ? (
-          <iframe
-            title="YouTube Video"
-            style={{ width: "100%", height: "100%", marginBottom: "100px" }}
-            src={`https://www.youtube.com/embed/${videoId}`}
-            allow="autoplay; encrypted-media"
-            allowFullScreen
-          ></iframe>
-        ) : videoType === "vimeo" && videoId ? (
-          <iframe
-            title="Vimeo Video"
-            style={{ width: "100%", height: "100%", marginBottom: "100px" }}
-            src={`https://player.vimeo.com/video/${videoId}`}
-            allow="autoplay; fullscreen"
-            allowFullScreen
-          ></iframe>
+      <div className="" style={{ height: `${scale.height}px` }}>
+        {["jpeg", "jpg", "gif", "png"].includes(currentFile.type) ? (
+          <img
+            src={currentFile.dataUrl}
+            style={{ width: "100%", borderRadius: "2px" }}
+          ></img>
+        ) : "txt" === currentFile.type ? (
+          <textarea
+            autoFocus
+            onBlur={() => handleSaveChanges()}
+            style={{
+              width: "100%",
+              height: "100%",
+              marginBottom: "100px",
+              borderLeft: "none",
+              borderRight: "none",
+              borderBottom: "none",
+              borderTop: ".25px solid #f6f6f6",
+              borderRadius: "2px",
+              color: "dimgray",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            }}
+            value={textURL}
+            onChange={(e) => setTextURL(e.target.value)}
+          ></textarea>
+        ) : "pdf" === currentFile.type ? (
+          <Document
+            file={currentFile.dataUrl}
+            onLoadSuccess={({ numPages }) => {
+              console.log(`PDF loaded with ${numPages} pages.`);
+              setNumPages(numPages);
+              setPdfController({
+                currentPage: 1,
+                pageLimit: numPages,
+              });
+            }}
+          >
+            <div className="pdfPlaceholder"></div>
+            <Page
+              // this fixes flicker but is no longer supported and may be removed
+              loading={""}
+              renderMode="svg"
+              pageNumber={pdfController.currentPage}
+              scale={scale.render}
+            />
+          </Document>
+        ) : "mp4" === currentFile.type || "mov" === currentFile.type ? (
+          <video
+            src={videoURL}
+            style={{ width: "100%", padding: "10px" }}
+            controls
+          >
+            Your browser does not support the video tag.
+          </video>
+        ) : "mp3" === currentFile.type ? (
+          <audio
+            src={audioURL}
+            style={{ width: "100%", padding: "10px" }}
+            controls
+          >
+            Your browser does not support the audio tag.
+          </audio>
+        ) : "url" === currentFile.type ? (
+          videoType === "youtube" && videoId ? (
+            <iframe
+              title="YouTube Video"
+              style={{ width: "100%", height: "100%", marginBottom: "100px" }}
+              src={`https://www.youtube.com/embed/${videoId}`}
+              allow="autoplay; encrypted-media"
+              allowFullScreen
+            ></iframe>
+          ) : videoType === "vimeo" && videoId ? (
+            <iframe
+              title="Vimeo Video"
+              style={{ width: "100%", height: "100%", marginBottom: "100px" }}
+              src={`https://player.vimeo.com/video/${videoId}`}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+            ></iframe>
+          ) : (
+            <div>
+              <p>
+                URL Shortcut:{" "}
+                <a href={textURL} target="_blank" rel="noreferrer">
+                  {textURL}
+                </a>
+              </p>
+            </div>
+          )
         ) : (
-          <div>
-            <p>
-              URL Shortcut:{" "}
-              <a href={textURL} target="_blank" rel="noreferrer">
-                {textURL}
-              </a>
-            </p>
-          </div>
-        )
-      ) : (
-        "💀"
-      )}
+          "💀"
+        )}
+      </div>
+
+      {/* {loadingPDF && (
+        <div className="loadingScreen">
+        </div>
+      )} */}
 
       <TinyFooter
         windowDimension={windowDimension}
         showingRightPanel={showingRightPanel}
         owner={owner}
         data={data}
+        pdfController={pdfController}
+        currentFile={currentFile}
+        setPdfController={setPdfController}
+        setMessage={setMessage}
+        // setLoadingPDF={setLoadingPDF}
       />
     </div>
   );

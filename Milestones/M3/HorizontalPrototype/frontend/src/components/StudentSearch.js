@@ -16,6 +16,8 @@ const StudentSearch = ({
   data,
   setOwner,
   setExplorerData,
+  message,
+  setMessage,
 }) => {
   const [selected, setSelected] = useState("");
   const [search, setSearch] = useState("");
@@ -27,25 +29,31 @@ const StudentSearch = ({
     setExplorerData(null);
   };
 
-  // this will populate the a temp arr of results
   const searchFromCurrentDirectory = (node, arr, search) => {
-    let temp = [];
+    let temp = arr;
     const lowerString1 = search.toLowerCase().trim(" ");
-    for (let i = 0; i < currentDirectory.items.length; i++) {
-      const lowerString2 = currentDirectory.items[i].name
-        .toLowerCase()
-        .trim(" ");
+    for (let i = 0; i < node.items.length; i++) {
+      const lowerString2 = node.items[i].name.toLowerCase().trim(" ");
       if (lowerString2.includes(lowerString1)) {
         temp.push(node.items[i]);
       }
+      temp = searchFromCurrentDirectory(node.items[i], temp, search);
     }
+
     return temp;
   };
 
   // this will populate searchResults
   const searchHelper = async (e) => {
     e.preventDefault();
-    setSearchResults(searchFromCurrentDirectory(currentDirectory, [], search));
+
+    if (search.length === 0) {
+      setSearchResults([]);
+    } else {
+      setSearchResults(
+        searchFromCurrentDirectory(currentDirectory, [], search)
+      );
+    }
   };
 
   return (
@@ -141,7 +149,7 @@ const StudentSearch = ({
               className={
                 selected === "saved" ? "selected" : "selection-content"
               }
-              onClick={() => handleSetScale(100)}
+              onClick={() => handleSetScale(1, currentFile.type)}
             >
               {/* zoom in */}
               <svg
@@ -160,7 +168,7 @@ const StudentSearch = ({
               className={
                 selected === "friends" ? "selected" : "selection-content"
               }
-              onClick={() => handleSetScale(-100)}
+              onClick={() => handleSetScale(-1, currentFile.type)}
             >
               {/* zoom out */}
               <svg
@@ -253,6 +261,12 @@ const StudentSearch = ({
               className={
                 selected === "friends" ? "selected" : "selection-content"
               }
+              onClick={() =>
+                setMessage({
+                  title: "Format",
+                  body: "This feature shall allow the user to swap between list and grid layout.",
+                })
+              }
             >
               {/* Format */}
               <svg
@@ -276,13 +290,6 @@ const StudentSearch = ({
               paddingLeft: "15px",
             }}
           >
-            {/* put owner info here */}
-            {/* <div className="box-username">
-              @{owner.user}
-              <br />
-              {owner.firstName} {owner.lastName}
-            </div> */}
-
             <div className="user-grid">
               <div
                 className="box-icon"

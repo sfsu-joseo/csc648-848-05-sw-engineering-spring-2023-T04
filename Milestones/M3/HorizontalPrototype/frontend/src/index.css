@@ -152,7 +152,7 @@ a, a:visited {
 
 a:hover {
     color: rgba(51,102,204, .8);
-    transition: .1s;
+    /* transition: .1s; */
     cursor: pointer;
 }
 
@@ -486,7 +486,7 @@ button {
     border-bottom: 1px solid #ededed;
     position: fixed;
     align-items: center;
-    z-index: 3;
+    z-index: 4;
     width: 100%;
 }
 
@@ -509,6 +509,94 @@ button {
     /* justify-content: center; */
     font: 20px sans-serif;
     color: lightgrey;
+}
+
+.displaying {
+height: 300px;
+}
+
+.hiding {
+height: 10px;
+left:-9999px;
+top:-9999px
+}
+
+.notifications {
+    right: 50px;
+}
+
+.user-account {
+    right: 10px;
+}
+
+.header-more-options {
+    position: absolute;
+    right: 30px;
+    text-align: left;
+    border: 1px solid lightgrey;
+    
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: dimgray;
+    line-height: 30px;
+    transition: .15s;
+    font-size: 15px;
+    overflow: hidden;
+    margin-top: -7px;
+    z-index: 1;
+}
+
+/* .user-panel:before {
+    border-top: 1px solid lightgrey;
+    border-left: 1px solid lightgrey;
+    top: 0%;
+    right: 0%;
+    margin-right: 10px;
+    margin-top: -8px; */
+
+    /* reused code */
+    /* position: absolute;
+    width: 20px;
+    height: 20px;
+    content: '';
+    transform: rotate(45deg);
+    background: white;
+} */
+
+
+.option {
+    /* padding: 10px; */
+    padding-right: 30px;
+    text-align: right;
+    border-radius: 2px;
+}
+
+.option:hover {
+    
+    cursor: pointer;
+    transition: .1s;
+    color: #aaa;
+    background: #f6f6f6;
+}
+
+.user-panel {
+    position: absolute;
+    margin: 10px;
+    top: 60px;
+    border: 1px solid lightgrey;
+    width: 260px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: dimgray;
+    line-height: 52px;
+    transition: .25s;
+    font-size: 18px;
+    overflow: hidden;
 }
 
 .divider {
@@ -544,7 +632,7 @@ button {
     position: fixed;
     justify-content: center;
     align-items: center;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     transition: .2s;
     
@@ -643,7 +731,6 @@ button {
     color: gray;
     font-size: 14px;
     border-radius: 25px;
-    transition: .1s;
     justify-self: right;
 }
 
@@ -664,7 +751,6 @@ button {
     color: gray;
     font-size: 14px;
     border-radius: 25px;
-    transition: .1s;
     justify-self: right;
 }
 
@@ -679,7 +765,7 @@ button {
     text-align: center;
     text-decoration: none;
     margin-right: 20px;
-    padding: 10px;
+    padding: 3px;
     border: 1px solid rgb(211,211,211);
     background: whitesmoke;
     border-bottom: none;
@@ -687,16 +773,15 @@ button {
     color: rgb(128,128,128);
     font-size: 14px;
     border-radius: 25px;
-    transition: .1s;
     justify-self: right;
 }
 
 #user-nav-icon {
-    height: 30px;
-    width: 30px;
-    transform: translate(-5.5px, -5.5px);
+ width: 100%;
+ height: 100%;
+    
+    /* transform: translate(-5.5px, -5.5px); */
     color: rgb(128,128,128);
-    transition: .1s;
 }
 
 .logo {
@@ -801,6 +886,7 @@ button {
 .placeholder {
     margin-top: 200px;
     width: 250px;
+    
 }
 
 /* change name to match this application */
@@ -863,7 +949,7 @@ padding: 6px 10px;
 }
 
 .sources-results {
-    margin-top: 300px;
+    margin-top: 280px;
     margin-bottom: 200px;
     display: grid;
     justify-content:center;
@@ -937,7 +1023,7 @@ padding: 6px 10px;
 .box-star:hover {
     color: rgba(128,128,128, .8);
     transition: .1s;
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 
 .box-friend {
@@ -1059,7 +1145,7 @@ padding: 6px 10px;
 }
 
 .left-panel-grid {
-    height: 100vh;
+    /* height: 100vh; */
     position: fixed;
     overflow-y: auto;  
     border: 1px solid #ededed;
@@ -1069,7 +1155,13 @@ padding: 6px 10px;
     direction:rtl;
     z-index: 2;
     background-color: #f6f6f6;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+
+    bottom: 0px;
+    margin-top: 67.5px;
+    margin-bottom: 80px;
+    top: 70px;
+
 }
 
 .main-panel-grid {
@@ -1079,19 +1171,25 @@ padding: 6px 10px;
 .right-panel-grid {
     /* starting scroll at bottom in order to show comments first */
 
-    height: 100vh;
+    /* height: 100vh; */
     position: fixed;
-    overflow-y: auto;
+    display: block;
+    overflow-y: scroll;
     right: 0;
 
-    border: 1px solid #ededed;
-    border-top: none;
+    border-left: 1px solid #ededed;
+    /* border-top: none;
     border-bottom: none;
-    border-right: none;
+    border-right: none; */
     z-index: 2;
 
+    bottom: 0px;
+    margin-top: 67.5px;
+    margin-bottom: 80px;
+    top: 70px;
+
     background-color: #f6f6f6;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
 }
 
 .header-tab {
@@ -1123,14 +1221,14 @@ padding: 6px 10px;
     z-index: 3;
     top: 70px;
     left: 0px;
-    border-bottom: 1px solid #ededed;
-    border-top: 1px solid #ededed;
+    border: 1px solid #ededed;
+    border-left: none;
 }
 
 .left-panel-tree {
     direction:ltr;
     min-height: 350px;
-    height: 38.75%;
+    height: 50%;
     background-color: #fafafa;
 
     border: 1px solid #ededed;
@@ -1148,9 +1246,9 @@ padding: 6px 10px;
 .left-panel-chatbot {
     direction:ltr;
     min-height: 350px;
-    height: 38.5%;
+    height: 50%;
     padding: 10px;
-    margin-bottom: 150px;
+    /* margin-bottom: 150px; */
     overflow:scroll;
     background-color: #fafafa;
 }
@@ -1186,8 +1284,8 @@ padding: 6px 10px;
     z-index: 3;
     top: 70px;
     right: 0px;
-    border-bottom: 1px solid #ededed;
-    border-top: 1px solid #ededed;
+    border: 1px solid #ededed;
+    border-right: none;
 }
 
 .right-panel-info {
@@ -1200,8 +1298,8 @@ padding: 6px 10px;
     flex-direction: column;
     /* justify-content: center; */
 
-    min-height: 150px;
-    height: 14.5%;
+    min-height: 100px;
+    height: 20%;
     padding: 10px;
 
     border: 1px solid #ededed;
@@ -1228,10 +1326,11 @@ padding: 6px 10px;
 .right-panel-notes {
     /* direction: rtl; */
     text-align: left;
+    /* width: 100%; */
 
-    min-height: 255px;
-    height: 30%;
-    padding: 10px;
+    min-height: 230px;
+    height: 40%;
+    padding-left: 10px;
 
     border: 1px solid #ededed;
     border-top: none;
@@ -1245,11 +1344,11 @@ padding: 6px 10px;
     /* direction: rtl; */
     text-align: left;
 
-    min-height: 255px;
-    height: 30.25%;
+    min-height: 230px;
+    height: 40%;
     /* padding: 10px; */
-    margin-bottom: 150px;
-    overflow: scroll;
+    /* margin-bottom: 150px; */
+    /* overflow: scroll; */
     
     background-color: #fafafa;
 }
@@ -1286,6 +1385,18 @@ padding: 6px 10px;
     border-bottom: none;
     border-right: none;
     border-left: none;
+
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    z-index: 1;
+    /* justify-content: center; */
+}
+.page-manager {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 10px;
+    width: 200px;
+    justify-self: center;
 }
 
 .main-searchbar-container {
@@ -1304,7 +1415,7 @@ padding: 6px 10px;
     margin: auto;
     width: 100%;
     max-width: 600px;
-    margin-top: 150px;
+    margin-top: 100px;
 }
 
 .main-panel-filename {
@@ -1477,23 +1588,25 @@ padding: 6px 10px;
   /* ---------- for displaying pdf's --------  */
 
  .react-pdf__Page__canvas {
-    width: 100% !important;
-    height: 100% !important;
+    /* width: 100% !important;
+    height: 100% !important; */
 }
 
   .react-pdf__Document {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 100px;
+    /* margin-bottom: 100px; */
+    overflow: hidden;
   }
   
   .react-pdf__Page {
-    border-bottom:1px solid lightgrey ;
     margin: 0 auto;
     height: auto;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
+    border-top: 1px solid #f6f6f6;
+    
+    margin-bottom: 15%;
   }
   
   .react-pdf__Page__annotations {
@@ -1501,14 +1614,24 @@ padding: 6px 10px;
   } 
   
   .annotationLayer {
-    display: none;
+    /* display: none; */
   }
 
   /* temporarily disable text highlighting until i figure out how to scale properly */
 .react-pdf__Page__textContent {
-    display: none;
+    /* display: none; */
 }
 .textLayer > span{
+}
+
+/* try to match width & height of page being rendered */
+.pdfPlaceholder {
+    width: 50%;
+    height:10%;
+    top: 100vh;
+    /* background-color: white; */
+    position: absolute;
+    z-index: 0;
 }
 
 /* ------------------- Comments ------------------- */
@@ -1533,7 +1656,7 @@ padding: 6px 10px;
     list-style:none;
     display: flex;
     flex-direction: column;
-    /* overflow: scroll; */
+    /* overflow: auto; */
     bottom: 0;
 }
 .commentList li {
@@ -1624,8 +1747,13 @@ padding: 6px 10px;
     border-radius: 5px;
     font: 18px system-ui;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    margin-bottom: 45px;
+    /* overflow: hidden; */
+    /* margin-bottom: 45px; */
+    /* overflow-x: scroll; */
+    max-width: 800px;
+    margin: auto;
+    z-index: 1;
+    /* margin-top: 150px; */
 }
 
 .exit {
