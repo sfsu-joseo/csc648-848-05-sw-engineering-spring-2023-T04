@@ -16,11 +16,11 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class StorageConfig {
 
-    @Value("${cloud.aws.credentials.access-key}")
+    @Value("${aws.access_key_id}")
     private String accessKey;
-    @Value("${cloud.aws.credentials.secret-key}")
+    @Value("${aws.secret_access_key}")
     private String accessSecret;
-    @Value("${cloud.aws.region.static}")
+    @Value("${aws.s3.region}")
     private String region;
 
 
