@@ -1,4 +1,4 @@
-package com.example.springbackendv2.model;
+package main.java.com.example.springbackendv2.model;
 
 import javax.persistence.*;
 

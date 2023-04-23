@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+// OLD TABLE can be deleted after front end verifies
 
 @Entity
 @Table(name ="Comment")

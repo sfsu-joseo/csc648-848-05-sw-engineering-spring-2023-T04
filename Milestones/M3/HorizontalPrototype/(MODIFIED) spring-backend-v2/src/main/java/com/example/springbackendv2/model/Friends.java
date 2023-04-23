@@ -3,6 +3,7 @@ package com.example.springbackendv2.model;
 import org.hibernate.annotations.RowId;
 
 import javax.persistence.*;
+// OLD TABLE can be deleted after front end verifies
 
 @Entity
 @Table(name = "Friends")
