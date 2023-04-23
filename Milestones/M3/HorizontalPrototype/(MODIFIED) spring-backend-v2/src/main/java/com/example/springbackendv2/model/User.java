@@ -8,6 +8,7 @@ import java.util.List;
 public class User {
 
 //    NOTE: generic user data... should be updated later
+// OLD TABLE can be deleted after front end verifies
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

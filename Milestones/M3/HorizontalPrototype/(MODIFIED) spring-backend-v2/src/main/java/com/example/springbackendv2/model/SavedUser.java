@@ -2,6 +2,8 @@ package com.example.springbackendv2.model;
 
 import javax.persistence.*;
 
+// OLD TABLE can be deleted after front end verifies
+
 @Entity
 @Table(name = "SavedUser")
 public class SavedUser {

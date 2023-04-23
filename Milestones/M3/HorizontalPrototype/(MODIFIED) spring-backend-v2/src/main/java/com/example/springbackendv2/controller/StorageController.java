@@ -42,15 +42,13 @@ public class StorageController {
 
     /* This function will handle file upload requests */
     @PostMapping("/upload")
-    @PreAuthorize("isSignedIn()")
     public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
         return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
     }
 
     /* This function will handle file download requests */
     @GetMapping("/download/{fileName}")
-    @PreAuthorize("isSignedIn()")
-    public ResponseEntity<?> downloadFile(@PathVariable String fileName) {
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
         try {
             byte[] data = service.downloadFile(fileName);
             ByteArrayResource resource = new ByteArrayResource(data);
@@ -70,8 +68,7 @@ public class StorageController {
 
     /* This function will handle file deletion requests */
     @DeleteMapping("/delete/{fileName}")
-    @PreAuthorize("isSignedIn()")
-    public ResponseEntity<?> deleteFile(@PathVariable String fileName) {
+    public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         try {
             service.deleteFile(fileName);
             return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
