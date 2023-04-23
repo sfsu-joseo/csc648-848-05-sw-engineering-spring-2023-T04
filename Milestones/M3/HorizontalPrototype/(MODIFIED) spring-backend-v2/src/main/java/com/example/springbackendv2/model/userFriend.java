@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "userFriend")
-@IdClass(UserFriendId.class)
 public class UserFriend {
 
     @Id
