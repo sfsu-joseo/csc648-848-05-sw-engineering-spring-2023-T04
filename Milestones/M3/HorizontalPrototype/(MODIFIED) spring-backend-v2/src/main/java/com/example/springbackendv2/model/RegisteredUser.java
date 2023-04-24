@@ -25,7 +25,7 @@ public class RegisteredUser {
     @Column(name = "formalName", nullable = false, length = 32)
     private String formalName;
 
-    @Column(name = "userImage", nullable = true, columnDefinition = "blob")
+    @Column(name = "userImage", nullable = true, columnDefinition = "BLOB")
     private byte[] userImage;
 
     // !! Not sure if this should be in registeredUser table, commented for now !!
@@ -40,10 +40,7 @@ public class RegisteredUser {
     // @ManyToOne
     // @JoinColumn(name = "commentID")
     // private int commentID;
-
-    @OneToMany(mappedBy = "user")
-    private List<Note> notes;
-
+    
     public int getUserID() {
         return userID;
     }
@@ -83,30 +80,30 @@ public class RegisteredUser {
     public void setFormalName(String formalName) {
         this.formalName = formalName;
     }
-    
+
     // !! Not sure if this should be in registeredUser table, commented for now !!
     // public SharedList getSharedListID() {
-    //     return sharedListID;
+    // return sharedListID;
     // }
 
     // public void setSharedListID(int sharedListID) {
-    //     this.sharedListID = sharedListID;
+    // this.sharedListID = sharedListID;
     // }
 
     // public int getResourceID() {
-    //     return resourceID;
+    // return resourceID;
     // }
 
     // public void setResourceID(int resourceID) {
-    //     this.resourceID = resourceID;
+    // this.resourceID = resourceID;
     // }
 
     // public int getResourceID() {
-    //     return resourceID;
+    // return resourceID;
     // }
 
     // public void setResourceID(int resourceID) {
-    //     this.resourceID = resourceID;
+    // this.resourceID = resourceID;
     // }
 
     public List<Note> getNotes() {
@@ -124,4 +121,5 @@ public class RegisteredUser {
     public void setUserImage(byte[] userImage) {
         this.userImage = userImage;
     }
+
 }

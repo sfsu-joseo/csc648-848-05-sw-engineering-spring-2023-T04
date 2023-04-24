@@ -45,7 +45,23 @@ public class UserResource {
     @OneToOne
     @JoinColumn(name = "noteID")
     private int noteID;
-
+    
+    // Types of files, child entities (WIP not sure if this is correct)
+    // @OneToOne(mappedBy = "userResource")
+    // private Text textFile;
+    
+    // @OneToOne(mappedBy = "userResource")
+    // private Image image;
+    
+    // @OneToOne(mappedBy = "userResource")
+    // private Video video;
+    
+    // @OneToOne(mappedBy = "userResource")
+    // private Audio audio;
+    
+    // @OneToOne(mappedBy = "userResource")
+    // private Webpage webpage;
+    
     public int getResourceID() {
         return resourceID;
     }
@@ -126,5 +142,20 @@ public class UserResource {
         this.noteID = noteID;
     }
 
+    public TextFile getTextFile() {
+        return textFile;
+    }
+
+    public void setTextFile(TextFile textFile) {
+        this.textFile = textFile;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
 }
 

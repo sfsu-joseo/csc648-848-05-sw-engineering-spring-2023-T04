@@ -9,34 +9,34 @@ public class UserFriend {
     @Id
     @ManyToOne
     @JoinColumn(name = "UID1", referencedColumnName = "userID")
-    private int user1;
+    private int UID1;
 
     @Id
     @ManyToOne
     @JoinColumn(name = "UID2", referencedColumnName = "userID")
-    private int user2;
+    private int UID2;
 
-    public UserFriend() {
+    public getUserFriend() {
     }
 
-    public UserFriend(int user1, int user2) {
-        this.user1 = user1;
-        this.user2 = user2;
+    public setUserFriend(int UID1, int UID2) {
+        this.UID1 = UID1;
+        this.UID2 = UID2;
     }
 
-    public int getUser1() {
-        return user1;
+    public int getUID1() {
+        return UID1;
     }
 
-    public void setUser1(int user1) {
-        this.user1 = user1;
+    public void setUID1(int UID1) {
+        this.UID1 = UID1;
     }
 
-    public int getUser2() {
-        return user2;
+    public int getUID2() {
+        return UID2;
     }
 
-    public void setUser2(int user2) {
-        this.user2 = user2;
+    public void setUID2(int UID2) {
+        this.UID2 = UID2;
     }
 }

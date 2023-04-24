@@ -55,4 +55,11 @@ public class UserNote {
     public void setResourceID(int resourceID) {
         this.resourceID = resourceID;
     }
+
+    public Note(){}
+    public Note(int noteID, String note, int userID) {
+        this.noteID = noteID;
+        this.note = note;
+        this.userID = userID;
+    }
 }
