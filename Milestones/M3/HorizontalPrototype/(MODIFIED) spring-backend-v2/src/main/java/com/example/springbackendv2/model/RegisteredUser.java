@@ -1,6 +1,7 @@
-package main.java.com.example.springbackendv2.model;
+package com.example.springbackendv2.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 // NEW TABLE
 
@@ -27,6 +28,9 @@ public class RegisteredUser {
 
     @Column(name = "userImage", nullable = true, columnDefinition = "BLOB")
     private byte[] userImage;
+
+    @OneToMany(mappedBy = "registeredUser")
+    private List<ResourceComment> resourceComments;
 
     // !! Not sure if this should be in registeredUser table, commented for now !!
     // @ManyToOne
@@ -106,12 +110,13 @@ public class RegisteredUser {
     // this.resourceID = resourceID;
     // }
 
-    public List<Note> getNotes() {
-        return notes;
+
+    public List<ResourceComment> getResourceComments() {
+        return resourceComments;
     }
 
-    public void setNotes(List<Note> notes) {
-        this.notes = notes;
+    public void setResourceComments(List<ResourceComment> resourceComments) {
+        this.resourceComments = resourceComments;
     }
 
     public byte[] getUserImage() {

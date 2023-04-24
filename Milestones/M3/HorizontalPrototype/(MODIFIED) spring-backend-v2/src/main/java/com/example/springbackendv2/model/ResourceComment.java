@@ -1,4 +1,6 @@
-package main.java.com.example.springbackendv2.model;
+package com.example.springbackendv2.model;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +19,7 @@ public class ResourceComment {
     @Column(name = "comment", nullable = false, columnDefinition = "TINYTEXT")
     private String comment;
 
+    @CreationTimestamp
     @Column(name = "commentDate", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date commentDate;
@@ -24,8 +27,9 @@ public class ResourceComment {
     @Column(name = "resourceID", nullable = false)
     private int resourceID;
 
-    @Column(name = "userID", nullable = false)
-    private int userID;
+    @ManyToOne
+    @JoinColumn(name = "userID", nullable = false)
+    private RegisteredUser registeredUser;
 
     public int getCommentID() {
         return commentID;
@@ -59,12 +63,11 @@ public class ResourceComment {
         this.resourceID = resourceID;
     }
 
-    public int getUserID() {
-        return userID;
+    public RegisteredUser getRegisteredUser() {
+        return registeredUser;
     }
 
-    public void setUserID(int userID) {
-        this.userID = userID;
+    public void setRegisteredUser(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
     }
-
 }
