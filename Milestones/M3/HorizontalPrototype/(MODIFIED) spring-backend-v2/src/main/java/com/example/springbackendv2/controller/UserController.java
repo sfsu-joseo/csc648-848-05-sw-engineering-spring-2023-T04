@@ -164,42 +164,27 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(res).getBody();
     }
 
-    @GetMapping("/homepage/{user_id}/{other_user_id}")
-    public String viewOtherUserHomepage(@PathVariable("user_id") Long user_id,
-            @PathVariable("other_user_id") Long otherUser_id) {
+    @GetMapping("/homepage/{userID}")
+public String viewOtherUserHomepage(@PathVariable("user_id") int userID) {
 
-        // Check if the other user's account is private
-        User otherUser = userRepository.findById(otherUser_id)
-                .orElseThrow(() -> new UserNotFoundException(otherUser_id));
+    boolean isPrivate = userRepository.isPrivate(userID);
 
-        boolean isPrivate = otherUser.isPrivateAccount();
-
-        // Check if the current user is the owner of the other user's account
-        // boolean isOwner = user_id.equals(otherUser_id);
-
-        // If the other user's account is private and the current user is not the owner,
-        // return an error message
-        if (isPrivate) {
-            return "Access denied. This user's account is private.";
-        }
-
-        // If the other user's account is not private or the current user is the owner,
-        // return the root folder of the other user's account as a string
-        return otherUser.getRootFolder();
+    // If the other user's account is private and the current user is not the owner,
+    // return an error message
+    if (isPrivate) {
+        return "Access denied. This user's account is private.";
     }
+    
 
-    public boolean isPrivateAccount(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        // Return true or false depending on what user isPrivate variable is stored in database.
-        return true;
-    }
+    // If the other user's account is not private or the current user is the owner,
+    // return the root folder of the other user's account as a string
+    
+    // To be implemented: some way to search unique ID of folder and return root folder
 
-    public Folder getRootFolder(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
-        if (isPrivateAccount(user))
-            throw new PrivateAccountException(userId);
+    // root 'folder' in S3 should look like 'userID/...'
+    String rootFolder = "userID/root";
 
-    }
+    return rootFolder;
+}
+
 }
