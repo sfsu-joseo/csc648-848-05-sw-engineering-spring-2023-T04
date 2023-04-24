@@ -34,4 +34,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM user WHERE id IN (SELECT fk_item_id FROM saved_user WHERE fk_user_id LIKE :user_id)", nativeQuery = true)
     List<User> getSavedUsers(@Param("user_id") Long user_id);
+    
+    @Query(value = "SELECT isPrivate from registeredUser WHERE id = :userID", nativeQuery = true)
+    boolean isPrivate(@Param("userID") int userID);
+
+    @Query(value = "SELECT username from registeredUser WHERE id = :userID", nativeQuery = true)
+    String getUsername(@Param("userID") int userID);
+
 }
