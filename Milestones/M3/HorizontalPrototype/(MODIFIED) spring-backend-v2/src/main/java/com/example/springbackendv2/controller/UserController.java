@@ -178,11 +178,9 @@ public String viewOtherUserHomepage(@PathVariable("user_id") int userID) {
 
     // If the other user's account is not private or the current user is the owner,
     // return the root folder of the other user's account as a string
-    
-    // To be implemented: some way to search unique ID of folder and return root folder
 
-    // root 'folder' in S3 should look like 'userID/...'
-    String rootFolder = "userID/root";
+    // root 'folder' in S3 should be replicated and returned.
+    String rootFolder = userRepository.getUsername(userID) + userID + "/";
 
     return rootFolder;
 }

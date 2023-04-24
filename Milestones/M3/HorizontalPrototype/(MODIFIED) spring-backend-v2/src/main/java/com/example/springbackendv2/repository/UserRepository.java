@@ -37,4 +37,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query(value = "SELECT isPrivate from registeredUser WHERE id = :userID", nativeQuery = true)
     boolean isPrivate(@Param("userID") int userID);
+
+    @Query(value = "SELECT username from registeredUser WHERE id = :userID", nativeQuery = true)
+    String getUsername(@Param("userID") int userID);
+
 }
