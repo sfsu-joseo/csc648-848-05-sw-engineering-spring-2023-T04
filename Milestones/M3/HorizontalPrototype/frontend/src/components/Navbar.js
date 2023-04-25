@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import logo from "../logos/Light-Version.png";
 
 export default function Navbar({ data, windowDimension, message, setMessage }) {
-  const [topRightNav, setTopRightNave] = useState("Login");
+  const [topRightNav, setTopRightNave] = useState("");
   // const [showUserPanel, setShowUserPanel] = useState(false);
   // const [showNotifications, setShowNotifications] = useState(false);
   const [display, setDisplay] = useState("");
@@ -12,44 +12,23 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (data.currentPoint === "login") {
+    if (window.location.pathname === "/login") {
       setTopRightNave("Sign up");
     } else {
       setTopRightNave("Login");
     }
-  }, [data.currentPoint]);
-
-  const goToSignUp = (e) => {
-    e.preventDefault();
-
-    data.currentPoint = "";
-    navigate("/" + data.currentPoint);
-  };
+  }, [window.location.pathname]);
 
   const testLogout = (e) => {
     e.preventDefault();
-    // setShowUserPanel(false);
     setDisplay("");
     setMessage({
       title: null,
       body: null,
     });
-    data.currentPoint = "login";
     data.isLoggedIn = false;
     localStorage.clear();
     navigate("/login");
-  };
-
-  const swapName = (e) => {
-    e.preventDefault();
-
-    if (data.currentPoint === "login") {
-      data.currentPoint = "";
-    } else {
-      data.currentPoint = "login";
-    }
-
-    navigate("/" + data.currentPoint);
   };
 
   const handleNav = (destination) => {
@@ -71,19 +50,12 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
     console.log(state);
     const element = document.getElementById(state);
     if (state == "userpanel") {
-      // setShowUserPanel(true);
-      // setShowNotifications(false);
       setDisplay("userpanel");
     } else {
-      // setShowUserPanel(false);
-      // setShowNotifications(true);
       setDisplay("notifications");
     }
     element.focus();
   };
-
-  // if (data.isLoggedIn) {
-  // }
 
   return (
     <>
@@ -100,59 +72,59 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             <button
               id="userpanel"
               className="user-panel displaying user-account"
+              onFocus={() => console.log("focused user")}
               onBlur={() => setDisplay("")}
             >
               <ul>
                 <div
                   className="option"
-                  onClick={() =>
+                  onClick={() => {
                     setMessage({
                       title: "Account",
                       body: "This feature shall allow the user the options to view, update, or delete their account.",
-                    })
-                  }
+                    });
+                    setDisplay("");
+                  }}
                 >
                   Account
                 </div>
                 <div
                   className="option"
-                  onClick={() =>
+                  onClick={() => {
                     setMessage({
                       title: "Inbox",
                       body: "This feature shall allow the user to view, delete, and send direct messages.",
-                    })
-                  }
+                    });
+                    setDisplay("");
+                  }}
                 >
                   Inbox
                 </div>
                 <div
                   className="option"
-                  onClick={() =>
+                  onClick={() => {
                     setMessage({
                       title: "Settings",
                       body: "This feature shall provide accessibilty options for configuring the general layout and theme of the website.",
-                    })
-                  }
+                    });
+                    setDisplay("");
+                  }}
                 >
                   Settings
                 </div>
                 <div
                   className="option"
-                  onClick={() =>
+                  onClick={() => {
                     setMessage({
                       title: "Help",
                       body: "This feature shall provide simplified instructions on how to navigate the basic features of the website.",
-                    })
-                  }
+                    });
+                    setDisplay("");
+                  }}
                 >
                   Help
                 </div>
-                <div
-                  className="option"
-                  onClick={testLogout}
-                  // --------- TESTING TOUCH -------- //
-                  onTouchEnd={testLogout}
-                >
+                <div className="option" onClick={testLogout}>
                   Logout
                 </div>
               </ul>
@@ -177,6 +149,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             <button
               id="notifications"
               className="user-panel displaying notifications"
+              onFocus={() => console.log("focused notifications")}
               onBlur={() => setDisplay("")}
             >
               ~ TO BE IMPLEMENTED ~
@@ -230,9 +203,15 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             </Link>
           </div>
 
-          <div style={{ justifySelf: "right", minWidth: "90px" }}>
+          <div
+            style={{
+              justifySelf: "right",
+              minWidth: "90px",
+              marginTop: "10px",
+            }}
+          >
             <Link
-              style={{ marginRight: "10px" }}
+              style={{ marginRight: "20px" }}
               onClick={() => {
                 handleSetFocus("notifications");
               }}
@@ -241,6 +220,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="header-icons cursor-enabled"
+                  style={{ marginTop: "8px" }}
                   fill="currentColor"
                   viewBox="0 0 16 16"
                 >
@@ -250,13 +230,10 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
             </Link>
 
             <Link
-              id="user-nav"
-              // to="/"
-              className="top-right-nav"
-              // onClick={testLogout}
               onClick={() => {
                 handleSetFocus("userpanel");
               }}
+              style={{ float: "right" }}
             >
               {
                 <svg
@@ -274,16 +251,15 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
         </div>
       ) : (
         <div className="navbar navbar-desktop navbar-2by1">
-          <Link id="logo-link" to={"/"} onClick={goToSignUp}>
+          <Link id="logo-link" to={"/sign-up"}>
             <img src={logo} className="logo" alt="" />
           </Link>
 
           <div></div>
 
           <Link
-            id={topRightNav === "Login" ? "login" : "signup"}
-            to={"/" + data.currentPoint}
-            onClick={swapName}
+            to={topRightNav === "Login" ? "/login" : "/sign-up"}
+            id={"login"}
             className="top-right-nav"
           >
             {topRightNav}

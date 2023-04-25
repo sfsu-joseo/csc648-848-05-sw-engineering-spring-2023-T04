@@ -30,7 +30,8 @@ const Student = ({
   // ----------- move to app.js later (maybe) ------------ //
   // const [explorerData, setExplorerData] = useState(folderData);
   const [currentDirectory, setCurrentDirectory] = useState(explorerData);
-  const [showingRightPanel, setShowingRightPanel] = useState(true);
+  const [showingRightPanel, setShowingRightPanel] = useState(false);
+  const [showingLeftPanel, setShowingLeftPanel] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
   const [loading, setLoading] = useState(null);
   const [display, setDisplay] = useState("");
@@ -75,6 +76,10 @@ const Student = ({
       navigate("/login");
       return;
     }
+    if (windowDimension.winWidth > 800) {
+      setShowingLeftPanel(true);
+      setShowingRightPanel(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -83,17 +88,18 @@ const Student = ({
     setSearchResults([]);
   }, [currentDirectory]);
 
-  useEffect(() => {
-    const element = document.documentElement;
+  // this was for mobile to freeze scroll but it does not work...
+  // useEffect(() => {
+  //   const element = document.documentElement;
 
-    if (windowDimension.winWidth < 800 && showingRightPanel) {
-      element.style.height = "100%";
-      element.style.overflow = "hidden";
-    } else {
-      element.style.height = "";
-      element.style.overflow = "";
-    }
-  }, [showingRightPanel, windowDimension.mobileMode]);
+  //   if (windowDimension.winWidth < 800 && showingRightPanel) {
+  //     element.style.height = "100%";
+  //     element.style.overflow = "hidden";
+  //   } else {
+  //     element.style.height = "";
+  //     element.style.overflow = "";
+  //   }
+  // }, [showingRightPanel, windowDimension.mobileMode]);
 
   // const handleSetPanel = (state) => {
   //   const element1 = document.getElementById(state);
@@ -107,17 +113,17 @@ const Student = ({
 
   const handleSetScale = (multiplier, state) => {
     if (state === "pdf") {
-      const weight = 0.1;
+      const weight = scale.render / 20;
       const temp = scale.render + weight * multiplier;
-      if (temp < 0.5)
+      if (temp < 0.1)
         setScale({
-          render: 0.5,
+          render: 0.1,
           width: scale.width,
           height: scale.height,
         });
-      else if (temp > 3) {
+      else if (temp > 10) {
         setScale({
-          render: 3,
+          render: 10,
           width: scale.width,
           height: scale.height,
         });
@@ -307,8 +313,9 @@ const Student = ({
         data={data}
         setOwner={setOwner}
         setExplorerData={setExplorerData}
-        message={message}
         setMessage={setMessage}
+        setCurrentDirectory={setCurrentDirectory}
+        showingLeftPanel={showingLeftPanel}
       />
 
       <span
@@ -331,24 +338,77 @@ const Student = ({
         </svg>
       </span>
 
+      {/* add left panel expand here */}
+      <span
+        style={{
+          left: "0",
+          position: "fixed",
+          zIndex: "2",
+          marginLeft: "10px",
+          marginTop: "90px",
+        }}
+        onClick={() => setShowingLeftPanel(true)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          className="header-icons cursor-enabled"
+          viewBox="0 0 16 16"
+        >
+          <path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
+        </svg>
+        {/* <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="header-icons cursor-enabled"
+          fill="currentColor"
+          viewBox="0 0 16 16"
+        >
+          <path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z" />
+        </svg> */}
+      </span>
+
       <div className="grid-foundation">
         <div
           className={
-            windowDimension.winWidth > 1200
+            windowDimension.winWidth > 1200 && showingLeftPanel
               ? "left-panel-title max-panel-width"
-              : windowDimension.winWidth > 800
-              ? "left-panel-title medium-panel-width"
+              : showingLeftPanel
+              ? // : windowDimension.winWidth > 800
+                "left-panel-title medium-panel-width"
               : "left-panel-title min-left-panel"
           }
         >
+          <div
+            onClick={() => setShowingLeftPanel(false)}
+            style={{ float: "left", marginRight: "30px" }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="header-icons cursor-enabled"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.854 3.646a.5.5 0 0 1 0 .708L8.207 8l3.647 3.646a.5.5 0 0 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 0 1 .708 0zM4.5 1a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 1 0v-13a.5.5 0 0 0-.5-.5z" />
+            </svg>
+            {/* <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="header-icons cursor-enabled"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M4.146 3.646a.5.5 0 0 0 0 .708L7.793 8l-3.647 3.646a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708 0zM11.5 1a.5.5 0 0 1 .5.5v13a.5.5 0 0 1-1 0v-13a.5.5 0 0 1 .5-.5z" />
+            </svg> */}
+          </div>
           EXPLORER
         </div>
+
         <div
           className={
-            windowDimension.winWidth > 1200
+            windowDimension.winWidth > 1200 && showingLeftPanel
               ? "left-panel-grid max-panel-width"
-              : windowDimension.winWidth > 800
-              ? "left-panel-grid medium-panel-width"
+              : showingLeftPanel
+              ? // : windowDimension.winWidth > 800
+                "left-panel-grid medium-panel-width"
               : "left-panel-grid  min-left-panel"
           }
         >
@@ -369,25 +429,25 @@ const Student = ({
                       className="cursor-enabled"
                       onClick={() => {
                         setMessage({
-                          title: "Expand All",
-                          body: "This feature shall provide an option to expand their entire directory tree, for the purpose of file hunting.",
-                        });
-                        setDisplay("");
-                      }}
-                    >
-                      Expand all
-                    </div>
-                    <div
-                      className="cursor-enabled"
-                      onClick={() => {
-                        setMessage({
-                          title: "Collapse All",
+                          title: "Collapse",
                           body: "This feature shall provide an option to collapse their entire directory tree, for the purpose simplifying the directory tree.",
                         });
                         setDisplay("");
                       }}
                     >
-                      Collapse all
+                      Collapse
+                    </div>
+                    <div
+                      className="cursor-enabled"
+                      onClick={() => {
+                        setMessage({
+                          title: "Expand",
+                          body: "This feature shall provide an option to expand their entire directory tree, for the purpose of file hunting.",
+                        });
+                        setDisplay("");
+                      }}
+                    >
+                      Expand
                     </div>
                   </ul>
                 </button>
@@ -469,30 +529,7 @@ const Student = ({
                       >
                         Disable
                       </div>
-                      <div
-                        className="cursor-enabled"
-                        onClick={() => {
-                          setMessage({
-                            title: "Read Current File",
-                            body: "Using OpenAI's API services, this feature shall provide an option to store the current file in context, so that users can ask questions about the file without having to provide context every time.",
-                          });
-                          setDisplay("");
-                        }}
-                      >
-                        Read current file
-                      </div>
-                      <div
-                        className="cursor-enabled"
-                        onClick={() => {
-                          setMessage({
-                            title: "Regenerate Response",
-                            body: "Using OpenAI's API services, this feature shall provide an option to regenerate the previous response.",
-                          });
-                          setDisplay("");
-                        }}
-                      >
-                        Regenerate Response
-                      </div>
+
                       <div
                         className="cursor-enabled"
                         onClick={() => {
@@ -505,6 +542,31 @@ const Student = ({
                       >
                         Download
                       </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Regenerate Response",
+                            body: "Using OpenAI's API services, this feature shall provide an option to regenerate the previous response.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Regenerate
+                      </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Read Current File",
+                            body: "Using OpenAI's API services, this feature shall provide an option to store the current file in context, so that users can ask questions about the file without having to provide context every time.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Read file
+                      </div>
+
                       <div
                         className="cursor-enabled"
                         onClick={() => {
@@ -556,7 +618,21 @@ const Student = ({
             </div>
           )}
         </div>
-        {owner.user === data.user && (
+        {owner.user === data.user ? (
+          <div
+            className={
+              windowDimension.winWidth > 1200 && showingLeftPanel
+                ? "left-panel-textbox max-panel-width"
+                : showingLeftPanel
+                ? // : windowDimension.winWidth > 800
+                  "left-panel-textbox medium-panel-width"
+                : "left-panel-textbox min-left-panel"
+            }
+          >
+            {/* add INPUT FIELD for CHATBOT here */}
+            {/* chatbot input field */}
+          </div>
+        ) : (
           <div
             className={
               windowDimension.winWidth > 1200
@@ -566,8 +642,7 @@ const Student = ({
                 : "left-panel-textbox min-left-panel"
             }
           >
-            {/* add INPUT FIELD for CHATBOT here */}
-            {/* chatbot input field */}
+            {/* left empty for visiting users */}
           </div>
         )}
 
@@ -656,18 +731,6 @@ const Student = ({
                         className="cursor-enabled"
                         onClick={() => {
                           setMessage({
-                            title: "Copy to Clipboard",
-                            body: "This feature shall provide the option to copy notes to clipboard for the purpose of pasting it somewhere else.",
-                          });
-                          setDisplay("");
-                        }}
-                      >
-                        Copy to clipboard
-                      </div>
-                      <div
-                        className="cursor-enabled"
-                        onClick={() => {
-                          setMessage({
                             title: "Download Notes",
                             body: "This feature shall provide the option to download notes as a text file to the users local machine.",
                           });
@@ -676,6 +739,19 @@ const Student = ({
                       >
                         Download
                       </div>
+                      <div
+                        className="cursor-enabled"
+                        onClick={() => {
+                          setMessage({
+                            title: "Copy",
+                            body: "This feature shall provide the option to copy notes to clipboard for the purpose of pasting it somewhere else.",
+                          });
+                          setDisplay("");
+                        }}
+                      >
+                        Copy
+                      </div>
+
                       <div
                         className="cursor-enabled"
                         onClick={() => {
@@ -765,19 +841,21 @@ const Student = ({
                 ></button>
               </span>
             )}
-            <span
-              style={{ float: "right" }}
-              onClick={() => handleSetFocus("commentspanel")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="header-icons cursor-enabled"
-                fill="currentColor"
-                viewBox="0 0 16 16"
+            {owner.user === data.user && (
+              <span
+                style={{ float: "right" }}
+                onClick={() => handleSetFocus("commentspanel")}
               >
-                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-              </svg>
-            </span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="header-icons cursor-enabled"
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                </svg>
+              </span>
+            )}
           </div>
           <div
             className="right-panel-coments"
@@ -812,10 +890,13 @@ const Student = ({
               : "main-panel-grid medium-margin"
           }
           style={
-            windowDimension.winWidth < 800
-              ? { margin: "0px" }
+            windowDimension.winWidth < 800 ||
+            (!showingRightPanel && !showingLeftPanel)
+              ? { marginRight: "0px", marginLeft: "0px" }
               : !showingRightPanel
               ? { marginRight: "0px" }
+              : !showingLeftPanel
+              ? { marginLeft: "0px" }
               : {}
           }
         >
@@ -843,6 +924,7 @@ const Student = ({
               setScale={setScale}
               message={message}
               setMessage={setMessage}
+              showingLeftPanel={showingLeftPanel}
             />
           ) : (
             <FolderContent
@@ -865,6 +947,7 @@ const Student = ({
               data={data}
               message={message}
               setMessage={setMessage}
+              showingLeftPanel={showingLeftPanel}
             />
           )}
         </div>
