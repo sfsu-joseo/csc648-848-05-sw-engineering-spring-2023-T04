@@ -69,14 +69,14 @@ public class StorageController {
     /* This function will handle file deletion requests */
     @DeleteMapping("/delete/{fileName}")
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
-        try {
-            service.deleteFile(fileName);
-            return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
-        } catch (NoSuchFileException ex) {
-            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
-        } catch (IOException ex) {
-            return new ResponseEntity<>("Failed to delete file", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        service.deleteFile(fileName);
+        return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/trash")
+    public ResponseEntity<String> emptyTrash(){
+        service.emptyTrash();
+        return new ResponseEntity<>("Trash emptied successfully", HttpStatus.OK);
     }
 
     /* This endpoint loads the user's saved file directory
