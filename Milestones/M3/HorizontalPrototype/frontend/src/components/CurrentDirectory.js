@@ -1,5 +1,16 @@
 import { useState } from "react";
 import { useEffect } from "react";
+import { ReactComponent as TXT } from "../logos/icons/txt.svg";
+import { ReactComponent as FOLDER } from "../logos/icons/folder.svg";
+import { ReactComponent as JPG } from "../logos/icons/jpg.svg";
+import { ReactComponent as PNG } from "../logos/icons/png.svg";
+import { ReactComponent as GIF } from "../logos/icons/gif.svg";
+import { ReactComponent as MOV } from "../logos/icons/mov.svg";
+import { ReactComponent as MP3 } from "../logos/icons/mp3.svg";
+import { ReactComponent as MP4 } from "../logos/icons/mp4.svg";
+import { ReactComponent as PDF } from "../logos/icons/pdf.svg";
+import { ReactComponent as UNKNOWN } from "../logos/icons/unknown-mail.svg";
+import { ReactComponent as URL } from "../logos/icons/url.svg";
 
 const CurrentDirectory = ({
   currentDirectory,
@@ -57,7 +68,15 @@ const CurrentDirectory = ({
 
   if (!pinSelected) {
     return currentDirectory.items.map((loadData, index) => (
-      <div className="box" style={{ overflow: "hidden" }} key={index}>
+      <div
+        className="box"
+        style={{
+          display: "grid",
+          overflow: "hidden",
+          justifyContent: "space-between",
+        }}
+        key={index}
+      >
         {/* file type and file name */}
         <div
           className="main-panel-filename cursor-enabled"
@@ -70,25 +89,54 @@ const CurrentDirectory = ({
           }
         >
           {loadData.type === "Folder" ? (
-            <span style={{ marginRight: "5px" }}>📁</span>
+            <span style={{ marginRight: "10px", float: "left" }}>
+              <FOLDER style={{ width: "40px", height: "40px" }} />
+            </span>
           ) : (
-            <span style={{ marginRight: "5px" }}>
-              {["jpeg", "jpg", "gif", "png"].includes(loadData.type)
-                ? "🖼️"
-                : "txt" === loadData.type
-                ? "📑"
-                : "pdf" === loadData.type
-                ? "📖"
-                : "mp4" === loadData.type
-                ? "📺"
-                : "💀"}
+            <span style={{ marginRight: "10px", float: "left" }}>
+              {["jpeg", "jpg"].includes(loadData.type) ? (
+                <JPG style={{ width: "40px", height: "40px" }} />
+              ) : "gif" === loadData.type ? (
+                <GIF style={{ width: "40px", height: "40px" }} />
+              ) : "png" === loadData.type ? (
+                <PNG style={{ width: "40px", height: "40px" }} />
+              ) : "txt" === loadData.type ? (
+                <TXT style={{ width: "40px", height: "40px" }} />
+              ) : "pdf" === loadData.type ? (
+                <PDF style={{ width: "40px", height: "40px" }} />
+              ) : "mp4" === loadData.type ? (
+                <MP4 style={{ width: "40px", height: "40px" }} />
+              ) : "mp3" === loadData.type ? (
+                <MP3 style={{ width: "40px", height: "40px" }} />
+              ) : "mov" === loadData.type ? (
+                <MOV style={{ width: "40px", height: "40px" }} />
+              ) : "url" === loadData.type ? (
+                <URL style={{ width: "40px", height: "40px" }} />
+              ) : (
+                <UNKNOWN style={{ width: "40px", height: "40px" }} />
+              )}
             </span>
           )}
-          {loadData.name}
+
+          {/* padding is used to center. temp solution */}
+          <div
+            className=""
+            style={{
+              paddingTop: "10px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {loadData.name}
+          </div>
         </div>
         {/* pinned icon */}
         {owner.user === data.user && (
-          <div className="box-star" onClick={() => setPinned(loadData)}>
+          <div
+            className="box-star"
+            style={{ justifySelf: "left" }}
+            onClick={() => setPinned(loadData)}
+          >
             {pinnedItems.includes(loadData.name) ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -113,7 +161,13 @@ const CurrentDirectory = ({
 
         {/* visibility */}
         {owner.user === data.user && (
-          <div style={{ display: "flex", width: "70px", marginLeft: "5px" }}>
+          <div
+            style={{
+              display: "flex",
+              // width: "70px",
+              marginLeft: "5px",
+            }}
+          >
             <div
               className="box-star"
               onClick={() =>
@@ -184,21 +238,45 @@ const CurrentDirectory = ({
             }
           >
             {loadData.type === "Folder" ? (
-              <span style={{ marginRight: "5px" }}>📁</span>
+              <span style={{ marginRight: "10px", float: "left" }}>
+                <FOLDER style={{ width: "40px", height: "40px" }} />
+              </span>
             ) : (
-              <span style={{ marginRight: "5px" }}>
-                {["jpeg", "jpg", "gif", "png"].includes(loadData.type)
-                  ? "🖼️"
-                  : "txt" === loadData.type
-                  ? "📑"
-                  : "pdf" === loadData.type
-                  ? "📖"
-                  : "mp4" === loadData.type
-                  ? "📺"
-                  : "💀"}
+              <span style={{ marginRight: "10px", float: "left" }}>
+                {["jpeg", "jpg"].includes(loadData.type) ? (
+                  <JPG style={{ width: "40px", height: "40px" }} />
+                ) : "gif" === loadData.type ? (
+                  <GIF style={{ width: "40px", height: "40px" }} />
+                ) : "png" === loadData.type ? (
+                  <PNG style={{ width: "40px", height: "40px" }} />
+                ) : "txt" === loadData.type ? (
+                  <TXT style={{ width: "40px", height: "40px" }} />
+                ) : "pdf" === loadData.type ? (
+                  <PDF style={{ width: "40px", height: "40px" }} />
+                ) : "mp4" === loadData.type ? (
+                  <MP4 style={{ width: "40px", height: "40px" }} />
+                ) : "mp3" === loadData.type ? (
+                  <MP3 style={{ width: "40px", height: "40px" }} />
+                ) : "mov" === loadData.type ? (
+                  <MOV style={{ width: "40px", height: "40px" }} />
+                ) : "url" === loadData.type ? (
+                  <URL style={{ width: "40px", height: "40px" }} />
+                ) : (
+                  <UNKNOWN style={{ width: "40px", height: "40px" }} />
+                )}
               </span>
             )}
-            {loadData.name}
+
+            {/* padding is used to center. temp solution */}
+            <div
+              style={{
+                paddingTop: "10px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {loadData.name}
+            </div>
           </div>
           {/* pinned icon */}
           <div className="box-star" onClick={() => setPinned(loadData)}>
