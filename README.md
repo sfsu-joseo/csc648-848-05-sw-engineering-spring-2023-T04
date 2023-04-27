@@ -28,7 +28,8 @@
 
 |             Name of the Project               |                            URL of the Project                          | 
 |                    :---:                      |                                 :---:                                  |
-|   StudentSources                              |              Replace this text with your application's URL or IP       |                                                        
+|   StudentSources                              |                         http://54.215.216.18/                        |                                                        
+
  
 
 ## NO code needs to be stored in the root of your repository. You may rename the application folder if you like to your team's application name. But all source code related to your team's application should be stored inside the application folder.
