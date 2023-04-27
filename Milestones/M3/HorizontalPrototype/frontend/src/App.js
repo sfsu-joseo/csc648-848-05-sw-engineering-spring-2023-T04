@@ -43,6 +43,11 @@ function App() {
   const handleAuthenticate = async () => {
     let tempData = {};
     setData((tempData = JSON.parse(localStorage.getItem("data"))));
+
+    // --------- TEMPORARY BS ---------- //
+    setLoading(true);
+    return;
+
     try {
       const res = await axios.get(
         `/authenticate/${tempData.password}/${tempData.id}`

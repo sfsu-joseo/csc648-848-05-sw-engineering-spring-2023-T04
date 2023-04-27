@@ -48,6 +48,17 @@ const Login = ({ data, windowDimension }) => {
 
     setErrMsg("");
 
+    // ---------- TEMPORARY -------- /
+    data.user = "test1234";
+    data.isLoggedIn = true;
+    data.id = 1;
+    data.password = "password";
+
+    localStorage.setItem("data", JSON.stringify(data));
+
+    navigate("/student");
+    return;
+
     if (!validName) {
       setUserFocus(true);
       return;
@@ -175,7 +186,7 @@ const Login = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={user.trim(" ")}
                   onChange={(e) => setUser(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validName ? "false" : "true"}
                   aria-describedby="uidnote"
                   onFocus={() => setUserFocus(true)}
@@ -205,7 +216,7 @@ const Login = ({ data, windowDimension }) => {
                   autoComplete="new-password"
                   value={password.trim(" ")}
                   onChange={(e) => setPassword(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validPassword ? "false" : "true"}
                   aria-describedby="pwdnote"
                   onFocus={() => setPasswordFocus(true)}
@@ -216,7 +227,7 @@ const Login = ({ data, windowDimension }) => {
 
                 <button
                   style={{ marginTop: "37px" }}
-                  disabled={!validName || !validPassword ? true : false}
+                  // disabled={!validName || !validPassword ? true : false}
                 >
                   Continue
                 </button>
@@ -356,7 +367,7 @@ const Login = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={user.trim(" ")}
                   onChange={(e) => setUser(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validName ? "false" : "true"}
                   aria-describedby="uidnote"
                   onFocus={() => setUserFocus(true)}
@@ -387,7 +398,7 @@ const Login = ({ data, windowDimension }) => {
                   autoComplete="new-password"
                   value={password.trim(" ")}
                   onChange={(e) => setPassword(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validPassword ? "false" : "true"}
                   aria-describedby="pwdnote"
                   onFocus={() => setPasswordFocus(true)}
@@ -398,7 +409,7 @@ const Login = ({ data, windowDimension }) => {
 
                 <button
                   style={{ marginTop: "37px" }}
-                  disabled={!validName || !validPassword ? true : false}
+                  // disabled={!validName || !validPassword ? true : false}
                 >
                   Continue
                 </button>

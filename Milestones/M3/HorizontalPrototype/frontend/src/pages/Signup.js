@@ -93,6 +93,17 @@ const Signup = ({ data, windowDimension }) => {
 
     setErrMsg("");
 
+    // ---------- TEMPORARY -------- /
+    data.user = "test1234";
+    data.isLoggedIn = true;
+    data.id = 1;
+    data.password = "password";
+
+    localStorage.setItem("data", JSON.stringify(data));
+
+    navigate("/student");
+    return;
+
     // convert email to lowercase here
     let convertEmail = email.toLowerCase();
 
@@ -243,7 +254,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={firstName.trim(" ")}
                   onChange={(e) => setFirstName(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validFirstName ? "false" : "true"}
                   aria-describedby="firstnamenote"
                   onFocus={() => setFirstNameFocus(true)}
@@ -266,7 +277,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={lastName.trim(" ")}
                   onChange={(e) => setLastName(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validLastName ? "false" : "true"}
                   aria-describedby="lastnamenote"
                   onFocus={() => setLastNameFocus(true)}
@@ -291,7 +302,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={email.trim(" ")}
                   onChange={(e) => setEmail(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validEmail ? "false" : "true"}
                   aria-describedby="emailnote"
                   onFocus={() => setEmailFocus(true)}
@@ -315,7 +326,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={user.trim(" ")}
                   onChange={(e) => setUser(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validName ? "false" : "true"}
                   aria-describedby="uidnote"
                   onFocus={() => setUserFocus(true)}
@@ -346,7 +357,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="new-password"
                   value={password.trim(" ")}
                   onChange={(e) => setPassword(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validPassword ? "false" : "true"}
                   aria-describedby="pwdnote"
                   onFocus={() => setPasswordFocus(true)}
@@ -375,15 +386,15 @@ const Signup = ({ data, windowDimension }) => {
 
                 <button
                   style={{ marginTop: "37px" }}
-                  disabled={
-                    !validName ||
-                    !validPassword ||
-                    !validFirstName ||
-                    !validLastName ||
-                    !validEmail
-                      ? true
-                      : false
-                  }
+                  // disabled={
+                  //   !validName ||
+                  //   !validPassword ||
+                  //   !validFirstName ||
+                  //   !validLastName ||
+                  //   !validEmail
+                  //     ? true
+                  //     : false
+                  // }
                 >
                   Continue
                 </button>
@@ -643,7 +654,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={firstName.trim(" ")}
                   onChange={(e) => setFirstName(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validFirstName ? "false" : "true"}
                   aria-describedby="firstnamenote"
                   onFocus={() => setFirstNameFocus(true)}
@@ -666,7 +677,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={lastName.trim(" ")}
                   onChange={(e) => setLastName(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validLastName ? "false" : "true"}
                   aria-describedby="lastnamenote"
                   onFocus={() => setLastNameFocus(true)}
@@ -691,7 +702,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={email.trim(" ")}
                   onChange={(e) => setEmail(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validEmail ? "false" : "true"}
                   aria-describedby="emailnote"
                   onFocus={() => setEmailFocus(true)}
@@ -715,7 +726,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="off"
                   value={user.trim(" ")}
                   onChange={(e) => setUser(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validName ? "false" : "true"}
                   aria-describedby="uidnote"
                   onFocus={() => setUserFocus(true)}
@@ -746,7 +757,7 @@ const Signup = ({ data, windowDimension }) => {
                   autoComplete="new-password"
                   value={password.trim(" ")}
                   onChange={(e) => setPassword(e.target.value.trim(" "))}
-                  required
+                  // required
                   aria-invalid={validPassword ? "false" : "true"}
                   aria-describedby="pwdnote"
                   onFocus={() => setPasswordFocus(true)}
@@ -775,15 +786,15 @@ const Signup = ({ data, windowDimension }) => {
 
                 <button
                   style={{ marginTop: "37px" }}
-                  disabled={
-                    !validName ||
-                    !validPassword ||
-                    !validFirstName ||
-                    !validLastName ||
-                    !validEmail
-                      ? true
-                      : false
-                  }
+                  // disabled={
+                  //   !validName ||
+                  //   !validPassword ||
+                  //   !validFirstName ||
+                  //   !validLastName ||
+                  //   !validEmail
+                  //     ? true
+                  //     : false
+                  // }
                 >
                   Continue
                 </button>
