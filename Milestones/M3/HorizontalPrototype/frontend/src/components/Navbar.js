@@ -85,6 +85,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                   className="option"
                   onTouchEnd={(e) => {
                     e.preventDefault();
+                    navigate("/student");
                     setMessage({
                       title: "Account",
                       body: null,
@@ -93,6 +94,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                   }}
                   onClick={(e) => {
                     e.preventDefault();
+                    navigate("/student");
                     setMessage({
                       title: "Account",
                       body: null,
@@ -106,6 +108,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                   className="option"
                   onTouchEnd={(e) => {
                     e.preventDefault();
+                    navigate("/student");
                     setMessage({
                       title: "Inbox",
                       body: "This feature shall allow the user to view, delete, and send direct messages.",
@@ -114,6 +117,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
                   }}
                   onClick={(e) => {
                     e.preventDefault();
+                    navigate("/student");
                     setMessage({
                       title: "Inbox",
                       body: "This feature shall allow the user to view, delete, and send direct messages.",
@@ -175,11 +179,6 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
               onClick={() => {
                 handleNav("student");
               }}
-              // style={
-              //   window.location.pathname === "/student"
-              //     ? { color: "dimgrey" }
-              //     : { color: "lightgrey" }
-              // }
               className={
                 window.location.pathname === "/student"
                   ? "root selected-root"
@@ -197,11 +196,6 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
               onClick={() => {
                 handleNav("sources");
               }}
-              // style={
-              //   window.location.pathname === "/sources"
-              //     ? { color: "dimgrey" }
-              //     : { color: "lightgrey" }
-              // }
               className={
                 window.location.pathname === "/sources"
                   ? "root selected-root"
