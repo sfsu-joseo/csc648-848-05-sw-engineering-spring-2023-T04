@@ -162,9 +162,15 @@ const Signup = ({ data, windowDimension }) => {
         console.log(response);
 
         data.user = user;
-        data.isLoggedIn = true;
-        data.id = response.data;
+        data.firstName = firstName;
+        data.lastName = lastName;
+        data.email = convertEmail;
         data.password = password;
+        data.id = response.data;
+
+        // data.isLoggedIn = true;
+
+        console.log(data);
 
         localStorage.setItem("data", JSON.stringify(data));
         window.scrollTo(0, 0);

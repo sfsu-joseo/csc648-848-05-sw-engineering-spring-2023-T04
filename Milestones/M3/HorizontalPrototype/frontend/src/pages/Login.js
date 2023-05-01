@@ -67,16 +67,23 @@ const Login = ({ data, windowDimension }) => {
 
     try {
       const res = await axios.get(`/login/${user}/${password}`);
+      console.log(res.data.id);
 
-      if (res.data === -1) {
+      if (res.data.id === -1) {
         setErrMsg("Invalid email or username.");
-      } else if (res.data === -2) {
+      } else if (res.data.id === -2) {
         setErrMsg("Invalid password.");
-      } else if (res.data > 0) {
-        data.user = user; // update this to set to username, if email was given
-        data.isLoggedIn = true;
-        data.id = res.data;
-        data.password = password;
+      } else if (res.data.id > 0) {
+        data.user = res.data.user;
+        data.firstName = res.data.firstName;
+        data.lastName = res.data.lastName;
+        data.email = res.data.email;
+        data.password = res.data.password;
+        data.id = res.data.id;
+
+        // data.isLoggedIn = true;
+
+        console.log(data);
 
         localStorage.setItem("data", JSON.stringify(data));
 

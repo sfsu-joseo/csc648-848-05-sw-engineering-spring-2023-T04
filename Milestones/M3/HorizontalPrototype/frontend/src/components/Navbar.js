@@ -29,7 +29,8 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
       title: null,
       body: null,
     });
-    data.isLoggedIn = false;
+    // data.isLoggedIn = false;
+    data.id = -1;
     localStorage.clear();
     window.scrollTo(0, 0);
     navigate("/login");
@@ -98,7 +99,7 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
   return (
     <>
       {" "}
-      {data.isLoggedIn ? (
+      {data.id > 0 ? (
         <div
           className={
             windowDimension.winWidth > 500

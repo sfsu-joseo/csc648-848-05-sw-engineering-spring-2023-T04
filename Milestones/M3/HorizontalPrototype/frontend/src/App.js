@@ -24,8 +24,11 @@ function App() {
 
   const [data, setData] = useState({
     user: "",
+    firstName: "",
+    lastName: "",
+    email: "",
     password: "",
-    isLoggedIn: false,
+    // isLoggedIn: false,
     id: -1,
   });
 

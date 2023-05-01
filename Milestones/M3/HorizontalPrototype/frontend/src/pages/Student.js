@@ -72,7 +72,7 @@ const Student = ({
   };
 
   useEffect(() => {
-    if (!data.isLoggedIn) {
+    if (!data.id > 0) {
       data.currentPoint = "login";
       window.scrollTo(0, 0);
       navigate("/login");
