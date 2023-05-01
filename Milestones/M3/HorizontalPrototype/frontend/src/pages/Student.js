@@ -87,8 +87,8 @@ const Student = ({
   useEffect(() => {
     setPinSelected(false);
     // setCurrentFile(null);
-    if (message.title !== "Account" && message.title !== "Inbox")
-      setMessage({ title: null, body: null });
+    if (message.body !== "hold") setMessage({ title: null, body: null });
+    else setMessage({ title: message.title, body: null });
     setSearchResults([]);
   }, [currentDirectory, currentFile]);
 
