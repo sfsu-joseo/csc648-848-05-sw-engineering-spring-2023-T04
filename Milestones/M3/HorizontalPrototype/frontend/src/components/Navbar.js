@@ -3,7 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import logo from "../logos/Light-Version.png";
 
-export default function Navbar({ data, windowDimension, message, setMessage }) {
+export default function Navbar({
+  data,
+  windowDimension,
+  message,
+  setMessage,
+  setSplashMsg,
+  explorerData,
+  storageLimit,
+}) {
   const [topRightNav, setTopRightNave] = useState("");
   // const [showUserPanel, setShowUserPanel] = useState(false);
   // const [showNotifications, setShowNotifications] = useState(false);
@@ -22,6 +30,22 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
     }
   }, [window.location.pathname]);
 
+  // ---------- reused from INFO component ---------- //
+  function formatBytes(size) {
+    const bytes = size;
+    const kilobytes = bytes / 1000;
+    const megabytes = bytes / (1000 * 1000);
+
+    if (megabytes >= 1000) {
+      const gigabytes = bytes / (1000 * 1000 * 1000);
+      return `${gigabytes.toFixed(2)} GB`;
+    } else if (kilobytes >= 1000) {
+      return `${megabytes.toFixed(2)} MB`;
+    } else {
+      return `${kilobytes.toFixed(2)} KB`;
+    }
+  }
+
   const testLogout = (e) => {
     e.preventDefault();
     setDisplay("");
@@ -34,6 +58,11 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
     localStorage.clear();
     window.scrollTo(0, 0);
     navigate("/login");
+
+    setSplashMsg({
+      message: "Goodbye!",
+      isShowing: true,
+    });
   };
 
   const handleNav = (destination) => {
@@ -114,6 +143,41 @@ export default function Navbar({ data, windowDimension, message, setMessage }) {
               onFocus={() => console.log("focused user")}
               onBlur={() => setDisplay("")}
             >
+              {/* indicate storage limit somewhere here */}
+
+              <div
+                style={{
+                  lineHeight: "10px",
+                  margin: "20px",
+                  textAlign: "left",
+                }}
+              >
+                <label htmlFor="">
+                  {`${formatBytes(explorerData.size)} / ${formatBytes(
+                    storageLimit
+                  )}`}
+                </label>
+                {/* storage limit ~ container */}
+                <div
+                  style={{
+                    backgroundColor: "lightgray",
+                    marginTop: "10px",
+                    width: "200px",
+                    borderRadius: "100px",
+                  }}
+                >
+                  {/* currently stored */}
+                  <div
+                    style={{
+                      backgroundColor: "limegreen",
+                      height: "10px",
+                      width: `${(explorerData.size / storageLimit) * 100}%`,
+                      borderRadius: "100px",
+                    }}
+                  ></div>
+                </div>
+              </div>
+
               <ul>
                 <div
                   className="option"

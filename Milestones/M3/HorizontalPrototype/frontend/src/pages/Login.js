@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 
 const user_endpoint = "/users";
 
-const Login = ({ data, windowDimension }) => {
+const Login = ({ data, windowDimension, setSplashMsg }) => {
   const userRef = useRef();
   const errRef = useRef();
   const navigate = useNavigate();
@@ -92,6 +92,11 @@ const Login = ({ data, windowDimension }) => {
         setPassword("");
         window.scrollTo(0, 0);
         navigate("/student");
+
+        setSplashMsg({
+          message: "Welcome back!",
+          isShowing: true,
+        });
         return;
       }
     } catch (err) {

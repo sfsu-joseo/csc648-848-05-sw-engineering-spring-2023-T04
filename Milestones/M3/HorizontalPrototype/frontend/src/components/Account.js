@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
-const Account = ({ data }) => {
+const Account = ({ data, splashMsg, setSplashMsg }) => {
   const navigate = useNavigate();
 
   const user_regex_l = /\S{4,24}/;
@@ -112,10 +112,20 @@ const Account = ({ data }) => {
         user,
       });
 
+      console.log(res);
+
       if (res.data.id === -1) {
         // setErrMsg("Invalid email or username.");
+        setSplashMsg({
+          message: "Username is already taken.",
+          isShowing: true,
+        });
       } else if (res.data.id === -2) {
         // setErrMsg("Invalid password.");
+        setSplashMsg({
+          message: "Email is already in use.",
+          isShowing: true,
+        });
       } else if (res.data.id > 0) {
         data.user = user;
         data.firstName = firstName;
@@ -126,13 +136,21 @@ const Account = ({ data }) => {
         console.log(data);
 
         localStorage.setItem("data", JSON.stringify(data));
+
+        setSplashMsg({
+          message: "Update successful!",
+          isShowing: true,
+        });
         return;
       }
     } catch (err) {
       if (!err?.response) {
         // setErrMsg("No server response.");
+        setSplashMsg({
+          message: "No server response.",
+          isShowing: true,
+        });
       }
-      // errRef.current.focus();
     }
   };
 
@@ -149,11 +167,18 @@ const Account = ({ data }) => {
       navigate("/login");
 
       // display splash here
+      setSplashMsg({
+        message: "Your account was successfully deleted.",
+        isShowing: true,
+      });
     } catch (err) {
       if (!err?.response) {
         // setErrMsg("No server response.");
+        setSplashMsg({
+          message: "No server response.",
+          isShowing: true,
+        });
       }
-      // errRef.current.focus();
     }
   };
 
