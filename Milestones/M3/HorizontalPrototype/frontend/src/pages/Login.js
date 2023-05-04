@@ -66,10 +66,7 @@ const Login = ({ data, windowDimension, setSplashMsg }) => {
     // }
 
     try {
-      const res = await axios.get(`/login/${user}/${password}`, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: false,
-      });
+      const res = await axios.get(`/login/${user}/${password}`);
       console.log(res.data.id);
 
       if (res.data.id === -1) {
