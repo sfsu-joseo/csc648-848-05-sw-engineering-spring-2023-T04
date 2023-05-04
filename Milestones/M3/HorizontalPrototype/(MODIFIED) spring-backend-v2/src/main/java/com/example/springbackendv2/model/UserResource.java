@@ -36,32 +36,32 @@ public class UserResource {
 
     @ManyToOne
     @JoinColumn(name = "userID")
-    private int userID;
+    private RegisteredUser RegisteredUser;
 
     @ManyToOne
     @JoinColumn(name = "commentID")
-    private int commentID;
+    private ResourceComment ResourceComment;
 
     @OneToOne
     @JoinColumn(name = "noteID")
-    private int noteID;
-    
+    private UserNote UserNote;
+
     // Types of files, child entities (WIP not sure if this is correct)
     // @OneToOne(mappedBy = "userResource")
     // private Text textFile;
-    
+
     // @OneToOne(mappedBy = "userResource")
     // private Image image;
-    
+
     // @OneToOne(mappedBy = "userResource")
     // private Video video;
-    
+
     // @OneToOne(mappedBy = "userResource")
     // private Audio audio;
-    
+
     // @OneToOne(mappedBy = "userResource")
     // private Webpage webpage;
-    
+
     public int getResourceID() {
         return resourceID;
     }
@@ -158,4 +158,3 @@ public class UserResource {
         this.image = image;
     }
 }
-
