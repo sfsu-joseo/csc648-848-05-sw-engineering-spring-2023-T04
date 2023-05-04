@@ -17,6 +17,15 @@ const AboutUs = ({ windowDimension }) => {
         </p>
 
         <br />
+        <header>Elias Abay</header>
+        <p>
+          Hello! I'm the Backend Lead for Team 4. I'm a computer science student
+          at SFSU and I'm in my second to last semester so I'm almost done!! A few
+          things that I enjoy when I have free time is that I like to listen to R&B music
+          or go out to hang with friends. Another thing that I enjoy is playing video
+          games, especially ones from older consoles. 
+        </p>
+        <br />
         <header>Saru Shrestha</header>
         <p>
           Meet Saru, an enthusiastic and driven computer science student who
