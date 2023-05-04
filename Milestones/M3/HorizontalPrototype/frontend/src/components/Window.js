@@ -32,16 +32,7 @@ const Window = ({
   if (searchResults && searchResults.length > 0) {
     return (
       <div className="search-results show-message" id="message">
-        <div
-          style={{
-            backgroundColor: "#3d3d3d",
-            padding: "10px",
-            borderTopLeftRadius: "5px",
-            borderTopRightRadius: "5px",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-          }}
-        >
+        <div className="window-header">
           <b style={{ color: "#fafafa", paddingLeft: "5px" }}>Search Results</b>
           <span style={{ justifySelf: "right" }}>
             <div
@@ -93,16 +84,7 @@ const Window = ({
           transition: ".4s",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#3d3d3d",
-            padding: "10px",
-            borderTopLeftRadius: "5px",
-            borderTopRightRadius: "5px",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-          }}
-        >
+        <div className="window-header">
           <b style={{ color: "#fafafa", paddingLeft: "5px" }}>
             {message.title}
           </b>
@@ -145,16 +127,7 @@ const Window = ({
           transition: ".4s",
         }}
       >
-        <div
-          style={{
-            backgroundColor: "#3d3d3d",
-            padding: "10px",
-            borderTopLeftRadius: "5px",
-            borderTopRightRadius: "5px",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-          }}
-        >
+        <div className="window-header">
           <b style={{ color: "#fafafa", paddingLeft: "5px" }}>
             {message.title}
           </b>
@@ -176,9 +149,7 @@ const Window = ({
             </div>
           </span>
         </div>
-        <div
-          style={{ padding: "20px", height: "500.5px", overflowY: "scroll" }}
-        >
+        <div style={{ height: "500.5px" }}>
           {/* add INBOX component here */}
           <Inbox data={data} />
         </div>
@@ -187,16 +158,7 @@ const Window = ({
   } else if (message.title && message.title === "Uh-oh!") {
     return (
       <div className="search-results show-message" id="message">
-        <div
-          style={{
-            backgroundColor: "#3d3d3d",
-            padding: "10px",
-            borderTopLeftRadius: "5px",
-            borderTopRightRadius: "5px",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-          }}
-        >
+        <div className="window-header">
           <b style={{ color: "#fafafa", paddingLeft: "5px" }}>
             {message.title}
           </b>
@@ -224,16 +186,7 @@ const Window = ({
   } else if (message.title) {
     return (
       <div className="search-results show-message" id="message">
-        <div
-          style={{
-            backgroundColor: "#3d3d3d",
-            padding: "10px",
-            borderTopLeftRadius: "5px",
-            borderTopRightRadius: "5px",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-          }}
-        >
+        <div className="window-header">
           <b style={{ color: "#fafafa", paddingLeft: "5px" }}>
             To be implemented ~ {message.title}
           </b>
