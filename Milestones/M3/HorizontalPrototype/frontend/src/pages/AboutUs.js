@@ -62,6 +62,16 @@ const AboutUs = ({ windowDimension }) => {
           . Don't hesitate to reach out and send her a connection request to
           stay connected and explore professional opportunities together.
         </p>
+        <br/>
+        <header>Parth Panchal</header>
+        <p>
+          Hey! I am the Github Master for Team 4. I'm a computer science grad student
+          at SFSU and I'm in my first semester!! After working more than 2 years as a full stack developer, I 
+          decided to go for master's to build on my fundamentals and explore different areas of tech. Looking
+           forward to a fun time in the bay area! Github: <Link to={"https://parthfloyd.github.io"} target="_blank">
+            @parthfloyd
+          </Link>
+        </p>
       </div>
 
       <Footer windowDimension={windowDimension} />
