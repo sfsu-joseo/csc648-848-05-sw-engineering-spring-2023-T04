@@ -110,4 +110,11 @@ public class StorageController {
     public String uploadFolder(@RequestParam(value = "path") String path){
         return service.uploadFolderToDestination(path);
     }
+
+    //endpoint for renaming a file
+    @PutMapping("/renameFile")
+    public String rename(@RequestParam(value = "key1") String fileKey, @RequestParam(value = "key2") String newFileKey) {
+        service.rename(fileKey, newFileKey);
+        return "Successful Rename: " + fileKey + " to " + newFileKey;
+    }
 }
