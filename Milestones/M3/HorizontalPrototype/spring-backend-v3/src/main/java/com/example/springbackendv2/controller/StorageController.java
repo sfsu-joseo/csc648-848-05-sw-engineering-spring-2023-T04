@@ -67,6 +67,12 @@ public class StorageController {
         return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/move")
+    public ResponseEntity<String> moveFile(@RequestParam("source") String source, @RequestParam("destination") String destination) {
+        service.moveFile(source,destination);
+        return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
+    }
+
     @DeleteMapping("/trash")
     public ResponseEntity<String> emptyTrash(){
         service.emptyTrash();

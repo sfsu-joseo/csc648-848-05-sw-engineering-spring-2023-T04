@@ -103,6 +103,16 @@ public class StorageService {
         return obj_keys;
     }
 
+    public void moveFile(String oldLocation, String newLocation) {
+        //creating a copy of the original file and placing in the trash folder
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucketName, oldLocation, bucketName, newLocation);
+        s3Client.copyObject(copyObjectRequest);
+
+        //deleting the original file
+        s3Client.deleteObject(bucketName, fileName);
+        //return fileName + " removed";
+    }
+
     private File convertMultiPartFileToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
