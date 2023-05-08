@@ -92,14 +92,15 @@ public class StorageController {
 
         List<S3ObjectSummary> summaries = objects.getObjectSummaries();
         ArrayList<String> obj_keys = new ArrayList<>();
+
         for (S3ObjectSummary objectSummary : summaries){
             obj_keys.add(objectSummary.getKey());
         }
         return obj_keys;
     }
 
-    @PostMapping("/uploadFile")
-    public String uploadFile(@RequestBody ) {
-
+    @PostMapping("/uploadToDest")
+    public ResponseEntity<String> uploadToDest(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "path") String path) {
+        return new ResponseEntity<>(service.uploadFileToDestination(file, path), HttpStatus.OK);
     }
 }
