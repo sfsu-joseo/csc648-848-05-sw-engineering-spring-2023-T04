@@ -106,4 +106,13 @@ public class StorageService {
         s3Client.s3Client().putObject(new PutObjectRequest(bucketName, path, "/"));
         return "Folder created at " + path;
     }
+
+    //renames a file
+    public void rename(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.s3Client().copyObject(bucketName, fileKey, bucketName, newFileKey);
+        //delete old file
+        s3Client.s3Client().deleteObject(bucketName, fileKey);
+    }
+
 }
