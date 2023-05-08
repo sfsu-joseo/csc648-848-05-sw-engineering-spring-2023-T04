@@ -99,11 +99,13 @@ public class StorageController {
         return obj_keys;
     }
 
+    //endpoint for uploading file to specified path
     @PostMapping("/uploadFileToDest")
     public ResponseEntity<String> uploadToDest(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "path") String path) {
         return new ResponseEntity<>(service.uploadFileToDestination(file, path), HttpStatus.OK);
     }
 
+    //endpoint for uploading folder to specified path
     @PostMapping("/uploadFolderToDest")
     public String uploadFolder(@RequestParam(value = "path") String path){
         return service.uploadFolderToDestination(path);

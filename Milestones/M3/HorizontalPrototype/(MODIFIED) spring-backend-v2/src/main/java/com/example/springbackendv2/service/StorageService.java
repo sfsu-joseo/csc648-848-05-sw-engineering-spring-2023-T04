@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +33,6 @@ public class StorageService {
         fileObject.delete();
 
         return "File uploaded: " + filename;
-    }
-    //uploadFileToDestination function takes a file and a path. The function will add place the file in the specified path
-    public String uploadFileToDestination(MultipartFile file, String filePath)
-    {
-        //convert multipart file to file
-        File fileObject = convertMultiPartFileToFile(file);
-
-        //put object in specified path
-        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, filePath, fileObject));
-        fileObject.delete();
-        return("File uploaded to " + filePath);
     }
 
     public byte[] downloadFile(String fileName) {
@@ -100,5 +87,23 @@ public class StorageService {
         }
 
         return convertedFile;
+    }
+
+    //places the file at the specified path
+    public String uploadFileToDestination(MultipartFile file, String filePath)
+    {
+        //convert multipart file to file
+        File fileObject = convertMultiPartFileToFile(file);
+
+        //put object in specified path
+        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, filePath, fileObject));
+        fileObject.delete();
+        return("File uploaded to " + filePath);
+    }
+
+    //uploads empty folder to specified path
+    public String uploadFolderToDestination(String path){
+        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, path, "/"));
+        return "Folder created at " + path;
     }
 }
