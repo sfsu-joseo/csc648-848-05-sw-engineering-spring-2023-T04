@@ -37,7 +37,7 @@ public class StorageService {
         return "File uploaded: " + filename;
     }
     //uploadFileToDestination function takes a file and a path. The function will add place the file in the specified path
-    public void uploadFileToDestination(MultipartFile file, String filePath)
+    public String uploadFileToDestination(MultipartFile file, String filePath)
     {
         //convert multipart file to file
         File fileObject = convertMultiPartFileToFile(file);
@@ -45,7 +45,7 @@ public class StorageService {
         //put object in specified path
         s3Client.s3Client().putObject(new PutObjectRequest(bucketName, filePath, fileObject));
         fileObject.delete();
-        System.out.println("File uploaded to " + filePath);
+        return("File uploaded to " + filePath);
     }
 
     public byte[] downloadFile(String fileName) {
