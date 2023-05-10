@@ -107,7 +107,8 @@ public class StorageService {
         return "Folder created at " + path;
     }
 
-    //renames a file
+    //move a file and delete
+    //used for delete
     public void moveFile(String fileKey, String newFileKey) {
         //make a copy of the file with a new name
         s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
@@ -132,6 +133,12 @@ public class StorageService {
             obj_keys.add(objectSummary.getKey());
         }
         return obj_keys;
+    }
+
+    //copy a file or folder
+    public void copyFile(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
     }
 
 }
