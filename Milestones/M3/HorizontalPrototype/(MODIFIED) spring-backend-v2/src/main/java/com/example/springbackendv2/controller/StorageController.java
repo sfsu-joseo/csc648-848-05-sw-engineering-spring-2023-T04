@@ -110,4 +110,11 @@ public class StorageController {
     public ArrayList<String> viewObject(@RequestParam(value = "path") String path) {
         return service.listDirectory(path);
     }
+
+    //endpoint for adding a directory to a location in the user's directory
+    @PostMapping("/addDirectory")
+    public String addDirectory(@RequestParam(value = "src") String src, @RequestParam(value = "dest") String dest) {
+        service.copyFile(src, dest);
+        return "Copied from: " + src + " to " + dest;
+    }
 }
