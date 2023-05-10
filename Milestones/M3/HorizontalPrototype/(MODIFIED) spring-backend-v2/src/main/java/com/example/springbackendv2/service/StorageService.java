@@ -20,7 +20,7 @@ public class StorageService {
     private String bucketName;
 
     @Autowired
-    private StorageConfig s3Client;
+    private AmazonS3 s3Client;
 
     private static final String trashFolder = "trash/";
 
@@ -29,14 +29,14 @@ public class StorageService {
 
 //        this filename is adjusted to ensure uniqueness
         String filename = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, filename, fileObject));
+        s3Client.putObject(new PutObjectRequest(bucketName, filename, fileObject));
         fileObject.delete();
 
         return "File uploaded: " + filename;
     }
 
     public byte[] downloadFile(String fileName) {
-        S3Object s3Object = s3Client.s3Client().getObject(bucketName, fileName);
+        S3Object s3Object = s3Client.getObject(bucketName, fileName);
         S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
         try {
@@ -53,16 +53,16 @@ public class StorageService {
 
         //creating a copy of the original file and placing in the trash folder
         CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucketName, fileName, bucketName, trashedFile);
-        s3Client.s3Client().copyObject(copyObjectRequest);
+        s3Client.copyObject(copyObjectRequest);
 
         //deleting the original file
-        s3Client.s3Client().deleteObject(bucketName, fileName);
+        s3Client.deleteObject(bucketName, fileName);
         //return fileName + " removed";
     }
 
     public void emptyTrash(){
         //Making a list of all the files in the trash bin
-        ObjectListing listings = s3Client.s3Client().listObjects(bucketName, trashFolder);
+        ObjectListing listings = s3Client.listObjects(bucketName, trashFolder);
         List<S3ObjectSummary> summaries = listings.getObjectSummaries();
 
         //Selecting each of the files that are to be purged
@@ -74,7 +74,7 @@ public class StorageService {
         //Deleting all files that have been selected
         if(!deletedFiles.isEmpty()){
             DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName).withKeys(deletedFiles.toArray(new String[0]));
-            s3Client.s3Client().deleteObjects(deleteObjectsRequest);
+            s3Client.deleteObjects(deleteObjectsRequest);
         }
     }
 
@@ -96,23 +96,42 @@ public class StorageService {
         File fileObject = convertMultiPartFileToFile(file);
 
         //put object in specified path
-        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, filePath, fileObject));
+        s3Client.putObject(new PutObjectRequest(bucketName, filePath, fileObject));
         fileObject.delete();
         return("File uploaded to " + filePath);
     }
 
     //uploads empty folder to specified path
     public String uploadFolderToDestination(String path){
-        s3Client.s3Client().putObject(new PutObjectRequest(bucketName, path, "/"));
+        s3Client.putObject(new PutObjectRequest(bucketName, path, "/"));
         return "Folder created at " + path;
     }
 
     //renames a file
     public void rename(String fileKey, String newFileKey) {
         //make a copy of the file with a new name
-        s3Client.s3Client().copyObject(bucketName, fileKey, bucketName, newFileKey);
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
         //delete old file
-        s3Client.s3Client().deleteObject(bucketName, fileKey);
+        s3Client.deleteObject(bucketName, fileKey);
+    }
+
+    //lists files and folders in a directory
+    //used for loading root dir and to view other dirs
+    public ArrayList<String> listDirectory(String path) {
+
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucketName)
+                .withPrefix(path).withDelimiter("");
+
+        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
+
+        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+        ArrayList<String> obj_keys = new ArrayList<>();
+
+        for (S3ObjectSummary objectSummary : summaries){
+            obj_keys.add(objectSummary.getKey());
+        }
+        return obj_keys;
     }
 
 }
