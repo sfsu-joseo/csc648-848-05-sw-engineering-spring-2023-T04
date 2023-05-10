@@ -101,12 +101,11 @@ public class StorageController {
     //endpoint for renaming a file
     @PutMapping("/renameFile")
     public String rename(@RequestParam(value = "key1") String fileKey, @RequestParam(value = "key2") String newFileKey) {
-        service.rename(fileKey, newFileKey);
+        service.moveFile(fileKey, newFileKey);
         return "Successful Rename: " + fileKey + " to " + newFileKey;
     }
 
     //endpoint for getting another user's folder/file
-    //parameters: key(path) for folder or file
     @GetMapping("/viewDir")
     public ArrayList<String> viewObject(@RequestParam(value = "path") String path) {
         return service.listDirectory(path);

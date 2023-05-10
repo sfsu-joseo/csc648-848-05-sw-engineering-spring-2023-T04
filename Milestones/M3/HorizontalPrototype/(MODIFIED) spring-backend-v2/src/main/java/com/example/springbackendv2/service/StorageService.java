@@ -108,7 +108,7 @@ public class StorageService {
     }
 
     //renames a file
-    public void rename(String fileKey, String newFileKey) {
+    public void moveFile(String fileKey, String newFileKey) {
         //make a copy of the file with a new name
         s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
         //delete old file
