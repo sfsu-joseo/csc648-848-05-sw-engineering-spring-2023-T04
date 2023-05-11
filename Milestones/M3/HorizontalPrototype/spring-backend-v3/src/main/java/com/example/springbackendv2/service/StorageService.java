@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.example.springbackendv2.config.StorageConfig;
+import com.example.springbackendv2.exception.NotEnoughStorageException;
+import com.example.springbackendv2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,23 +26,32 @@ public class StorageService {
 //    @Autowired
 //    private StorageConfig s3Client;
 
+
     @Value("${application.bucket.name}")
     private String bucketName;
 
     @Autowired
     private AmazonS3 s3Client;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private static final String trashFolder = "trash/";
 
-    public String uploadFile(MultipartFile file) {
+    public String uploadFile(Long userId, MultipartFile file) {
         File fileObject = convertMultiPartFileToFile(file);
-
-//        this filename is adjusted to ensure uniqueness
-        String filename = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-        s3Client.putObject(new PutObjectRequest(bucketName, filename, fileObject));
-        fileObject.delete();
-
-        return "File uploaded: " + filename;
+        Integer fileSize = Math.toIntExact(fileObject.length());
+        Integer currentUserStorage = userRepository.getStorageLeftByUserId(userId);
+        if(currentUserStorage >= fileSize) {
+            //this filename is adjusted to ensure uniqueness
+            String filename = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+            s3Client.putObject(new PutObjectRequest(bucketName, filename, fileObject));
+            fileObject.delete();
+            userRepository.updateUserStorageByUserId(currentUserStorage - fileSize, userId); // Updated user storage after upload.
+            return "File uploaded: " + filename;
+        } else {
+            throw new NotEnoughStorageException();
+        }
     }
 
     public byte[] downloadFile(String fileName) {
@@ -69,6 +80,7 @@ public class StorageService {
     }
 
     public void emptyTrash(){
+        //TODO: add logic to decrease storage size after deleting file from trash.
         //Making a list of all the files in the trash bin
         ObjectListing listings = s3Client.listObjects(bucketName, trashFolder);
         List<S3ObjectSummary> summaries = listings.getObjectSummaries();

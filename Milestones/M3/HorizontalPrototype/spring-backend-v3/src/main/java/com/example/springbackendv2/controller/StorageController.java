@@ -38,9 +38,9 @@ public class StorageController {
 //    private String bucketName;
 
     /* This function will handle file upload requests */
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
-        return new ResponseEntity<>(service.uploadFile(file), HttpStatus.OK);
+    @PostMapping("/upload/{userId}")
+    public ResponseEntity<String> uploadFile(@PathVariable Long userId, @RequestParam(value = "file") MultipartFile file) {
+        return new ResponseEntity<>(service.uploadFile(userId,file), HttpStatus.OK);
     }
 
     /* This function will handle file download requests */

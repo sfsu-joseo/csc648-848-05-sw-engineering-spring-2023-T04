@@ -16,6 +16,7 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    private Integer storageLeftInBytes = 1000_000_000; //1GB default storage space
 
 
     public Long getId() {
@@ -64,6 +65,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getStorageLeftInBytes() {
+        return storageLeftInBytes;
+    }
+
+    public void setStorageLeftInBytes(Integer storageLeftInBytes) {
+        this.storageLeftInBytes = storageLeftInBytes;
     }
 }
 

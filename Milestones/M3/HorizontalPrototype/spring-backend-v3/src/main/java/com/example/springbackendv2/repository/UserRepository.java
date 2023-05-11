@@ -34,4 +34,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM registered_user WHERE id IN (SELECT fk_item_id FROM saved_user WHERE fk_user_id LIKE :user_id)", nativeQuery = true)
     List<User> getSavedUsers(@Param("user_id") Long user_id);
+
+    @Query(value = "SELECT storageLeftInBytes FROM registered_user WHERE id = :userId", nativeQuery = true)
+
+    Integer getStorageLeftByUserId(@Param("userId") Long userId);
+
+    @Modifying
+    @Query(value = "update registered_user u set u.storageLeftInBytes = :newStorageSize where u.id = :userId", nativeQuery = true)
+    void updateUserStorageByUserId(@Param("newStorageSize") Integer newStorageSize, @Param("userId") Long userId);
+
+
 }

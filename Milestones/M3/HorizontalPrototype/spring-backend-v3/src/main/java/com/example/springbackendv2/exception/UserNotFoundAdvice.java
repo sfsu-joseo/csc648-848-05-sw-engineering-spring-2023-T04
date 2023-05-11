@@ -21,4 +21,14 @@ public class UserNotFoundAdvice {
 
         return errorMap;
     }
+
+    @ResponseBody
+    @ExceptionHandler(NotEnoughStorageException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> exceptionHandler(NotEnoughStorageException exception){
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", exception.getMessage());
+
+        return errorMap;
+    }
 }
