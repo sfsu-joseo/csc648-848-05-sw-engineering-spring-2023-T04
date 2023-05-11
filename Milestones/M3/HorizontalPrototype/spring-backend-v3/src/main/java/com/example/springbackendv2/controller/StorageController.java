@@ -67,10 +67,16 @@ public class StorageController {
         return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
     }
 
-    @PostMapping("/move")
+    @PostMapping("/moveFile")
     public ResponseEntity<String> moveFile(@RequestParam("source") String source, @RequestParam("destination") String destination) {
         service.moveFile(source,destination);
-        return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
+        return new ResponseEntity<>("File moved successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/moveFolder")
+    public ResponseEntity<String> moveFolder(@RequestParam("source") String source, @RequestParam("destination") String destination){
+        service.moveFolder(source,destination);
+        return new ResponseEntity<>("Folder moved successfully", HttpStatus.OK);
     }
 
     @DeleteMapping("/trash")
