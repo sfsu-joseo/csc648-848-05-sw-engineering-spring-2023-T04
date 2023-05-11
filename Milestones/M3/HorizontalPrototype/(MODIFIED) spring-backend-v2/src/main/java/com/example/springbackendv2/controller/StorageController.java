@@ -82,21 +82,8 @@ public class StorageController {
     /* This endpoint loads the user's saved file directory
     *  The object keys (bucket paths) are returned as an array*/
     @GetMapping("/getUserDir/{userName}")
-    public ArrayList<String> listBucket(@PathVariable String userName) {
-
-        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
-                .withBucketName(bucketName)
-                .withPrefix(userName).withDelimiter("");
-
-        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
-
-        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
-        ArrayList<String> obj_keys = new ArrayList<>();
-
-        for (S3ObjectSummary objectSummary : summaries){
-            obj_keys.add(objectSummary.getKey());
-        }
-        return obj_keys;
+    public ArrayList<String> listBucket(@RequestParam (value = "username") String userName) {
+        return service.listDirectory(userName);
     }
 
     //endpoint for uploading file to specified path
@@ -114,7 +101,20 @@ public class StorageController {
     //endpoint for renaming a file
     @PutMapping("/renameFile")
     public String rename(@RequestParam(value = "key1") String fileKey, @RequestParam(value = "key2") String newFileKey) {
-        service.rename(fileKey, newFileKey);
+        service.moveFile(fileKey, newFileKey);
         return "Successful Rename: " + fileKey + " to " + newFileKey;
+    }
+
+    //endpoint for getting another user's folder/file
+    @GetMapping("/viewDir")
+    public ArrayList<String> viewObject(@RequestParam(value = "path") String path) {
+        return service.listDirectory(path);
+    }
+
+    //endpoint for adding a directory to a location in the user's directory
+    @PostMapping("/addDirectory")
+    public String addDirectory(@RequestParam(value = "src") String src, @RequestParam(value = "dest") String dest) {
+        service.copyFile(src, dest);
+        return "Copied from: " + src + " to " + dest;
     }
 }
