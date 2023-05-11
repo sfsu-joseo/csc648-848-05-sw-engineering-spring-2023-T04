@@ -25,8 +25,14 @@ const handleDrop = async (
   tempFile,
   explorerData,
   setMessage,
-  setSplashMsg
+  setSplashMsg,
+  data,
+  owner
 ) => {
+  if (data.user !== owner.user) {
+    return;
+  }
+
   e.preventDefault();
   e.stopPropagation();
   setLoading(true);
@@ -39,6 +45,17 @@ const handleDrop = async (
     setLoading(false);
   } else {
     const objArr = await readDroppedFiles(e, node);
+
+    if (objArr === -1) {
+      console.log("exceeded storage limit");
+      // set failed in main message
+      setLoading(false);
+      setMessage({
+        title: "Uh-oh!",
+        body: "Looks like this upload request exceeds the available storage space on this account. Try deleting files from trash bin to free up space.",
+      });
+      return;
+    }
 
     // --- this will update and sort global currDir --- //
 
@@ -54,7 +71,7 @@ const handleDrop = async (
       setLoading(false);
       setMessage({
         title: "Uh-oh!",
-        body: "Looks like this upload request exceeds the available storage space on this account. Try deleting files to free up space.",
+        body: "Looks like this upload request exceeds the available storage space on this account. Try deleting files from trash bin to free up space.",
       });
       return;
     }

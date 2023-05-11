@@ -33,11 +33,13 @@ const DirectoryTree = ({
   tempFile,
   setTempFile,
   handleMoveFile,
+  setShowingTrash,
+  showTrash,
 }) => {
   const [expand, setExpand] = useState(false);
   const [specialExpand, setSpecialExpand] = useState(false);
   const [input, setInput] = useState("");
-  const [validInput, setValidInput] = useState(true);
+  const [validInput, setValidInput] = useState(false);
   const delimiters = /[./:]+/;
   const restrictedChars = /[{}|"%~#<>]/;
   const [dragOver, setDragOver] = useState(false);
@@ -82,16 +84,14 @@ const DirectoryTree = ({
             body: null,
           });
           const res = input.split(delimiters);
-          if (res.length !== 2 && !res.includes("com")) {
-            setValidInput(false);
+          console.log(res);
+          if (res.includes("com")) {
+            setValidInput(true);
           } else {
-            if (res.includes("com")) {
-              setValidInput(true);
-            } else {
-              setValidInput(["txt"].includes(res[1]));
-            }
+            setValidInput("txt" === res[res.length - 1]);
           }
         } else {
+          setValidInput(false);
           setMessage({
             title: "Uh-oh!",
             body: 'Filenames cannot contain these characters: {}|"%~#<>',
@@ -145,7 +145,9 @@ const DirectoryTree = ({
     }
 
     // set curr dir
-    if (currentDirectory.pathname !== explorer.pathname) {
+    if (currentDirectory.pathname !== explorer.pathname || showTrash) {
+      setShowingTrash(false);
+
       if (specialExpand) {
         setExpand(!expand);
         return;
@@ -176,10 +178,11 @@ const DirectoryTree = ({
       if (showInput.type === "file") {
         const temp = input.split(delimiters);
         if (temp.includes("com")) {
-          if (temp.includes("https:")) handleInsertNode(e.target.value, "url");
+          if (temp.includes("https")) handleInsertNode(e.target.value, "url");
           else handleInsertNode("https://" + e.target.value, "url");
         } else {
-          handleInsertNode(e.target.value, temp[1]);
+          console.log(temp);
+          handleInsertNode(e.target.value, temp[temp.length - 1]);
         }
       } else {
         handleInsertNode(e.target.value, showInput.type);
@@ -211,7 +214,10 @@ const DirectoryTree = ({
   //   return <div>Loading...</div>;
   // }
 
-  if (explorer.type === "Folder") {
+  if (explorer.name.includes("~")) {
+    // these are hidden files
+    return;
+  } else if (explorer.type === "Folder") {
     return (
       <div>
         <div
@@ -243,11 +249,21 @@ const DirectoryTree = ({
               tempFile,
               explorerData,
               setMessage,
-              setSplashMsg
+              setSplashMsg,
+              data,
+              owner
             )
           }
           onDragOver={(e) =>
-            handleDragOver(e, tempFile, explorer, setMoveEffect, setDragOver)
+            handleDragOver(
+              e,
+              tempFile,
+              explorer,
+              setMoveEffect,
+              setDragOver,
+              data,
+              owner
+            )
           }
           onDragLeave={() => {
             setDragOver(false);
@@ -391,6 +407,8 @@ const DirectoryTree = ({
                   tempFile={tempFile}
                   setTempFile={setTempFile}
                   handleMoveFile={handleMoveFile}
+                  setShowingTrash={setShowingTrash}
+                  showTrash={showTrash}
                 />
               );
             }

@@ -11,11 +11,17 @@ import folderData from "./data/folderData";
 import LearnMore from "./pages/LearnMore";
 import Credits from "./pages/Credits";
 import AboutUs from "./pages/AboutUs";
+import trashData from "./data/trashData";
+
+import retreiveJSON from "./helpers/retreiveS3Bucket";
+import explorer from "./data/folderData";
+import SplashMessage from "./components/SplashMessage";
 
 function App() {
   const [loading, setLoading] = useState(null);
-  const [explorerData, setExplorerData] = useState(folderData);
-  const [trash, setTrash] = useState([]);
+  const [explorerData, setExplorerData] = useState(null);
+  const [trash, setTrash] = useState(null);
+
   const [storageLimit, setStorageLimit] = useState(1e9);
   const [splashMsg, setSplashMsg] = useState({
     message: "",
@@ -26,17 +32,7 @@ function App() {
     body: "",
   });
 
-  // or we can pass setExploreData and setTrash as props to Login.js and SignUp.js
-  const getFolderData = async () => {
-    // set loading to true
-    // get folderdata from backend
-    // init explorer data with folderdata
-    // init trash data with trash folder in folder data
-    // set loading to false
-  };
-
   // ------------ store user info from login/signup ---------- //
-
   const [data, setData] = useState({
     user: "",
     firstName: "",
@@ -51,10 +47,19 @@ function App() {
 
     if (localStorage.getItem("data")) {
       handleAuthenticate();
+      // console.log(trash);
     } else {
       setLoading(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (loading === false) {
+      console.log("loading finished");
+      console.log(explorerData);
+      initTrash();
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (splashMsg.isShowing) {
@@ -62,6 +67,17 @@ function App() {
       element.focus();
     }
   }, [splashMsg]);
+
+  const initTrash = () => {
+    for (let i = 0; i < explorerData.items.length; i++) {
+      if (explorerData.items[i].name === "~Trash") {
+        setTrash(explorerData.items[i]);
+        setLoading(true);
+        return;
+      }
+    }
+    setLoading(false);
+  };
 
   // ------------ authenticate localstorage ----------- //
 
@@ -77,7 +93,12 @@ function App() {
         localStorage.clear();
         window.location.reload();
       }
-      setLoading(true);
+
+      // retreive folder data
+      retreiveJSON(setExplorerData);
+      console.log("folder was retreived");
+
+      setLoading(false);
     } catch (err) {
       if (!err?.response) {
         setLoading(false);
@@ -111,35 +132,26 @@ function App() {
   // ------ check for initial server response ----------//
 
   if (loading === null) {
-    return <div className="App">Loading...</div>;
+    return (
+      <div className="App">
+        <SplashMessage splashMsg={splashMsg} setSplashMsg={setSplashMsg} />
+        Loading...
+      </div>
+    );
   } else if (loading === false) {
-    return <div className="App">No server response...</div>;
+    return (
+      <div className="App">
+        <SplashMessage splashMsg={splashMsg} setSplashMsg={setSplashMsg} />
+        No server response...
+      </div>
+    );
   }
 
   return (
     <div className="App">
       {/* ----------- splash message ------------ */}
 
-      {splashMsg.isShowing ? (
-        <button
-          className="splashMsg show-splash"
-          id="splash"
-          onBlur={() =>
-            setTimeout(() => {
-              setSplashMsg({
-                message: splashMsg.message,
-                isShowing: false,
-              });
-            }, 500)
-          }
-        >
-          {splashMsg.message}
-        </button>
-      ) : (
-        <button className="splashMsg hide-splash" id="splash">
-          {splashMsg.message}
-        </button>
-      )}
+      <SplashMessage splashMsg={splashMsg} setSplashMsg={setSplashMsg} />
 
       {/* ------------- router pages ------------ */}
 
@@ -170,6 +182,8 @@ function App() {
                 message={message}
                 setMessage={setMessage}
                 setSplashMsg={setSplashMsg}
+                setExplorerData={setExplorerData}
+                setLoading={setLoading}
               />
             }
           />
@@ -182,6 +196,8 @@ function App() {
                 message={message}
                 setMessage={setMessage}
                 setSplashMsg={setSplashMsg}
+                setExplorerData={setExplorerData}
+                setLoading={setLoading}
               />
             }
           />
@@ -208,8 +224,8 @@ function App() {
                 message={message}
                 setMessage={setMessage}
                 setSplashMsg={setSplashMsg}
-                trash={trash}
-                setTrash={setTrash}
+                trashItems={trash}
+                setTrashItems={setTrash}
               />
             }
           />

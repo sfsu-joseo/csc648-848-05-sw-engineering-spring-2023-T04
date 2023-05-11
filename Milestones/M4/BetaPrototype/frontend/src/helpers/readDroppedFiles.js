@@ -1,5 +1,8 @@
 // -------- adjust later to only store meta data -------- //
 
+// TEMPORARY ID
+let globalID = 100;
+
 const readFileContent = async (file) => {
   return new Promise((resolve) => {
     const reader = new FileReader();
@@ -9,7 +12,13 @@ const readFileContent = async (file) => {
 };
 
 const readEntries = async (entry, parent, path) => {
-  const currentPath = path ? `${path}/${entry.name}` : entry.name;
+  // adjust name to remove '/' this shouldn't be a problem, but just in case
+  const regex = new RegExp("/", "g");
+  const adjustedForPathname = entry.name.replace(regex, "%");
+
+  const currentPath = path
+    ? `${path}/${adjustedForPathname}`
+    : adjustedForPathname;
 
   if (entry.isFile) {
     const nameAndType = entry.name.split(".");
@@ -24,16 +33,19 @@ const readEntries = async (entry, parent, path) => {
             nameAndType[nameAndType.length - 1]
           )
         ) {
+          // UPLOAD FILE TO S3 BUCKET HERE AND GET UNIQUE KEY FROM BACKEND
           dataUrl = await readFileContent(file);
         }
 
         const newItem = {
+          id: globalID, // <-- REPLACE WITH DB GENERATED ID
           name: nameAndType[0] + "." + nameAndType[nameAndType.length - 1],
           pathname: currentPath,
           type: nameAndType[nameAndType.length - 1],
           size: file.size,
           isPinned: false,
           visibility: "Private",
+          permissions: "Only you have access",
           dataUrl: dataUrl,
           items: [],
         };
@@ -46,12 +58,14 @@ const readEntries = async (entry, parent, path) => {
     });
   } else if (entry.isDirectory) {
     const newFolder = {
+      id: globalID, // <-- REPLACE WITH DB GENERATED ID
       name: entry.name,
       pathname: currentPath,
       type: "Folder",
       size: 0,
       isPinned: false,
       visibility: "Private",
+      permissions: "Only you have access",
       dataUrl: "",
       items: [],
     };
@@ -69,6 +83,7 @@ const readEntries = async (entry, parent, path) => {
 
           for (let i = 0; i < entries.length; i++) {
             const e = entries[i];
+            globalID += 1;
             await readEntries(e, newFolder, currentPath);
           }
           await readAllEntries(); // Recursively call readAllEntries()
@@ -81,7 +96,7 @@ const readEntries = async (entry, parent, path) => {
   }
 };
 
-// ------- gets all contents of users home folder -------- //
+// ------- gets all contents of dropped item, and converts into a tree that i can render -------- //
 
 const readDroppedFiles = async (items, currentDirectory) => {
   const relPath = JSON.parse(JSON.stringify(currentDirectory.pathname));
@@ -93,7 +108,9 @@ const readDroppedFiles = async (items, currentDirectory) => {
   };
 
   if (items.dataTransfer) {
-    for (const item of items.dataTransfer.items) {
+    for (let i = 0; i < items.dataTransfer.items.length; i++) {
+      globalID += 1;
+      const item = items.dataTransfer.items[i];
       const entry = item.webkitGetAsEntry();
       if (entry) {
         await readEntries(entry, rootFolder, relPath);
@@ -101,8 +118,9 @@ const readDroppedFiles = async (items, currentDirectory) => {
     }
   } else {
     // for files only
-
-    for (const file of items.target.files) {
+    for (let i = 0; i < items.target.files.length; i++) {
+      globalID += 1;
+      const file = items.target.files[i];
       const entry = {
         isFile: true,
         name: file.name,

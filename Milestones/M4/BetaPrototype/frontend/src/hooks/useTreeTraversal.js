@@ -21,13 +21,22 @@ const useTreeTraversal = () => {
           "application/octet-stream;base64," + window.btoa("URL=" + name);
       }
 
+      const regex = new RegExp("/", "g");
+      const adjustedForPathname = name.replace(regex, "%");
+
+      // temporary placement
+      const time = new Date().getTime();
+      console.log(time);
+
       currentDirectory.items.push({
-        pathname: currentDirectory.pathname + "/" + name,
+        id: time, // temporary
+        pathname: currentDirectory.pathname + "/" + adjustedForPathname,
         name,
         type,
         size: 0,
         isPinned: false,
         visibility: "Private", // <-default
+        permissions: "Only you have access",
         dataUrl: dataUrl,
         items: [],
       });
@@ -48,20 +57,6 @@ const useTreeTraversal = () => {
       }
       const updateitems = folders.concat(files);
       currentDirectory.items = updateitems;
-
-      // remove unneccessary data here before parsing with stringify
-      const tempObject = {
-        name: currentDirectory.name,
-        pathname: currentDirectory.pathname,
-        type: currentDirectory.type,
-        size: 0,
-        isPinned: false,
-        visibility: currentDirectory.visibility,
-        dataUrl: "",
-        items: currentDirectory.items,
-      };
-
-      setCurrentDirectory(tempObject);
     }
   }
 
