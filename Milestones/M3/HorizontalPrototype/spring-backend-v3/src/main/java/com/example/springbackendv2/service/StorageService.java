@@ -5,6 +5,8 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.example.springbackendv2.config.StorageConfig;
 import com.example.springbackendv2.exception.NotEnoughStorageException;
+import com.example.springbackendv2.model.TrashMaster;
+import com.example.springbackendv2.repository.TrashMasterRepository;
 import com.example.springbackendv2.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +37,9 @@ public class StorageService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TrashMasterRepository trashMasterRepository;
 
     private static final String trashFolder = "trash/";
 
@@ -74,13 +79,35 @@ public class StorageService {
         CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucketName, fileName, bucketName, trashedFile);
         s3Client.copyObject(copyObjectRequest);
 
+        //Save info to trashmaster
+        TrashMaster newTrashMaster = new TrashMaster();
+        newTrashMaster.setOriginalPath(fileName);
+        newTrashMaster.setTrashFolderPath(trashedFile);
+        trashMasterRepository.save(newTrashMaster);
+
         //deleting the original file
         s3Client.deleteObject(bucketName, fileName);
         //return fileName + " removed";
     }
 
+    public void restoreFile(String trashFolderPath) {
+        //fetching original path of trash file
+        String originalFilePath = trashMasterRepository.findOriginalFilePathByTrashPath(trashFolderPath);
+
+        //creating a copy of the trash file and placing it in original Place
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucketName, trashFolderPath, bucketName, originalFilePath);
+        s3Client.copyObject(copyObjectRequest);
+
+        //Delete info from trashMaster
+        trashMasterRepository.deleteByTrashFilePath(trashFolderPath);
+
+        //deleting the original file
+        s3Client.deleteObject(bucketName, trashFolderPath);
+        //return fileName + " removed";
+    }
+
     public void emptyTrash(){
-        //TODO: add logic to decrease storage size after deleting file from trash.
+        //TODO: add logic to decrease storage size after deleting file from trash when implementing delete from trash.
         //Making a list of all the files in the trash bin
         ObjectListing listings = s3Client.listObjects(bucketName, trashFolder);
         List<S3ObjectSummary> summaries = listings.getObjectSummaries();
@@ -96,6 +123,8 @@ public class StorageService {
             DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(bucketName).withKeys(deletedFiles.toArray(new String[0]));
             s3Client.deleteObjects(deleteObjectsRequest);
         }
+
+        trashMasterRepository.deleteAll();
     }
 
 //    This will get the root folder of the user... I think.

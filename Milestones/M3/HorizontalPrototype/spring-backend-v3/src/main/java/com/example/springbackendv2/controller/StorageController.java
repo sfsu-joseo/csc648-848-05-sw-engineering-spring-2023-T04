@@ -67,6 +67,12 @@ public class StorageController {
         return new ResponseEntity<>("File deleted successfully", HttpStatus.OK);
     }
 
+    @PostMapping("/restore/{fileName}")
+    public ResponseEntity<String> restoreFile(@PathVariable String fileName) {
+        service.restoreFile(fileName);
+        return new ResponseEntity<>("File restored successfully", HttpStatus.OK);
+    }
+
     @PostMapping("/moveFile")
     public ResponseEntity<String> moveFile(@RequestParam("source") String source, @RequestParam("destination") String destination) {
         service.moveFile(source,destination);
