@@ -121,8 +121,22 @@ public class StorageService {
         s3Client.copyObject(copyObjectRequest);
 
         //deleting the original file
-        s3Client.deleteObject(bucketName, fileName);
+        s3Client.deleteObject(bucketName, oldLocation);
         //return fileName + " removed";
+    }
+
+    public void moveFolder(String oldLocation, String newLocation){
+        ObjectListing listings = s3Client.listObjects(bucketName, oldLocation);
+        List<S3ObjectSummary> summaries = listings.getObjectSummaries();
+
+        for (S3ObjectSummary summary : summaries) {
+            String key = summary.getKey();
+            String newKey = key.replace(oldLocation, newLocation);
+
+            s3Client.copyObject(bucketName, key, bucketName, newKey);
+            s3Client.deleteObject(bucketName, key);
+        }
+
     }
 
     private File convertMultiPartFileToFile(MultipartFile file) {
