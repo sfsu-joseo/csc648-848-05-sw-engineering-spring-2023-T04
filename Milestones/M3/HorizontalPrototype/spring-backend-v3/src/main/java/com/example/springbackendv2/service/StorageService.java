@@ -103,7 +103,6 @@ public class StorageService {
 
         //deleting the original file
         s3Client.deleteObject(bucketName, trashFolderPath);
-        //return fileName + " removed";
     }
 
     public void emptyTrash(){
