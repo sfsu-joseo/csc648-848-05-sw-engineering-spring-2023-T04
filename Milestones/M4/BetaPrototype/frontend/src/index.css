@@ -569,9 +569,29 @@ top:-9999px
     right: 10px;
 }
 
+.more-options {
+    position: absolute;
+    transform: translate(-80px, 10px);
+    
+    text-align: left;
+    border: 1px solid #ededed;
+    
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: dimgray;
+    line-height: 30px;
+    transition: .15s;
+    font-size: 15px;
+    overflow: hidden;
+    margin-top: -7px;
+    z-index: 5;
+}
+
 .header-more-options {
     position: absolute;
     right: 30px;
+    
     text-align: left;
     border: 1px solid #ededed;
     
@@ -692,7 +712,7 @@ top:-9999px
 .selection-content {
     padding-top: 15px;
     min-width: 80px;
-    transition: .1s;
+    /* transition: .1s; */
 }
 
 .nested {
@@ -726,6 +746,14 @@ top:-9999px
     background: #ececec;
     /* transition: .5s; */
     cursor: pointer;
+}
+
+.delete-all {
+
+}
+.delete-all:hover {
+    color: #adadad;
+    background-color: white;
 }
 
 #logo-link {
@@ -969,6 +997,10 @@ padding: 6px 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 } */
 .box-hover {}
+.box-highlight {
+    background-color: #fafafa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 .box-hover:hover {
     background-color: #fafafa;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -1379,6 +1411,16 @@ padding: 6px 10px;
 }
 
 /* ------ inner main grid content  */
+.tiny-footer-show {
+    transform: translate(0, 0px);
+    /* transition: .1s; */
+}
+
+.tiny-footer-hide {
+transform: translate(0, 75px);
+/* transition: .1s; */
+}
+
 
 .tiny-footer {
     height: 80px;
@@ -1390,12 +1432,10 @@ padding: 6px 10px;
     bottom: 0;
     background-color: #fafafa;
     border-top: 2px solid #ededed ;
-    text-align: right;
-
-    display: grid;
-    grid-template-columns: repeat(3, auto);
+    display: flex;
+    justify-content: right;
     z-index: 1;
-    /* justify-content: center; */
+    transition: .2s;
 }
 .page-manager {
     display: grid;
@@ -1515,6 +1555,7 @@ padding: 6px 10px;
     padding-left: 67.5px;
   }
   
+  
   .inputContainer__input {
     padding: 5px;
     display: flex;
@@ -1524,7 +1565,7 @@ padding: 6px 10px;
     align-items: center;
     justify-content: space-between;
     cursor: text;
-    height: 32px;
+    height: 40px;
     width: 100%;
     /* margin-right: 10px; */
     /* outline: none; */
@@ -1534,13 +1575,40 @@ padding: 6px 10px;
     /* border-top: 1px solid lightgray; */
     border-bottom: 1px solid #e0e0e0;
     font: 15px system-ui;
-    height: 32px;
+    height: 40px;
     width: 50px;
     background-color: white;
     text-align: center;
-    padding-top: 7px;
+    padding-top: 10px;
     color: limegreen;
     /* background-color: #ededed; */
+    font-size: bolder;
+    transition: .1s;
+  }
+
+  /* copied from above */
+    .inputContainer__input-2 {
+    padding: 5px;
+    display: flex;
+    border: 2px solid #e0e0e0;
+    border-right: 0px solid lightgray;
+    align-items: center;
+    justify-content: space-between;
+    cursor: text;
+    height: 45px;
+    width: 100%;
+    }
+ /* copied from above */
+  .inputValid-2 {
+    border: 2px solid #e0e0e0;
+    border-left: 0px solid lightgray;
+    font: 15px system-ui;
+    height: 45px;
+    width: 50px;
+    background-color: white;
+    text-align: center;
+    padding-top: 12.5px;
+    color: limegreen;
     font-size: bolder;
     transition: .1s;
   }
@@ -1593,6 +1661,32 @@ padding: 6px 10px;
   }
 
   /* ---------- for displaying pdf's --------  */
+  .pdf-controller {
+    position: fixed;
+    z-index: 2;
+    /* background-color: #adadad; */
+    /* width: 100%; */
+    min-width: 100px;
+    /* justify-self: left; */
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    padding: 10px;
+    padding-top: 20px;
+  }
+
+  .pdf-button {
+    height: 100px;
+    width: 40px;
+    /* border: 1px solid #3d3d3d; */
+    background-color: #202020;
+    color: #f6f6f6;
+    border-radius: 2px;
+  }
+  .pdf-button:hover {
+    cursor: pointer;
+    background-color: #3d3d3d;
+  }
 
  .react-pdf__Page__canvas {
     /* width: 100% !important;

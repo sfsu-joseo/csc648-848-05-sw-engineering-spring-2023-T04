@@ -16,6 +16,8 @@ const DropZone = ({
   setTempFile,
   handleMoveFile,
   setCurrentDirectory,
+  data,
+  owner,
 }) => {
   const [dragOver, setDragOver] = useState(false);
   const [moveEffect, setMoveEffect] = useState(false);
@@ -35,7 +37,9 @@ const DropZone = ({
         tempFile,
         explorerData,
         setMessage,
-        setSplashMsg
+        setSplashMsg,
+        data,
+        owner
       );
       setFiles(null);
     }
@@ -62,7 +66,9 @@ const DropZone = ({
 
   return (
     <div>
-      {dragOver || (currentDirectory.items.length === 0 && !moveEffect) ? (
+      {dragOver ||
+      (currentDirectory.items.length === 0 && !moveEffect) ||
+      (explorerData.items.length === 1 && !moveEffect) ? (
         <div
           className={"dropzone dragging"}
           onDrop={(e) =>
@@ -76,7 +82,9 @@ const DropZone = ({
               tempFile,
               explorerData,
               setMessage,
-              setSplashMsg
+              setSplashMsg,
+              data,
+              owner
             )
           }
           onDragOver={(e) =>
@@ -85,10 +93,12 @@ const DropZone = ({
               tempFile,
               currentDirectory,
               setMoveEffect,
-              setDragOver
+              setDragOver,
+              data,
+              owner
             )
           }
-          onDragExit={() => {
+          onDragLeave={() => {
             setDragOver(false);
             setMoveEffect(false);
           }}
@@ -131,7 +141,9 @@ const DropZone = ({
               tempFile,
               explorerData,
               setMessage,
-              setSplashMsg
+              setSplashMsg,
+              data,
+              owner
             )
           }
           onDragOver={(e) =>
@@ -140,7 +152,9 @@ const DropZone = ({
               tempFile,
               currentDirectory,
               setMoveEffect,
-              setDragOver
+              setDragOver,
+              data,
+              owner
             )
           }
           onDragLeave={() => {
@@ -176,7 +190,9 @@ const DropZone = ({
               tempFile,
               currentDirectory,
               setMoveEffect,
-              setDragOver
+              setDragOver,
+              data,
+              owner
             )
           }
         >
