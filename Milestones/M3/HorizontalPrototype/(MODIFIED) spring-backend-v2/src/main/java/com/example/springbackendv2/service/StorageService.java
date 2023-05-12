@@ -135,7 +135,7 @@ public class StorageService {
         return obj_keys;
     }
 
-    //copy a file or folder
+    //copy a file
     public void copyFile(String fileKey, String newFileKey) {
         //make a copy of the file with a new name
         s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
