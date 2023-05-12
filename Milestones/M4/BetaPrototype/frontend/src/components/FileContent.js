@@ -149,6 +149,7 @@ const FileContent = ({
         currentPage: temp,
         pageLimit: pdfController.pageLimit,
       });
+      window.scrollTo(0, 0);
     }
   };
 
