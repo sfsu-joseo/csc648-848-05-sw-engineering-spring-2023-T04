@@ -19,6 +19,11 @@ public class NoteController {
         return noteService.getLatestNoteByUserId(userId);
     }
 
+    @GetMapping("/note/latest/{resourceID}")
+    Note getLatestNoteByResourceID(@PathVariable("resourceID") int resourceID){
+        return noteService.getLatestNoteByResourceId(resourceID);
+    }
+
     @GetMapping("/note/all/{user_id}")
     List<Note> getAllNotesByUserId(@PathVariable("user_id") Long userId){
         return noteService.getAllNotesByUserId(userId);

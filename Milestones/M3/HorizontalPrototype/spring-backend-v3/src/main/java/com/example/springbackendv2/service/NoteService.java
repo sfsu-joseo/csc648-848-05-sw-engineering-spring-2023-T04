@@ -11,6 +11,8 @@ public interface NoteService {
 
     List<Note> getAllNotesByUserId(Long userId);
 
+    Note getLatestNoteByResourceId(int resourceID);
+
     void updateNoteText(Long noteId, String text);
 
     Note saveOrUpdateNote(Note note);

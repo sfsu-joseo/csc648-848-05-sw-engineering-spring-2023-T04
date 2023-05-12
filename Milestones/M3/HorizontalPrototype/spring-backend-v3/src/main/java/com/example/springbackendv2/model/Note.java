@@ -14,6 +14,9 @@ public class Note {
     @Column(columnDefinition = "TEXT")
     private String text;
 
+    @Column(name = "resourceID", nullable = false)
+    private int resourceID;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -42,10 +45,19 @@ public class Note {
         this.user = user;
     }
 
+    public int getResourceID() {
+        return resourceID;
+    }
+
+    public void setResourceID(int resourceID) {
+        this.resourceID = resourceID;
+    }
+
     public Note(){}
-    public Note(Long id, String text, User user) {
+    public Note(Long id, String text, int resourceID, User user) {
         this.id = id;
         this.text = text;
         this.user = user;
+        this.resourceID = resourceID;
     }
 }

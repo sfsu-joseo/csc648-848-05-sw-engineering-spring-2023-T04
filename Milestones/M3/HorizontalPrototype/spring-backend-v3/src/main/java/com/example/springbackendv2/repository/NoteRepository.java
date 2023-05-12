@@ -15,6 +15,9 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Query(value = "select n from user_note n WHERE n.user_id = :userId ORDER BY id DESC LIMIT 1", nativeQuery = true)
     Note findLatestNoteByUserId(@Param("userId") Long userId);
 
+    @Query(value = "select n from user_note n WHERE n.resourceID = :resourceID ORDER BY id DESC LIMIT 1", nativeQuery = true)
+    Note findLatestNoteByResourceId(@Param("resourceID") int resourceID);
+
     @Query(value = "update user_note n set n.text = :text WHERE n.id = :id", nativeQuery = true)
     void updateNoteTextById(@Param("id") Long id, @Param("text")  String text);
 }

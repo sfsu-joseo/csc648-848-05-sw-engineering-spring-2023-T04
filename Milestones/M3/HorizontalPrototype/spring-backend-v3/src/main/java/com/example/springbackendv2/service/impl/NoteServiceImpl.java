@@ -32,4 +32,9 @@ public class NoteServiceImpl implements NoteService {
     public Note saveOrUpdateNote(Note note) {
         return repository.save(note);
     }
+
+    @Override
+    public Note getLatestNoteByResourceId(int resourceID) {
+        return repository.findLatestNoteByResourceId(resourceID);
+    }
 }
