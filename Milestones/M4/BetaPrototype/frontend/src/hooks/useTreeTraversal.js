@@ -1,4 +1,5 @@
 // const finalTree = insertNode(currentDirectory, id, name, type);
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const useTreeTraversal = () => {
   function insertNode(
@@ -8,7 +9,9 @@ const useTreeTraversal = () => {
     setCurrentDirectory,
     setExplorerData,
     name,
-    type
+    type,
+    data,
+    setSplashMsg
   ) {
     if (currentDirectory.items.some((item) => item.name === name)) {
       // prompt skip or replace
@@ -57,13 +60,27 @@ const useTreeTraversal = () => {
       }
       const updateitems = folders.concat(files);
       currentDirectory.items = updateitems;
+
+      const ret = uploadJsonToS3(
+        "prototypebucket-1",
+        `${data.id}`,
+        explorerData
+      );
+      // if (ret === -1) {
+      //   setSplashMsg({
+      //     message: "Upload failed!",
+      //     isShowing: true,
+      //   });
+      // } else {
+      //   setSplashMsg({
+      //     message: "Upload successful!",
+      //     isShowing: true,
+      //   });
+      // }
     }
   }
 
-  const deleteNode = () => {};
-  const updateNode = () => {};
-
-  return { insertNode, deleteNode, updateNode };
+  return { insertNode };
 };
 
 export default useTreeTraversal;

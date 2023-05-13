@@ -84,7 +84,6 @@ const DirectoryTree = ({
             body: null,
           });
           const res = input.split(delimiters);
-          console.log(res);
           if (res.includes("com")) {
             setValidInput(true);
           } else {
@@ -110,7 +109,6 @@ const DirectoryTree = ({
   useEffect(() => {
     if (explorer.pathname === currentDirectory.pathname && !specialExpand) {
       setExpand(true);
-      console.log("expanded");
     }
   }, [currentDirectory]);
 
@@ -181,7 +179,6 @@ const DirectoryTree = ({
           if (temp.includes("https")) handleInsertNode(e.target.value, "url");
           else handleInsertNode("https://" + e.target.value, "url");
         } else {
-          console.log(temp);
           handleInsertNode(e.target.value, temp[temp.length - 1]);
         }
       } else {

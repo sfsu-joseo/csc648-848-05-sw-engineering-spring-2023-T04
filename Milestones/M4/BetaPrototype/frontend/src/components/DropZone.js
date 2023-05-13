@@ -26,7 +26,6 @@ const DropZone = ({
   // not sure what this is for
   useEffect(() => {
     if (files) {
-      console.log(files);
       handleDrop(
         files,
         currentDirectory,

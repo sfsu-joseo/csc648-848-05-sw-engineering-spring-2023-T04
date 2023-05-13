@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import downloadFile from "../helpers/downloadFile";
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const StudentSearch = ({
   currentDirectory,
@@ -49,6 +50,19 @@ const StudentSearch = ({
         setTrashItems(tempTrash);
       }
     }
+
+    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, exploreData);
+    // if (ret === -1) {
+    //   setSplashMsg({
+    //     message: "Upload failed!",
+    //     isShowing: true,
+    //   });
+    // } else {
+    //   setSplashMsg({
+    //     message: "Upload successful!",
+    //     isShowing: true,
+    //   });
+    // }
   };
 
   const handleExit = () => {
@@ -373,9 +387,11 @@ const StudentSearch = ({
               onClick={() => {
                 // handleSort();
                 setMessage({
-                  title: "Select",
-                  body: "This feature shall toggle multi-selection mode for deleting, moving, sharing, downloading in bulk and also sort alphanumerically.",
+                  title: "Save",
+                  body: "This is a temporary save button.",
                 });
+                // TESTING JSON UPLOAD
+                uploadJsonToS3("prototypebucket-1", `${data.id}`, exploreData);
               }}
             >
               {/* Select */}

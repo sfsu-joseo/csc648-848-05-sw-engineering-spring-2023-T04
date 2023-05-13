@@ -111,7 +111,7 @@ public class StorageController {
         return service.listDirectory(path);
     }
 
-    //endpoint for adding a directory to a location in the user's directory
+    //endpoint for adding a file to a location in the user's directory
     @PostMapping("/addDirectory")
     public String addDirectory(@RequestParam(value = "src") String src, @RequestParam(value = "dest") String dest) {
         service.copyFile(src, dest);

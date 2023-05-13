@@ -97,4 +97,42 @@ public class StorageController {
     public ArrayList<String> listBucket(@PathVariable String userName) {
         return service.getRoot(userName);
     }
+    /* This endpoint loads the user's saved file directory
+     *  The object keys (bucket paths) are returned as an array*/
+    @GetMapping("/getUserDir/{userName}")
+    public ArrayList<String> listBucket(@RequestParam (value = "username") String userName) {
+        return service.listDirectory(userName);
+    }
+
+    //endpoint for uploading file to specified path
+    @PostMapping("/uploadFileToDest")
+    public ResponseEntity<String> uploadToDest(@RequestParam(value = "file") MultipartFile file, @RequestParam(value = "path") String path) {
+        return new ResponseEntity<>(service.uploadFileToDestination(file, path), HttpStatus.OK);
+    }
+
+    //endpoint for uploading folder to specified path
+    @PostMapping("/uploadFolderToDest")
+    public String uploadFolder(@RequestParam(value = "path") String path){
+        return service.uploadFolderToDestination(path);
+    }
+
+    //endpoint for renaming a file
+    @PutMapping("/renameFile")
+    public String rename(@RequestParam(value = "key1") String fileKey, @RequestParam(value = "key2") String newFileKey) {
+        service.moveFile(fileKey, newFileKey);
+        return "Successful Rename: " + fileKey + " to " + newFileKey;
+    }
+
+    //endpoint for getting another user's folder/file
+    @GetMapping("/viewDir")
+    public ArrayList<String> viewObject(@RequestParam(value = "path") String path) {
+        return service.listDirectory(path);
+    }
+
+    //endpoint for adding a file to a location in the user's directory
+    @PostMapping("/addDirectory")
+    public String addDirectory(@RequestParam(value = "src") String src, @RequestParam(value = "dest") String dest) {
+        service.copyFile(src, dest);
+        return "Copied from: " + src + " to " + dest;
+    }
 }

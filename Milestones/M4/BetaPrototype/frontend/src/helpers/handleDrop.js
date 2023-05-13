@@ -1,4 +1,5 @@
 import readDroppedFiles from "./readDroppedFiles";
+import uploadJsonToS3 from "./uploadS3Bucket";
 
 const updateParentSize = (node, parsingArr, size) => {
   parsingArr.shift();
@@ -44,6 +45,9 @@ const handleDrop = async (
 
     setLoading(false);
   } else {
+    // uploading here
+    console.log("uploading this file");
+
     const objArr = await readDroppedFiles(e, node);
 
     if (objArr === -1) {
@@ -107,22 +111,23 @@ const handleDrop = async (
     let parsingArr = node.pathname.split("/");
     const res = updateParentSize(explorerData, parsingArr, size);
 
-    // console.log("from update parents");
-    // console.log(res);
-
     setLoading(false);
 
-    console.log("snapshot");
+    console.log("snapshot after upload");
     console.log(explorerData);
 
-    // send req to backend to sync files in cloud
-
-    console.log("updated storage limit w/ : " + explorerData.size + size);
-    // set success in splash message
-    setSplashMsg({
-      message: "Upload successful!",
-      isShowing: true,
-    });
+    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, explorerData);
+    if (ret === -1) {
+      setSplashMsg({
+        message: "Upload failed!",
+        isShowing: true,
+      });
+    } else {
+      setSplashMsg({
+        message: "Upload successful!",
+        isShowing: true,
+      });
+    }
   }
 };
 

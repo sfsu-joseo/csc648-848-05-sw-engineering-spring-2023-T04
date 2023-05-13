@@ -4,7 +4,7 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import Footer from "../components/Footer";
-import retreiveJSON from "../helpers/retreiveS3Bucket";
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const user_regex_l = /\S{4,24}/;
 
@@ -21,7 +21,8 @@ const Signup = ({
   windowDimension,
   setSplashMsg,
   setExplorerData,
-  setLoading,
+  setTrash,
+  setCurrentDirectory,
 }) => {
   const userRef = useRef();
   const errRef = useRef();
@@ -95,6 +96,17 @@ const Signup = ({
     setShowingPassword(!showingPassword);
   };
 
+  const initTrash = (folderData) => {
+    for (let i = 0; i < folderData.items.length; i++) {
+      if (folderData.items[i].name === "~Trash") {
+        setTrash(folderData.items[i]);
+        return 0;
+      }
+    }
+    console.log("failed to initilize trash");
+    return -1;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -166,8 +178,6 @@ const Signup = ({
         setUser("");
         setPassword("");
 
-        console.log(response);
-
         data.user = user;
         data.firstName = firstName;
         data.lastName = lastName;
@@ -175,42 +185,54 @@ const Signup = ({
         data.password = password;
         data.id = response.data;
 
-        // data.isLoggedIn = true;
-
-        console.log(data);
-
         // send request to create root folder in db
         const res = 1;
 
-        // let tempExplorer = {
-        //   id: res,
-        //   name: "Home",
-        //   pathname: "Home",
-        //   type: "Folder",
-        //   size: 0,
-        //   isPinned: false,
-        //   visibility: "Public",
-        //   permissions: "Can view only",
-        //   dataUrl: "",
-        //   items: [
-        //     {
-        //       id: -1, // i don't think an id needs to be created here
-        //       name: "~Trash",
-        //       pathname: "Home/~Trash",
-        //       type: "Folder",
-        //       size: 0,
-        //       isPinned: false,
-        //       visibility: "Private",
-        //       permissions: "Only you have access",
-        //       dataUrl: "",
-        //       items: [],
-        //     },
-        //   ],
-        // };
-        // setExplorerData(tempExplorer);
+        let tempExplorer = {
+          id: res,
+          name: "Home",
+          pathname: "Home",
+          type: "Folder",
+          size: 0,
+          isPinned: false,
+          visibility: "Public",
+          permissions: "Can view only",
+          dataUrl: "",
+          items: [
+            {
+              id: -1, // i don't think an id needs to be created here
+              name: "~Trash",
+              pathname: "Home/~Trash",
+              type: "Folder",
+              size: 0,
+              isPinned: false,
+              visibility: "Private",
+              permissions: "Only you have access",
+              dataUrl: "",
+              items: [],
+            },
+          ],
+        };
+        const ret = uploadJsonToS3(
+          "prototypebucket-1",
+          `${data.id}`,
+          tempExplorer
+        );
+        if (ret === -1) {
+          setErrMsg("Could not create new account.");
+          return;
+        }
 
-        retreiveJSON(setExplorerData);
-        setLoading(false);
+        setExplorerData(tempExplorer);
+        const res2 = initTrash(tempExplorer);
+        if (res2 === -1) {
+          setErrMsg("Failed to initialize trashbin");
+          return;
+        }
+        setCurrentDirectory(tempExplorer);
+
+        // retreiveJSON(setExplorerData);
+        // setLoading(false);
 
         localStorage.setItem("data", JSON.stringify(data));
         window.scrollTo(0, 0);

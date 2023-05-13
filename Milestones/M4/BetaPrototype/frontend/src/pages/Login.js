@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import Footer from "../components/Footer";
 import retreiveJSON from "../helpers/retreiveS3Bucket";
+import explorer from "../data/folderData";
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const user_endpoint = "/users";
 
@@ -13,7 +15,8 @@ const Login = ({
   windowDimension,
   setSplashMsg,
   setExplorerData,
-  setLoading,
+  setTrash,
+  setCurrentDirectory,
 }) => {
   const userRef = useRef();
   const errRef = useRef();
@@ -50,6 +53,17 @@ const Login = ({
     setShowingPassword(!showingPassword);
   };
 
+  const initTrash = (folderData) => {
+    for (let i = 0; i < folderData.items.length; i++) {
+      if (folderData.items[i].name === "~Trash") {
+        setTrash(folderData.items[i]);
+        return 0;
+      }
+    }
+    console.log("failed to initilize trash");
+    return -1;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,7 +88,6 @@ const Login = ({
 
     try {
       const res = await axios.get(`/login/${user}/${password}`);
-      console.log(res.data.id);
 
       if (res.data.id === -1) {
         setErrMsg("Invalid email or username.");
@@ -88,26 +101,53 @@ const Login = ({
         data.password = res.data.password;
         data.id = res.data.id;
 
-        // data.isLoggedIn = true;
+        retreiveJSON("prototypebucket-1", `${data.id}`).then((ret) => {
+          if (ret === -1) {
+            console.log("could not get user home directory");
+            console.log("creating new home directory");
 
-        console.log(data);
+            // changing ret to dummy data
+            ret = explorer;
 
-        localStorage.setItem("data", JSON.stringify(data));
+            // TEMP PLACEMENT: creating new home directory
+            const ret2 = uploadJsonToS3(
+              "prototypebucket-1",
+              `${data.id}`,
+              explorer
+            );
+            if (ret2 === -1) {
+              setErrMsg("Could not create new account.");
+              return;
+            }
 
-        retreiveJSON(setExplorerData);
-        setLoading(false);
+            setUser("");
+            setPassword("");
+          }
 
-        // clear input fields here
-        setUser("");
-        setPassword("");
-        window.scrollTo(0, 0);
-        navigate("/student");
+          setExplorerData(ret);
+          const res = initTrash(ret);
+          if (res === -1) {
+            setErrMsg("Failed to initialize trashbin.");
+            return;
+          }
+          setCurrentDirectory(ret);
 
-        setSplashMsg({
-          message: "Welcome back!",
-          isShowing: true,
+          localStorage.setItem("data", JSON.stringify(data));
+
+          // clear input fields here
+          setUser("");
+          setPassword("");
+
+          window.scrollTo(0, 0);
+          navigate("/student");
+
+          setSplashMsg({
+            message: "Welcome back!",
+            isShowing: true,
+          });
+
+          return;
         });
-        return;
       }
     } catch (err) {
       if (!err?.response) {
