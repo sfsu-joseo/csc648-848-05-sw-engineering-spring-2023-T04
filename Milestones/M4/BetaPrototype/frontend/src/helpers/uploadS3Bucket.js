@@ -1,18 +1,27 @@
-const AWS = require("aws-sdk");
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const uploadJsonToS3 = async (bucketName, key, jsonData) => {
-  const s3 = new AWS.S3();
+  const s3 = new S3Client({
+    region: "us-west-1",
+    credentials: {
+      accessKeyId: "",
+      secretAccessKey: "",
+    },
+  });
+
   const stringifiedData = JSON.stringify(jsonData);
 
   try {
     const params = {
       Bucket: bucketName,
-      Key: key + ".json", // will be the same as user_id
+      Key: key + ".json",
       Body: stringifiedData,
       ContentType: "application/json",
     };
 
-    await s3.upload(params).promise();
+    const command = new PutObjectCommand(params);
+    await s3.send(command);
+
     console.log(`JSON data uploaded to s3://${bucketName}/${key}`);
     return 0;
   } catch (error) {
@@ -20,4 +29,5 @@ const uploadJsonToS3 = async (bucketName, key, jsonData) => {
     return -1;
   }
 };
+
 export default uploadJsonToS3;

@@ -1,8 +1,13 @@
-// -- temp. will be retreiving from s3 bucket later on -- //
-const AWS = require("aws-sdk");
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 
-const retreiveJSON = async (bucketName, key) => {
-  const s3 = new AWS.S3();
+const retrieveJSON = async (bucketName, key) => {
+  const s3 = new S3Client({
+    region: "us-west-1",
+    credentials: {
+      accessKeyId: "",
+      secretAccessKey: "",
+    },
+  });
 
   try {
     const params = {
@@ -10,9 +15,15 @@ const retreiveJSON = async (bucketName, key) => {
       Key: key + ".json",
     };
 
-    const response = await s3.getObject(params).promise();
-    const jsonData = JSON.parse(response.Body.toString());
-    console.log("JSON data retrieved from S3:", jsonData);
+    const command = new GetObjectCommand(params);
+    const response = await s3.send(command);
+
+    const responseBuffer = await new Response(response.Body).arrayBuffer();
+    const jsonData = JSON.parse(
+      new TextDecoder("utf-8").decode(responseBuffer)
+    );
+
+    console.log("JSON data retrieved from S3:", jsonData, key + ".json");
     return jsonData;
   } catch (error) {
     console.error("Error downloading JSON data:", error);
@@ -20,4 +31,4 @@ const retreiveJSON = async (bucketName, key) => {
   }
 };
 
-export default retreiveJSON;
+export default retrieveJSON;
