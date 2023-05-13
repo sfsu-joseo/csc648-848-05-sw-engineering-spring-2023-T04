@@ -7,14 +7,10 @@ import Terms from "./pages/Terms";
 import { useEffect, useState } from "react";
 import axios from "./api/axios";
 import Student from "./pages/Student";
-import folderData from "./data/folderData";
 import LearnMore from "./pages/LearnMore";
 import Credits from "./pages/Credits";
 import AboutUs from "./pages/AboutUs";
-import uploadJsonToS3 from "./helpers/uploadS3Bucket";
-
 import retreiveJSON from "./helpers/retreiveS3Bucket";
-import explorer from "./data/folderData";
 import SplashMessage from "./components/SplashMessage";
 
 function App() {

@@ -42,6 +42,8 @@ const downloadFile = (currentFile) => {
 
     const blob = new Blob([ab], { type: mimeString });
     saveAs(blob, currentFile.name);
+  } else {
+    // send request to backend to download unsupported files
   }
 };
 

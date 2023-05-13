@@ -2,7 +2,6 @@ import TinyFooter from "./TinyFooter";
 import { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "pdfjs-dist/web/pdf_viewer.css";
-import Message from "./Window";
 import Window from "./Window";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;

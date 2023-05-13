@@ -1,30 +1,12 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import axios from "../api/axios";
 
 const retrieveJSON = async (bucketName, key) => {
-  const s3 = new S3Client({
-    region: "us-west-1",
-    credentials: {
-      accessKeyId: "",
-      secretAccessKey: "",
-    },
-  });
-
+  const adjustedKey = key + ".json";
+  console.log(adjustedKey);
   try {
-    const params = {
-      Bucket: bucketName,
-      Key: key + ".json",
-    };
-
-    const command = new GetObjectCommand(params);
-    const response = await s3.send(command);
-
-    const responseBuffer = await new Response(response.Body).arrayBuffer();
-    const jsonData = JSON.parse(
-      new TextDecoder("utf-8").decode(responseBuffer)
-    );
-
-    console.log("JSON data retrieved from S3:", jsonData, key + ".json");
-    return jsonData;
+    const res = await axios.get(`/download/${adjustedKey}`);
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     console.error("Error downloading JSON data:", error);
     return -1;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import readDroppedFiles from "../helpers/readDroppedFiles";
 import handleDrop from "../helpers/handleDrop";
 import handleDragOver from "../helpers/handleDrag";
 

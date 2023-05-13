@@ -1,9 +1,6 @@
 import CurrentDirectory from "./CurrentDirectory";
 import DropZone from "./DropZone";
-import Message from "./Window";
-import TinyFooter from "./TinyFooter";
 import Window from "./Window";
-import { useState } from "react";
 
 const FolderContent = ({
   windowDimension,

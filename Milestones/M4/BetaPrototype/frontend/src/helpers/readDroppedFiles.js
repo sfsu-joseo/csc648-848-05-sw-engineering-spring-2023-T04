@@ -3,6 +3,7 @@
 // TEMPORARY ID
 let globalID = 100;
 
+// this will probably only be used when retreiving files from backend
 const readFileContent = async (file) => {
   return new Promise((resolve) => {
     const reader = new FileReader();

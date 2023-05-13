@@ -13,7 +13,6 @@ import { ReactComponent as UNKNOWN } from "../logos/icons/unknown-mail.svg";
 import { ReactComponent as URL } from "../logos/icons/url.svg";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import readDroppedFiles from "../helpers/readDroppedFiles";
 import handleDrop from "../helpers/handleDrop";
 import handleDragOver from "../helpers/handleDrag";
 import downloadZip from "../helpers/downloadZip";
