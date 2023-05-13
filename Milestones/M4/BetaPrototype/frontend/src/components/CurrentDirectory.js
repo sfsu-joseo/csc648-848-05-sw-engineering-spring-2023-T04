@@ -103,7 +103,6 @@ const CurrentDirectory = ({
 
       updatePathname(loadData, currentDirectory.pathname);
       handleSetInputFalse();
-      console.log(showInput.index);
     }
   };
 
@@ -123,14 +122,9 @@ const CurrentDirectory = ({
   };
 
   const handleSetFocus = (index) => {
-    // console.log(state);
     const element = document.getElementById(`${index}`);
 
     setMoreOptions(index);
-
-    console.log(moreOptions);
-    console.log(index);
-
     element.focus({
       preventScroll: true,
     });
@@ -153,7 +147,6 @@ const CurrentDirectory = ({
 
   const setPinned = (loadData) => {
     let index = 0;
-    console.log(loadData.pathname);
     for (let i = 0; i < currentDirectory.items.length; i++) {
       if (currentDirectory.items[i].pathname === loadData.pathname) {
         currentDirectory.items[i].isPinned =
@@ -161,8 +154,6 @@ const CurrentDirectory = ({
         index = i;
       }
     }
-
-    console.log(index);
 
     let temp = JSON.parse(JSON.stringify(pinnedItems));
 
@@ -176,8 +167,6 @@ const CurrentDirectory = ({
         setPinnedItems(temp2);
       }
     }
-
-    console.log(pinnedItems);
   };
 
   // ------------------ pin is not selected ----------------- //
@@ -415,7 +404,6 @@ const CurrentDirectory = ({
                   <button
                     id={`${index}`}
                     className="more-options"
-                    onFocus={() => console.log("focusing")}
                     onBlur={() => {
                       setMoreOptions(-1);
                     }}
@@ -719,7 +707,6 @@ const CurrentDirectory = ({
                   <button
                     id={`${index}`}
                     className="more-options"
-                    onFocus={() => console.log("focusing")}
                     onBlur={() => {
                       setMoreOptions(-1);
                     }}

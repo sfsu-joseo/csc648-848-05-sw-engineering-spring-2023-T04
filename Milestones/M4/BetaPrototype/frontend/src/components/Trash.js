@@ -13,7 +13,7 @@ import Window from "./Window";
 import handleDragOver from "../helpers/handleDrag";
 import handleDrop from "../helpers/handleDrop";
 import { useState } from "react";
-import { useEffect } from "react";
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const Trash = ({
   data,
@@ -62,11 +62,12 @@ const Trash = ({
 
     for (let i = 0; i < explorerData.items.length; i++) {
       if (explorerData.items[i].name === "~Trash") {
-        console.log("first");
         explorerData.items[i] = tempTrash;
         setTrashItems(tempTrash);
       }
     }
+
+    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, explorerData);
   };
 
   return (

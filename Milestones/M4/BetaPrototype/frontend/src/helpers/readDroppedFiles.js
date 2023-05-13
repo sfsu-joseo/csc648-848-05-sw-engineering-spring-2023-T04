@@ -25,17 +25,17 @@ const readEntries = async (entry, parent, path) => {
 
     return new Promise(async (resolve) => {
       entry.file(async (file) => {
-        let dataUrl = "";
+        // let dataUrl = "";
 
-        /* IMPORTANT: must replace this will file streaming. */
-        if (
-          ["pdf", "txt", "url", "jpeg", "jpg", "gif", "png"].includes(
-            nameAndType[nameAndType.length - 1]
-          )
-        ) {
-          // UPLOAD FILE TO S3 BUCKET HERE AND GET UNIQUE KEY FROM BACKEND
-          dataUrl = await readFileContent(file);
-        }
+        // /* IMPORTANT: must replace this will file streaming. */
+        // if (
+        //   ["pdf", "txt", "url", "jpeg", "jpg", "gif", "png"].includes(
+        //     nameAndType[nameAndType.length - 1]
+        //   )
+        // ) {
+        //   // UPLOAD FILE TO S3 BUCKET HERE AND GET UNIQUE KEY FROM BACKEND
+        //   dataUrl = await readFileContent(file);
+        // }
 
         const newItem = {
           id: globalID, // <-- REPLACE WITH DB GENERATED ID
@@ -46,7 +46,7 @@ const readEntries = async (entry, parent, path) => {
           isPinned: false,
           visibility: "Private",
           permissions: "Only you have access",
-          dataUrl: dataUrl,
+          dataUrl: "",
           items: [],
         };
         parent.items.push(newItem);
@@ -98,8 +98,10 @@ const readEntries = async (entry, parent, path) => {
 
 // ------- gets all contents of dropped item, and converts into a tree that i can render -------- //
 
-const readDroppedFiles = async (items, currentDirectory) => {
-  const relPath = JSON.parse(JSON.stringify(currentDirectory.pathname));
+const readDroppedFiles = async (items, node) => {
+  console.log("uploading to:");
+  console.log(node.pathname);
+  const relPath = JSON.parse(JSON.stringify(node.pathname));
 
   const rootFolder = {
     name: "root",

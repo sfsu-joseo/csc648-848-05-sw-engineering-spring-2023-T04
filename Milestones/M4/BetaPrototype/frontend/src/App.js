@@ -11,7 +11,7 @@ import folderData from "./data/folderData";
 import LearnMore from "./pages/LearnMore";
 import Credits from "./pages/Credits";
 import AboutUs from "./pages/AboutUs";
-import trashData from "./data/trashData";
+import uploadJsonToS3 from "./helpers/uploadS3Bucket";
 
 import retreiveJSON from "./helpers/retreiveS3Bucket";
 import explorer from "./data/folderData";
@@ -20,6 +20,7 @@ import SplashMessage from "./components/SplashMessage";
 function App() {
   const [loading, setLoading] = useState(null);
   const [explorerData, setExplorerData] = useState(null);
+  const [currentDirectory, setCurrentDirectory] = useState(null);
   const [trash, setTrash] = useState(null);
 
   const [storageLimit, setStorageLimit] = useState(1e9);
@@ -47,19 +48,10 @@ function App() {
 
     if (localStorage.getItem("data")) {
       handleAuthenticate();
-      // console.log(trash);
     } else {
       setLoading(true);
     }
   }, []);
-
-  useEffect(() => {
-    if (loading === false) {
-      console.log("loading finished");
-      console.log(explorerData);
-      initTrash();
-    }
-  }, [loading]);
 
   useEffect(() => {
     if (splashMsg.isShowing) {
@@ -68,15 +60,15 @@ function App() {
     }
   }, [splashMsg]);
 
-  const initTrash = () => {
-    for (let i = 0; i < explorerData.items.length; i++) {
-      if (explorerData.items[i].name === "~Trash") {
-        setTrash(explorerData.items[i]);
-        setLoading(true);
-        return;
+  const initTrash = (folderData) => {
+    for (let i = 0; i < folderData.items.length; i++) {
+      if (folderData.items[i].name === "~Trash") {
+        setTrash(folderData.items[i]);
+        return 0;
       }
     }
-    setLoading(false);
+    console.log("failed to initilize trash");
+    return -1;
   };
 
   // ------------ authenticate localstorage ----------- //
@@ -90,15 +82,26 @@ function App() {
         `/authenticate/${tempData.password}/${tempData.id}`
       );
       if (res.data === false) {
+        console.log("unauthorized entry");
         localStorage.clear();
         window.location.reload();
+      } else {
+        retreiveJSON("prototypebucket-1", `${tempData.id}`).then((ret) => {
+          if (ret === -1) {
+            console.log("could not get user home directory");
+            setLoading(false);
+            return;
+          }
+          setExplorerData(ret);
+          setCurrentDirectory(ret);
+          const res = initTrash(ret);
+          if (res === -1) {
+            setLoading(false);
+          } else {
+            setLoading(true);
+          }
+        });
       }
-
-      // retreive folder data
-      retreiveJSON(setExplorerData);
-      console.log("folder was retreived");
-
-      setLoading(false);
     } catch (err) {
       if (!err?.response) {
         setLoading(false);
@@ -183,7 +186,8 @@ function App() {
                 setMessage={setMessage}
                 setSplashMsg={setSplashMsg}
                 setExplorerData={setExplorerData}
-                setLoading={setLoading}
+                setTrash={setTrash}
+                setCurrentDirectory={setCurrentDirectory}
               />
             }
           />
@@ -197,7 +201,8 @@ function App() {
                 setMessage={setMessage}
                 setSplashMsg={setSplashMsg}
                 setExplorerData={setExplorerData}
-                setLoading={setLoading}
+                setTrash={setTrash}
+                setCurrentDirectory={setCurrentDirectory}
               />
             }
           />
@@ -226,6 +231,8 @@ function App() {
                 setSplashMsg={setSplashMsg}
                 trashItems={trash}
                 setTrashItems={setTrash}
+                currentDirectory={currentDirectory}
+                setCurrentDirectory={setCurrentDirectory}
               />
             }
           />

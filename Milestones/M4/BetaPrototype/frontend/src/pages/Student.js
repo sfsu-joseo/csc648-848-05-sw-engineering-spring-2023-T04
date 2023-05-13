@@ -19,6 +19,7 @@ import Trash from "../components/Trash";
 import TinyFooter from "../components/TinyFooter";
 import downloadZip from "../helpers/downloadZip";
 import downloadFile from "../helpers/downloadFile";
+import uploadJsonToS3 from "../helpers/uploadS3Bucket";
 
 const Student = ({
   data,
@@ -33,12 +34,14 @@ const Student = ({
   setSplashMsg,
   trashItems,
   setTrashItems,
+  currentDirectory,
+  setCurrentDirectory,
 }) => {
   const navigate = useNavigate();
 
   // ----------- move to app.js later (maybe) ------------ //
   // const [explorerData, setExplorerData] = useState(folderData);
-  const [currentDirectory, setCurrentDirectory] = useState(explorerData);
+  // const [currentDirectory, setCurrentDirectory] = useState(explorerData);
   const [showingRightPanel, setShowingRightPanel] = useState(false);
   const [showingLeftPanel, setShowingLeftPanel] = useState(false);
   const [currentFile, setCurrentFile] = useState(null);
@@ -83,7 +86,9 @@ const Student = ({
       setCurrentDirectory,
       setExplorerData,
       name,
-      type
+      type,
+      data,
+      setSplashMsg
     );
   };
 
@@ -112,9 +117,6 @@ const Student = ({
     else setMessage({ title: message.title, body: null });
     setSearchResults([]);
     window.scrollTo(0, 0);
-
-    // console.log("cur dir size");
-    // console.log(currentDirectory.size);
   }, [currentDirectory, currentFile]);
 
   function getParentPath(pathString) {
@@ -130,7 +132,7 @@ const Student = ({
     else if (tempFile.state && tempFile.state === "delete") {
       handleMoveFile("Home/~Trash");
     }
-  }, [tempFile.state]);
+  }, [tempFile]);
 
   const updateParentSize = (node, parsingArr, size) => {
     parsingArr.shift();
@@ -176,7 +178,6 @@ const Student = ({
 
       // --------------  insert moved file into destination -------------- //
       if (currentDirectory.pathname === pathDest) {
-        console.log("this was entered");
         currentDirectory.items.push(tempFile.content);
       } else {
         tempRef2.items.push(tempFile.content);
@@ -244,13 +245,26 @@ const Student = ({
       );
 
       let parsingArr2 = parent.split("/");
-      console.log(parsingArr2);
       const res2 = updateParentSize(
         explorerData,
         parsingArr2,
         -tempFile.content.size
       );
     }
+
+    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, explorerData);
+    // if (ret === -1) {
+    //   setSplashMsg({
+    //     message: "Upload failed!",
+    //     isShowing: true,
+    //   });
+    // } else {
+    //   setSplashMsg({
+    //     message: "Upload successful!",
+    //     isShowing: true,
+    //   });
+    // }
+
     if (tempFile.state)
       setTempFile({
         state: null,
@@ -307,14 +321,11 @@ const Student = ({
         });
       }
     }
-    console.log("scale");
-    console.log(scale);
   };
 
   // ---------------------------------------------- //
 
   const handleSetFocus = (state) => {
-    console.log(state);
     const element = document.getElementById(state);
 
     setMiniPanel(state);
@@ -380,7 +391,6 @@ const Student = ({
     if (comment.trim(" ").length === 0) return;
     else {
       const commentsCopy = comments.slice();
-      console.log(commentsCopy.length);
       commentsCopy.push({
         // id: commentsCopy.slice(-1).id + 1,
         commenterImage: "http://placekitten.com/50/50", // replace with avatar from db
@@ -546,7 +556,6 @@ const Student = ({
                 <button
                   id="filespanel"
                   className="header-more-options"
-                  onFocus={() => console.log("focusing")}
                   onBlur={() => setMiniPanel("")}
                   style={
                     owner.user === data.user
@@ -670,7 +679,6 @@ const Student = ({
                   <button
                     id="chatbotpanel"
                     className="header-more-options"
-                    onFocus={() => console.log("focusing")}
                     onBlur={() => setMiniPanel("")}
                     style={{ height: "170px" }}
                   >
@@ -1001,7 +1009,6 @@ const Student = ({
                 <button
                   id="commentspanel"
                   className="header-more-options"
-                  onFocus={() => console.log("focusing")}
                   onBlur={() => setMiniPanel("")}
                   style={{ height: "80px" }}
                 >
