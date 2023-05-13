@@ -177,4 +177,56 @@ public class StorageService {
 
         return convertedFile;
     }
+
+    //places the file at the specified path
+    public String uploadFileToDestination(MultipartFile file, String filePath)
+    {
+        //convert multipart file to file
+        File fileObject = convertMultiPartFileToFile(file);
+
+        //put object in specified path
+        s3Client.putObject(new PutObjectRequest(bucketName, filePath, fileObject));
+        fileObject.delete();
+        return("File uploaded to " + filePath);
+    }
+
+    //uploads empty folder to specified path
+    public String uploadFolderToDestination(String path){
+        s3Client.putObject(new PutObjectRequest(bucketName, path, "/"));
+        return "Folder created at " + path;
+    }
+
+    //move a file and delete
+    //used for delete
+    public void moveFile(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
+        //delete old file
+        s3Client.deleteObject(bucketName, fileKey);
+    }
+
+    //lists files and folders in a directory
+    //used for loading root dir and to view other dirs
+    public ArrayList<String> listDirectory(String path) {
+
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucketName)
+                .withPrefix(path).withDelimiter("");
+
+        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
+
+        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+        ArrayList<String> obj_keys = new ArrayList<>();
+
+        for (S3ObjectSummary objectSummary : summaries){
+            obj_keys.add(objectSummary.getKey());
+        }
+        return obj_keys;
+    }
+
+    //copy a file
+    public void copyFile(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
+    }
 }
