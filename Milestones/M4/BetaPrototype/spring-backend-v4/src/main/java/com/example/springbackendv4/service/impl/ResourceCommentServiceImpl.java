@@ -1,11 +1,10 @@
-package com.example.springbackendv2.service.impl;
+package com.example.springbackendv4.service.impl;
 
-import com.example.springbackendv2.dto.ResourceCommentRecord;
-import com.example.springbackendv2.model.ResourceComment;
-import com.example.springbackendv2.repository.ResourceCommentRepository;
-import com.example.springbackendv2.service.ResourceCommentService;
+import com.example.springbackendv4.dto.ResourceCommentRecord;
+import com.example.springbackendv4.model.ResourceComment;
+import com.example.springbackendv4.repository.ResourceCommentRepository;
+import com.example.springbackendv4.service.ResourceCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

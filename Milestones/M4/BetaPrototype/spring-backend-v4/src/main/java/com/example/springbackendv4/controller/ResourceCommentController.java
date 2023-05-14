@@ -1,8 +1,8 @@
-package com.example.springbackendv2.controller;
+package com.example.springbackendv4.controller;
 
-import com.example.springbackendv2.dto.ResourceCommentRecord;
-import com.example.springbackendv2.model.ResourceComment;
-import com.example.springbackendv2.service.impl.ResourceCommentServiceImpl;
+import com.example.springbackendv4.dto.ResourceCommentRecord;
+import com.example.springbackendv4.model.ResourceComment;
+import com.example.springbackendv4.service.impl.ResourceCommentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

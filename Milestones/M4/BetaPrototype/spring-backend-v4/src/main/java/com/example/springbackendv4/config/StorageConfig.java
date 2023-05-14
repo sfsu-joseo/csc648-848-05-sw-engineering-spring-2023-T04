@@ -1,4 +1,4 @@
-package com.example.springbackendv2.config;
+package com.example.springbackendv4.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

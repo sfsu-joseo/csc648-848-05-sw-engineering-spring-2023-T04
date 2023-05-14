@@ -1,4 +1,4 @@
-package com.example.springbackendv2.model;
+package com.example.springbackendv4.model;
 
 import javax.persistence.*;
 // OLD TABLE can be deleted after front end verifies

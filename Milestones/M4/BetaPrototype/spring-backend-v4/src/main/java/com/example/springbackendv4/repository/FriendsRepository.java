@@ -1,13 +1,11 @@
-package com.example.springbackendv2.repository;
+package com.example.springbackendv4.repository;
 
-import com.example.springbackendv2.model.Friends;
+import com.example.springbackendv4.model.Friends;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 public interface FriendsRepository extends JpaRepository<Friends, Long> {
     @Transactional

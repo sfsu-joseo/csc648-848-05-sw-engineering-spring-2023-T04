@@ -1,4 +1,4 @@
-package com.example.springbackendv2.dto;
+package com.example.springbackendv4.dto;
 
 import java.util.Date;
 

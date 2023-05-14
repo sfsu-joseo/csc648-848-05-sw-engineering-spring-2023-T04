@@ -1,6 +1,6 @@
-package com.example.springbackendv2.service;
+package com.example.springbackendv4.service;
 
-import com.example.springbackendv2.model.Note;
+import com.example.springbackendv4.model.Note;
 
 import java.util.List;
 

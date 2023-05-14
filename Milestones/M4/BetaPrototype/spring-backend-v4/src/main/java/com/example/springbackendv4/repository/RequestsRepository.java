@@ -1,7 +1,6 @@
-package com.example.springbackendv2.repository;
+package com.example.springbackendv4.repository;
 
-import com.example.springbackendv2.model.Requests;
-import com.example.springbackendv2.model.User;
+import com.example.springbackendv4.model.Requests;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,4 @@
-package com.example.springbackendv2.model;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
+package com.example.springbackendv4.model;
 import javax.persistence.*;
 
 @Entity

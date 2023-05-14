@@ -1,8 +1,8 @@
-package com.example.springbackendv2.service.impl;
+package com.example.springbackendv4.service.impl;
 
-import com.example.springbackendv2.model.Note;
-import com.example.springbackendv2.repository.NoteRepository;
-import com.example.springbackendv2.service.NoteService;
+import com.example.springbackendv4.model.Note;
+import com.example.springbackendv4.repository.NoteRepository;
+import com.example.springbackendv4.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package com.example.springbackendv2.controller;
+package com.example.springbackendv4.controller;
 
-import com.example.springbackendv2.model.Note;
-import com.example.springbackendv2.service.impl.NoteServiceImpl;
+import com.example.springbackendv4.model.Note;
+import com.example.springbackendv4.service.impl.NoteServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

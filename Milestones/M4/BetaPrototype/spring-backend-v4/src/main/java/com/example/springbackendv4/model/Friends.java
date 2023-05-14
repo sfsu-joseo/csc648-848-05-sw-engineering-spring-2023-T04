@@ -1,6 +1,4 @@
-package com.example.springbackendv2.model;
-
-import org.hibernate.annotations.RowId;
+package com.example.springbackendv4.model;
 
 import javax.persistence.*;
 

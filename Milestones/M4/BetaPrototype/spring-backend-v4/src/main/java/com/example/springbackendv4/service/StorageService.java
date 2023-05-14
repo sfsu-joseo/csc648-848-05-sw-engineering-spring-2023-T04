@@ -1,13 +1,12 @@
-package com.example.springbackendv2.service;
+package com.example.springbackendv4.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
-import com.example.springbackendv2.config.StorageConfig;
-import com.example.springbackendv2.exception.NotEnoughStorageException;
-import com.example.springbackendv2.model.TrashMaster;
-import com.example.springbackendv2.repository.TrashMasterRepository;
-import com.example.springbackendv2.repository.UserRepository;
+import com.example.springbackendv4.exception.NotEnoughStorageException;
+import com.example.springbackendv4.model.TrashMaster;
+import com.example.springbackendv4.repository.TrashMasterRepository;
+import com.example.springbackendv4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

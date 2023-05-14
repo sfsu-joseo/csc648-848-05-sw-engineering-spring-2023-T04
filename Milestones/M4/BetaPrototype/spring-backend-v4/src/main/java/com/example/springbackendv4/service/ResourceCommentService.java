@@ -1,9 +1,8 @@
-package com.example.springbackendv2.service;
+package com.example.springbackendv4.service;
 
 
-import com.example.springbackendv2.dto.ResourceCommentRecord;
-import com.example.springbackendv2.model.ResourceComment;
-import org.springframework.stereotype.Repository;
+import com.example.springbackendv4.dto.ResourceCommentRecord;
+import com.example.springbackendv4.model.ResourceComment;
 
 import java.util.List;
 

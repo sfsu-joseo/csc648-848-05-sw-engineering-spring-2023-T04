@@ -1,11 +1,9 @@
-package com.example.springbackendv2.repository;
+package com.example.springbackendv4.repository;
 
-import com.example.springbackendv2.model.TrashMaster;
+import com.example.springbackendv4.model.TrashMaster;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface TrashMasterRepository extends JpaRepository<TrashMaster, Long> {
 

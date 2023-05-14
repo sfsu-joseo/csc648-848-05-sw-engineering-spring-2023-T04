@@ -1,11 +1,8 @@
-package com.example.springbackendv2.controller;
+package com.example.springbackendv4.controller;
 
-import com.example.springbackendv2.exception.UserNotFoundException;
-import com.example.springbackendv2.model.Friends;
-import com.example.springbackendv2.model.Requests;
-import com.example.springbackendv2.model.User;
-import com.example.springbackendv2.repository.FriendsRepository;
-import com.example.springbackendv2.repository.RequestsRepository;
+import com.example.springbackendv4.exception.UserNotFoundException;
+import com.example.springbackendv4.model.Requests;
+import com.example.springbackendv4.repository.RequestsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

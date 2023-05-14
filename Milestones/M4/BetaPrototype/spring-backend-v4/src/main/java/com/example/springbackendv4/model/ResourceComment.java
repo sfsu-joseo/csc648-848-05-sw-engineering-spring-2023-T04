@@ -1,4 +1,4 @@
-package com.example.springbackendv2.model;
+package com.example.springbackendv4.model;
 
 import org.hibernate.annotations.CreationTimestamp;
 
