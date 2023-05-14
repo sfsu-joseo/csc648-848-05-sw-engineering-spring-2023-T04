@@ -1,15 +1,14 @@
-package com.example.springbackendv2.controller;
+package com.example.springbackendv4.controller;
 
-import com.example.springbackendv2.exception.UserNotFoundException;
-import com.example.springbackendv2.model.User;
-import com.example.springbackendv2.repository.UserRepository;
+import com.example.springbackendv4.exception.UserNotFoundException;
+import com.example.springbackendv4.model.User;
+import com.example.springbackendv4.repository.UserRepository;
+import com.example.springbackendv4.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,22 +18,25 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserServiceImpl userService;
+
     //   --------------------- BASIC POST, GET, DELETE MAPPING BY UNIQUE ID --------------------
 
-
-    @PostMapping("/user")
-    Long newUser(@RequestBody User newUser){
-
-        if (userRepository.checkUsername(newUser.getUser()) != null)
-            return -1L;
-        else if (userRepository.checkEmail(newUser.getEmail()) != null) {
-            return -2L;
-        }
-        String rootFolder = newUser.getUser() + newUser.getId() + "/";
-        userRepository.save(newUser);
-        
-        return newUser.getId();
-    }
+//OLD SIGNUP METHOD
+//    @PostMapping("/user")
+//    Long newUser(@RequestBody User newUser){
+//
+//        if (userRepository.checkUsername(newUser.getUser()) != null)
+//            return -1L;
+//        else if (userRepository.checkEmail(newUser.getEmail()) != null) {
+//            return -2L;
+//        }
+//        String rootFolder = newUser.getUser() + newUser.getId() + "/";
+//        userRepository.save(newUser);
+//
+//        return newUser.getId();
+//    }
 
     @GetMapping("/users")
     List<User> getAllUsers(){
@@ -72,23 +74,33 @@ public class UserController {
 
     //   --------------------- MODIFIED MAPPING (refer to UserRepository for more info) --------------------
 
+//OLD LOGIN METHOD
+//    @GetMapping(value = "/login/{user}/{password}")
+//    public Long findByName(@PathVariable("user") String user, @PathVariable("password") String password) {
+//        User res = userRepository.findUsers(user);
+//
+////        USERNAME OR EMAIL DOES NOT EXIST
+//        if(res == null) {
+//            return -1L;
+//        }
+//
+////        PASSWORD DOES NOT MATCH
+//        else if (!Objects.equals(res.getPassword(), password)) {
+//            System.out.println("this is being printed");
+//            return -2L;
+//        } else {
+//            return res.getId();
+//        }
+//    }
 
-    @GetMapping(value = "/login/{user}/{password}")
-    public Long findByName(@PathVariable("user") String user, @PathVariable("password") String password) {
-        User res = userRepository.findUsers(user);
+    @PostMapping("/user/signup")
+    String signup(@RequestBody User newUser){
+        return userService.encryptPasswordAndCreateUser(newUser);
+    }
 
-//        USERNAME OR EMAIL DOES NOT EXIST
-        if(res == null) {
-            return -1L;
-        }
-
-//        PASSWORD DOES NOT MATCH
-        else if (!Objects.equals(res.getPassword(), password)) {
-            System.out.println("this is being printed");
-            return -2L;
-        } else {
-            return res.getId();
-        }
+    @PostMapping("/user/login")
+    String login(@RequestBody User user){
+        return userService.authorizeUser(user.getUser(), user.getPassword());
     }
 
     @GetMapping(value = "/authenticate/{password}/{user_id}")

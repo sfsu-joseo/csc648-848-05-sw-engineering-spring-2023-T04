@@ -1,4 +1,4 @@
-package com.example.springbackendv2.exception;
+package com.example.springbackendv4.exception;
 
 public class NotEnoughStorageException extends RuntimeException{
     public NotEnoughStorageException(){
