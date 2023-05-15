@@ -42,7 +42,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "update registered_user u set u.storageLeftInBytes = :newStorageSize where u.id = :userId", nativeQuery = true)
     void updateUserStorageByUserId(@Param("newStorageSize") Integer newStorageSize, @Param("userId") Long userId);
 
-    User findByUsername(String username);
+    User findByUser(String username);
 
     User findByEmail(String email);
 

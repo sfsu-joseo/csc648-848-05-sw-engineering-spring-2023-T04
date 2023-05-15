@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public String encryptPasswordAndCreateUser(User newUser) throws UsernameAlreadyExistsException, EmailAlreadyExistsException {
 
         //Check if username is unique
-        User userWithUsername = userRepository.findByUsername(newUser.getUser());
+        User userWithUsername = userRepository.findByUser(newUser.getUser());
         if(userWithUsername != null){
             throw new UsernameAlreadyExistsException(newUser.getUser());
         }
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String authorizeUser(String username, String password) throws UserNotFoundException, InvalidCredentialsException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUser(username);
         if(user == null){
             throw new UserNotFoundException(username);
         }
