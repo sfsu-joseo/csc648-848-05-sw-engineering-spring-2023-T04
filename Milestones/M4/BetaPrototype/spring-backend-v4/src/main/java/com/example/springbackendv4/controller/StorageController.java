@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,7 +75,7 @@ public class StorageController {
     }
 
     @PostMapping("/moveFolder?source={source}&destination={destination}")
-    public ResponseEntity<String> moveFolder(@RequestParam("source") String source, @RequestParam("destination") String destination){
+    public ResponseEntity<String> moveFolder(@RequestParam(value = "source") String source, @RequestParam(value = "destination") String destination){
         service.moveFolder(source,destination);
         return new ResponseEntity<>("Folder moved successfully", HttpStatus.OK);
     }
@@ -85,10 +86,20 @@ public class StorageController {
         return new ResponseEntity<>("Trash emptied successfully", HttpStatus.OK);
     }
 
+
+
     /* This endpoint loads the user's saved file directory
     *  The object keys (bucket paths) are returned as an array*/
     @GetMapping("/getUserDir/{userName}")
     public ArrayList<String> listBucket(@PathVariable String userName) {
         return service.getRoot(userName);
     }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public ResponseEntity<String> automaticFileDeletion(){
+        service.emptyTrash();
+        return new ResponseEntity<>("Trash automatically emptied successfully", HttpStatus.OK);
+    }
+
+
 }
