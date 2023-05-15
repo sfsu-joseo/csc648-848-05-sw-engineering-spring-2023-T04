@@ -4,9 +4,10 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import Footer from "../components/Footer";
-import retreiveJSON from "../helpers/retreiveS3Bucket";
+import retreiveJSON from "../helpers/retrieveJson";
 import explorer from "../data/folderData";
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
+import initTrash from "../helpers/initializeTrash";
 
 const user_endpoint = "/users";
 
@@ -53,17 +54,6 @@ const Login = ({
     setShowingPassword(!showingPassword);
   };
 
-  const initTrash = (folderData) => {
-    for (let i = 0; i < folderData.items.length; i++) {
-      if (folderData.items[i].name === "~Trash") {
-        setTrash(folderData.items[i]);
-        return 0;
-      }
-    }
-    console.log("failed to initilize trash");
-    return -1;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -101,7 +91,7 @@ const Login = ({
         data.password = res.data.password;
         data.id = res.data.id;
 
-        retreiveJSON("prototypebucket-1", `${data.id}`).then((ret) => {
+        retreiveJSON(`${data.id}`).then((ret) => {
           if (ret === -1) {
             console.log("could not get user home directory");
             console.log("creating new home directory");
@@ -110,11 +100,7 @@ const Login = ({
             ret = explorer;
 
             // TEMP PLACEMENT: creating new home directory
-            const ret2 = uploadJsonToS3(
-              "prototypebucket-1",
-              `${data.id}`,
-              explorer
-            );
+            const ret2 = uploadJson(`${data.id}`, explorer);
             if (ret2 === -1) {
               setErrMsg("Could not create new account.");
               return;
@@ -125,7 +111,7 @@ const Login = ({
           }
 
           setExplorerData(ret);
-          const res = initTrash(ret);
+          const res = initTrash(ret, setTrash);
           if (res === -1) {
             setErrMsg("Failed to initialize trashbin.");
             return;

@@ -29,6 +29,7 @@ const FolderContent = ({
   setTempFile,
   handleMoveFile,
   setTrashItems,
+  setLoadingBar,
 }) => {
   const handleSetCurrentFile = async (file) => {
     await setCurrentFile(file);
@@ -60,6 +61,7 @@ const FolderContent = ({
           splashMsg={splashMsg}
           setSplashMsg={setSplashMsg}
           tempFile={tempFile}
+          windowDimension={windowDimension}
         />
         {/* display header */}
         <div className="box box-hover" style={{ overflow: "hidden" }}>
@@ -145,6 +147,7 @@ const FolderContent = ({
           handleMoveFile={handleMoveFile}
           data={data}
           owner={owner}
+          setLoadingBar={setLoadingBar}
         />
       )}
 

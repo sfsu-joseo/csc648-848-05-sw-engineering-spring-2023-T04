@@ -4,7 +4,8 @@ import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "../api/axios";
 import Footer from "../components/Footer";
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
+import initTrash from "../helpers/initializeTrash";
 
 const user_regex_l = /\S{4,24}/;
 
@@ -96,17 +97,6 @@ const Signup = ({
     setShowingPassword(!showingPassword);
   };
 
-  const initTrash = (folderData) => {
-    for (let i = 0; i < folderData.items.length; i++) {
-      if (folderData.items[i].name === "~Trash") {
-        setTrash(folderData.items[i]);
-        return 0;
-      }
-    }
-    console.log("failed to initilize trash");
-    return -1;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -142,19 +132,6 @@ const Signup = ({
       return;
     }
 
-    // double check here in case they overwrote my html
-    // if (
-    //   !validFirstName ||
-    //   !validLastName ||
-    //   !validEmail ||
-    //   !validName ||
-    //   !validPassword ||
-    //   !checkbox
-    // ) {
-    //   setErrMsg("Invalid entry.");
-    //   return;
-    // }
-
     try {
       const response = await axios.post(user_endpoint, {
         email: convertEmail,
@@ -186,10 +163,12 @@ const Signup = ({
         data.id = response.data;
 
         // send request to create root folder in db
-        const res = 1;
+        const res = await axios.post(`/postFile/${data.id}/Home`);
+        console.log("returned from db");
+        console.log(res.data);
 
-        let tempExplorer = {
-          id: res,
+        const tempExplorer = {
+          id: res.data,
           name: "Home",
           pathname: "Home",
           type: "Folder",
@@ -198,6 +177,7 @@ const Signup = ({
           visibility: "Public",
           permissions: "Can view only",
           dataUrl: "",
+          notes: "",
           items: [
             {
               id: -1, // i don't think an id needs to be created here
@@ -209,22 +189,19 @@ const Signup = ({
               visibility: "Private",
               permissions: "Only you have access",
               dataUrl: "",
+              notes: "",
               items: [],
             },
           ],
         };
-        const ret = uploadJsonToS3(
-          "prototypebucket-1",
-          `${data.id}`,
-          tempExplorer
-        );
+        const ret = uploadJson(`${data.id}`, tempExplorer);
         if (ret === -1) {
           setErrMsg("Could not create new account.");
           return;
         }
 
         setExplorerData(tempExplorer);
-        const res2 = initTrash(tempExplorer);
+        const res2 = initTrash(tempExplorer, setTrash);
         if (res2 === -1) {
           setErrMsg("Failed to initialize trashbin");
           return;

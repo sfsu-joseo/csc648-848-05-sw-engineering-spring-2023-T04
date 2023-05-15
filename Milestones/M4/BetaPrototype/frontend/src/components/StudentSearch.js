@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import downloadFile from "../helpers/downloadFile";
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
+import parseAndDelete from "../helpers/deleteFiles";
 
 const StudentSearch = ({
   currentDirectory,
@@ -31,7 +32,7 @@ const StudentSearch = ({
   const [filter, setFilter] = useState("");
   const inputRef = useRef();
 
-  const handleEmptyTrash = () => {
+  const handleEmptyTrash = async () => {
     // run confirm message first
 
     // send a request to backend to empty trashbin
@@ -39,7 +40,10 @@ const StudentSearch = ({
     exploreData.size -= trashItems.size;
     trashItems.size = 0;
 
-    while (trashItems.items.length > 0) {
+    console.log(trashItems);
+
+    for (let i = trashItems.items.length - 1; i >= 0; i--) {
+      parseAndDelete(trashItems.items[i]);
       trashItems.items.pop();
     }
 
@@ -51,7 +55,7 @@ const StudentSearch = ({
       }
     }
 
-    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, exploreData);
+    const ret = uploadJson(`${data.id}`, exploreData);
     // if (ret === -1) {
     //   setSplashMsg({
     //     message: "Upload failed!",
@@ -391,7 +395,7 @@ const StudentSearch = ({
                   body: "This is a temporary save button.",
                 });
                 // TESTING JSON UPLOAD
-                uploadJsonToS3("prototypebucket-1", `${data.id}`, exploreData);
+                uploadJson(`${data.id}`, exploreData);
               }}
             >
               {/* Select */}

@@ -1,5 +1,9 @@
 // -------- adjust later to only store meta data -------- //
 
+import axios from "../api/axios";
+import uploadFile from "./uploadFile";
+import uploadJson from "./uploadJson";
+
 // TEMPORARY ID
 let globalID = 100;
 
@@ -12,7 +16,17 @@ const readFileContent = async (file) => {
   });
 };
 
-const readEntries = async (entry, parent, path) => {
+const readEntries = async (
+  entry,
+  parent,
+  path,
+  data,
+  explorerData,
+  setLoading,
+  setMessage,
+  setSplashMsg,
+  setLoadingBar
+) => {
   // adjust name to remove '/' this shouldn't be a problem, but just in case
   const regex = new RegExp("/", "g");
   const adjustedForPathname = entry.name.replace(regex, "%");
@@ -37,78 +51,188 @@ const readEntries = async (entry, parent, path) => {
         //   // UPLOAD FILE TO S3 BUCKET HERE AND GET UNIQUE KEY FROM BACKEND
         //   dataUrl = await readFileContent(file);
         // }
-
-        const newItem = {
-          id: globalID, // <-- REPLACE WITH DB GENERATED ID
-          name: nameAndType[0] + "." + nameAndType[nameAndType.length - 1],
-          pathname: currentPath,
-          type: nameAndType[nameAndType.length - 1],
-          size: file.size,
-          isPinned: false,
-          visibility: "Private",
-          permissions: "Only you have access",
-          dataUrl: "",
-          items: [],
-        };
-        parent.items.push(newItem);
-
-        // Add the item's size to the parent folder's size
-        parent.size += newItem.size;
-        resolve();
-      });
-    });
-  } else if (entry.isDirectory) {
-    const newFolder = {
-      id: globalID, // <-- REPLACE WITH DB GENERATED ID
-      name: entry.name,
-      pathname: currentPath,
-      type: "Folder",
-      size: 0,
-      isPinned: false,
-      visibility: "Private",
-      permissions: "Only you have access",
-      dataUrl: "",
-      items: [],
-    };
-    parent.items.push(newFolder);
-
-    const reader = entry.createReader();
-
-    const readAllEntries = async () => {
-      return new Promise((resolve) => {
-        reader.readEntries(async (entries) => {
-          if (entries.length === 0) {
-            resolve();
+        try {
+          if (explorerData.size + file.size > 1e9) {
+            console.log("exceeded storage limit");
+            // set failed in main message
+            setLoadingBar({
+              filename: null,
+              progress: null,
+            });
+            setLoading(false);
+            setMessage({
+              title: "Uh-oh!",
+              body: "Looks like some files exceed the available storage space on this account. Try deleting files from trash bin to free up space.",
+            });
             return;
           }
 
-          for (let i = 0; i < entries.length; i++) {
-            const e = entries[i];
-            globalID += 1;
-            await readEntries(e, newFolder, currentPath);
-          }
-          await readAllEntries(); // Recursively call readAllEntries()
-          resolve();
-        });
-      });
-    };
+          const key = await axios.post(`/postFile/${data.id}/${entry.name}`);
 
-    return readAllEntries();
+          console.log("received key:");
+          console.log(key);
+
+          const res = await uploadFile(
+            key.data,
+            file,
+            setLoadingBar,
+            parent.pathname
+          );
+
+          const newItem = {
+            id: key.data, // <-- REPLACE WITH DB GENERATED ID
+            name: nameAndType[0] + "." + nameAndType[nameAndType.length - 1],
+            pathname: currentPath,
+            type: nameAndType[nameAndType.length - 1],
+            size: file.size,
+            isPinned: false,
+            visibility: "Private",
+            permissions: "Only you have access",
+            dataUrl: "",
+            notes: "",
+            items: [],
+          };
+          parent.items.push(newItem);
+
+          // sort parent node
+          sortItem(parent);
+
+          // update all the parents of newly inserted node
+          let parsingArr = parent.pathname.split("/");
+          const res1 = updateParentSize(explorerData, parsingArr, newItem.size);
+
+          const ret = uploadJson(`${data.id}`, explorerData);
+          if (ret === -1) {
+            setSplashMsg({
+              message: "Upload failed!",
+              isShowing: true,
+            });
+          } else {
+            setSplashMsg({
+              message: `Uploaded ~ ${entry.name}`,
+              isShowing: true,
+            });
+          }
+
+          resolve();
+        } catch (error) {
+          console.log(error);
+          return;
+        }
+      });
+    });
+  } else if (entry.isDirectory) {
+    try {
+      const key = await axios.post(`/postFile/${data.id}/${entry.name}`);
+
+      const newFolder = {
+        id: key.data, // <-- REPLACE WITH DB GENERATED ID
+        name: entry.name,
+        pathname: currentPath,
+        type: "Folder",
+        size: 0,
+        isPinned: false,
+        visibility: "Private",
+        permissions: "Only you have access",
+        dataUrl: "",
+        notes: "",
+        items: [],
+      };
+
+      console.log(newFolder);
+
+      parent.items.push(newFolder);
+
+      // sort parent node
+      sortItem(parent);
+
+      const reader = entry.createReader();
+
+      const readAllEntries = async () => {
+        return new Promise((resolve) => {
+          reader.readEntries(async (entries) => {
+            if (entries.length === 0) {
+              resolve();
+              return;
+            }
+
+            for (let i = 0; i < entries.length; i++) {
+              const e = entries[i];
+              globalID += 1;
+              await readEntries(
+                e,
+                newFolder,
+                currentPath,
+                data,
+                explorerData,
+                setLoading,
+                setMessage,
+                setSplashMsg,
+                setLoadingBar
+              );
+            }
+            await readAllEntries(); // Recursively call readAllEntries()
+            resolve();
+          });
+        });
+      };
+      return readAllEntries();
+    } catch (error) {
+      console.log(error);
+      return;
+    }
+  }
+};
+
+const sortItem = (node) => {
+  node.items.sort((a, b) => {
+    let fa = a.name.toLowerCase(),
+      fb = b.name.toLowerCase();
+
+    return fa.localeCompare(fb, undefined, { numeric: true });
+  });
+
+  // this may never be needed here ...
+  let folders = [];
+  let files = [];
+  for (let i = 0; i < node.items.length; i++) {
+    if (node.items[i].type === "Folder") folders.push(node.items[i]);
+    else files.push(node.items[i]);
+  }
+  const updateitems = folders.concat(files);
+  node.items = updateitems;
+};
+
+const updateParentSize = (node, parsingArr, size) => {
+  parsingArr.shift();
+  if (parsingArr.length === 0) {
+    node.size += size;
+    return node;
+  }
+  node.size += size;
+  for (let i = 0; i < node.items.length; i++) {
+    if (node.items[i].name === parsingArr[0]) {
+      node.items[i] = updateParentSize(node.items[i], parsingArr, size);
+      return node;
+    }
   }
 };
 
 // ------- gets all contents of dropped item, and converts into a tree that i can render -------- //
 
-const readDroppedFiles = async (items, node) => {
+const readDroppedFiles = async (
+  items,
+  node,
+  data,
+  explorerData,
+  setLoading,
+  setMessage,
+  setSplashMsg,
+  setLoadingBar
+) => {
   console.log("uploading to:");
   console.log(node.pathname);
   const relPath = JSON.parse(JSON.stringify(node.pathname));
-
-  const rootFolder = {
-    name: "root",
-    type: "Folder",
-    items: [],
-  };
 
   if (items.dataTransfer) {
     for (let i = 0; i < items.dataTransfer.items.length; i++) {
@@ -116,7 +240,17 @@ const readDroppedFiles = async (items, node) => {
       const item = items.dataTransfer.items[i];
       const entry = item.webkitGetAsEntry();
       if (entry) {
-        await readEntries(entry, rootFolder, relPath);
+        await readEntries(
+          entry,
+          node,
+          relPath,
+          data,
+          explorerData,
+          setLoading,
+          setMessage,
+          setSplashMsg,
+          setLoadingBar
+        );
       }
     }
   } else {
@@ -129,11 +263,29 @@ const readDroppedFiles = async (items, node) => {
         name: file.name,
         file: (callback) => callback(file),
       };
-      await readEntries(entry, rootFolder, relPath);
+      await readEntries(
+        entry,
+        node,
+        relPath,
+        data,
+        explorerData,
+        setLoading,
+        setMessage,
+        setSplashMsg,
+        setLoadingBar
+      );
     }
   }
 
-  return rootFolder.items;
+  setLoadingBar({
+    filename: null,
+    progress: null,
+    pathname: null,
+  });
+  setSplashMsg({ message: "Finished uploading!", isShowing: true });
+
+  setLoading(false);
+  return 0;
 };
 
 export default readDroppedFiles;

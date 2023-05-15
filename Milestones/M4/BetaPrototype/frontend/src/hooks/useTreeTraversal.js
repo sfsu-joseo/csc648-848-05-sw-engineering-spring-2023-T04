@@ -1,17 +1,15 @@
 // const finalTree = insertNode(currentDirectory, id, name, type);
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
+import axios from "../api/axios";
 
 const useTreeTraversal = () => {
   function insertNode(
     explorerData,
     currentDirectory,
-    handleSetCurrentDirectory,
-    setCurrentDirectory,
-    setExplorerData,
     name,
     type,
     data,
-    setSplashMsg
+    setMessage
   ) {
     if (currentDirectory.items.some((item) => item.name === name)) {
       // prompt skip or replace
@@ -27,12 +25,8 @@ const useTreeTraversal = () => {
       const regex = new RegExp("/", "g");
       const adjustedForPathname = name.replace(regex, "%");
 
-      // temporary placement
-      const time = new Date().getTime();
-      console.log(time);
-
       currentDirectory.items.push({
-        id: time, // temporary
+        id: new Date().getTime(), // placeholder until successfully created in table
         pathname: currentDirectory.pathname + "/" + adjustedForPathname,
         name,
         type,
@@ -41,6 +35,7 @@ const useTreeTraversal = () => {
         visibility: "Private", // <-default
         permissions: "Only you have access",
         dataUrl: dataUrl,
+        notes: "",
         items: [],
       });
 
@@ -61,22 +56,28 @@ const useTreeTraversal = () => {
       const updateitems = folders.concat(files);
       currentDirectory.items = updateitems;
 
-      const ret = uploadJsonToS3(
-        "prototypebucket-1",
-        `${data.id}`,
-        explorerData
-      );
-      // if (ret === -1) {
-      //   setSplashMsg({
-      //     message: "Upload failed!",
-      //     isShowing: true,
-      //   });
-      // } else {
-      //   setSplashMsg({
-      //     message: "Upload successful!",
-      //     isShowing: true,
-      //   });
-      // }
+      try {
+        axios.post(`/postFile/${data.id}/${name}`).then((res) => {
+          console.log(res.data);
+          for (let i = 0; i < currentDirectory.items.length; i++) {
+            if (currentDirectory.items[i].name === name) {
+              currentDirectory.items[i].id = res.data;
+            }
+          }
+          const ret = uploadJson(`${data.id}`, explorerData);
+        });
+      } catch (error) {
+        // remove the the inserted node from current directory
+        console.log(error);
+
+        let tempItemsArr = [];
+        for (let i = 0; i < currentDirectory.items.length; i++) {
+          if (currentDirectory.items[i].name !== name) {
+            tempItemsArr.push(currentDirectory.items[i]);
+          }
+        }
+        currentDirectory.items = tempItemsArr;
+      }
     }
   }
 

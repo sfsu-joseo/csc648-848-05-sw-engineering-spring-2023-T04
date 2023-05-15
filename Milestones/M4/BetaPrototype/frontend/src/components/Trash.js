@@ -13,7 +13,9 @@ import Window from "./Window";
 import handleDragOver from "../helpers/handleDrag";
 import handleDrop from "../helpers/handleDrop";
 import { useState } from "react";
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
+import axios from "../api/axios";
+import parseAndDelete from "../helpers/deleteFiles";
 
 const Trash = ({
   data,
@@ -30,13 +32,17 @@ const Trash = ({
   explorerData,
   owner,
   currentDirectory,
+  setCurrentDirectory,
 }) => {
   const [dragOver, setDragOver] = useState(false);
   const [moveEffect, setMoveEffect] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const deleteThisItem = (loadData) => {
+  const deleteThisItem = async (loadData) => {
     // updated size of home directory
+
+    parseAndDelete(loadData);
+
     explorerData.size -= loadData.size;
 
     let tempTrash = {
@@ -67,7 +73,7 @@ const Trash = ({
       }
     }
 
-    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, explorerData);
+    const ret = uploadJson(`${data.id}`, explorerData);
   };
 
   return (

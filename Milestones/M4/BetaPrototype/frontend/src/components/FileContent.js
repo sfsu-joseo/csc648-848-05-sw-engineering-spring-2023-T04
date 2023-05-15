@@ -22,6 +22,7 @@ const FileContent = ({
   message,
   setMessage,
   showingLeftPanel,
+  loadingBar,
 }) => {
   const [numPages, setNumPages] = useState(null);
   const [videoURL, setVideoURL] = useState(null);
@@ -345,6 +346,7 @@ const FileContent = ({
         setPdfController={setPdfController}
         setMessage={setMessage}
         showingLeftPanel={showingLeftPanel}
+        loadingBar={loadingBar}
         // setLoadingPDF={setLoadingPDF}
       />
     </div>

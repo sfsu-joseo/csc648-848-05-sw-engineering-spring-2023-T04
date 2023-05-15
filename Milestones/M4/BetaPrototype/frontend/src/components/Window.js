@@ -15,6 +15,7 @@ const Window = ({
   splashMsg,
   setSplashMsg,
   tempFile,
+  windowDimension,
 }) => {
   useEffect(() => {
     if (message.title) {
@@ -116,6 +117,7 @@ const Window = ({
             data={data}
             splashMsg={splashMsg}
             setSplashMsg={setSplashMsg}
+            explorerData={explorerData}
           />
         </div>
       </div>
@@ -194,6 +196,8 @@ const Window = ({
             data={data}
             tempFile={tempFile}
             setMessage={setMessage}
+            explorerData={explorerData}
+            windowDimension={windowDimension}
           />
         </div>
       </div>

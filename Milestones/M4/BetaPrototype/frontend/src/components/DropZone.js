@@ -17,6 +17,7 @@ const DropZone = ({
   setCurrentDirectory,
   data,
   owner,
+  setLoadingBar,
 }) => {
   const [dragOver, setDragOver] = useState(false);
   const [moveEffect, setMoveEffect] = useState(false);
@@ -37,7 +38,8 @@ const DropZone = ({
         setMessage,
         setSplashMsg,
         data,
-        owner
+        owner,
+        setLoadingBar
       );
       setFiles(null);
     }
@@ -56,9 +58,7 @@ const DropZone = ({
           color: "dimgray",
           transition: ".2s",
         }}
-      >
-        Loading...
-      </div>
+      ></div>
     );
   }
 
@@ -82,7 +82,8 @@ const DropZone = ({
               setMessage,
               setSplashMsg,
               data,
-              owner
+              owner,
+              setLoadingBar
             )
           }
           onDragOver={(e) =>
@@ -141,7 +142,8 @@ const DropZone = ({
               setMessage,
               setSplashMsg,
               data,
-              owner
+              owner,
+              setLoadingBar
             )
           }
           onDragOver={(e) =>

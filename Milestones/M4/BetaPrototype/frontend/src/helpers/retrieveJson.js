@@ -1,10 +1,10 @@
 import axios from "../api/axios";
 
-const retrieveJSON = async (bucketName, key) => {
+const retrieveJson = async (key) => {
   const adjustedKey = key + ".json";
   console.log(adjustedKey);
   try {
-    const res = await axios.get(`/download/${adjustedKey}`);
+    const res = await axios.get(`/downloadJson/${adjustedKey}`);
     console.log(res.data);
     return res.data;
   } catch (error) {
@@ -13,4 +13,4 @@ const retrieveJSON = async (bucketName, key) => {
   }
 };
 
-export default retrieveJSON;
+export default retrieveJson;

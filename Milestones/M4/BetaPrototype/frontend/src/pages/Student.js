@@ -15,7 +15,7 @@ import Trash from "../components/Trash";
 import TinyFooter from "../components/TinyFooter";
 import downloadZip from "../helpers/downloadZip";
 import downloadFile from "../helpers/downloadFile";
-import uploadJsonToS3 from "../helpers/uploadS3Bucket";
+import uploadJson from "../helpers/uploadJson";
 
 const Student = ({
   data,
@@ -45,11 +45,16 @@ const Student = ({
   const [miniPanel, setMiniPanel] = useState("");
 
   const [showTrash, setShowTrash] = useState(false);
+  const [loadingBar, setLoadingBar] = useState({
+    filename: null,
+    progress: null,
+    pathname: null,
+  });
 
   const [pinSelected, setPinSelected] = useState(false);
   const [textURL, setTextURL] = useState("");
 
-  const [notesData, setNotesData] = useState("");
+  // const [notesData, setNotesData] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(commentsData);
   const [files, setFiles] = useState(null);
@@ -78,13 +83,10 @@ const Student = ({
     const finalTree = insertNode(
       explorerData,
       currentDirectory,
-      handleSetCurrentDirectory,
-      setCurrentDirectory,
-      setExplorerData,
       name,
       type,
       data,
-      setSplashMsg
+      setMessage
     );
   };
 
@@ -123,9 +125,13 @@ const Student = ({
   }
 
   useEffect(() => {
-    if (tempFile.state && tempFile.state === "restore")
-      handleMoveFile(currentDirectory.pathname);
-    else if (tempFile.state && tempFile.state === "delete") {
+    if (tempFile.state && tempFile.state === "restore") {
+      if (trashItems.items.includes(currentDirectory)) {
+        handleMoveFile(explorerData.pathname);
+      } else {
+        handleMoveFile(currentDirectory.pathname);
+      }
+    } else if (tempFile.state && tempFile.state === "delete") {
       handleMoveFile("Home/~Trash");
     }
   }, [tempFile]);
@@ -165,8 +171,25 @@ const Student = ({
     ) {
       // prompt skip or replace
     } else {
+      // return if tempfile is frozen for uploading
+      if (
+        loadingBar.pathname &&
+        pathDest === "Home/~Trash" &&
+        loadingBar.pathname.includes(tempFile.content.pathname)
+      ) {
+        setMessage({
+          title: "Uh-oh!",
+          body: "Files are currently being uploaded inside this folder.",
+        });
+        return;
+      }
+
       // set cur dir to home directory if current directory was  moved to trash
-      if (pathDest === "Home/~Trash" && currentDirectory === tempFile.content) {
+      if (
+        !showTrash &&
+        pathDest === "Home/~Trash" &&
+        currentDirectory === tempFile.content
+      ) {
         setCurrentDirectory(explorerData);
       }
 
@@ -248,7 +271,7 @@ const Student = ({
       );
     }
 
-    const ret = uploadJsonToS3("prototypebucket-1", `${data.id}`, explorerData);
+    const ret = uploadJson(`${data.id}`, explorerData);
     // if (ret === -1) {
     //   setSplashMsg({
     //     message: "Upload failed!",
@@ -953,11 +976,13 @@ const Student = ({
                       <div
                         className="cursor-enabled"
                         onTouchEnd={() => {
-                          setNotesData("");
+                          currentDirectory.notes = "";
+                          // setNotesData("");
                           setMiniPanel("");
                         }}
                         onClick={() => {
-                          setNotesData("");
+                          currentDirectory.notes = "";
+                          // setNotesData("");
                           setMiniPanel("");
                         }}
                       >
@@ -993,7 +1018,15 @@ const Student = ({
           {owner.user === data.user && (
             <div className="right-panel-notes">
               {/* add NOTES components here */}
-              <Notes notesData={notesData} setNotesData={setNotesData} />
+
+              <Notes
+                // notesData={notesData}
+                // setNotesData={setNotesData}
+                data={data}
+                currentDirectory={currentDirectory}
+                explorerData={explorerData}
+                setSplashMsg={setSplashMsg}
+              />
             </div>
           )}
 
@@ -1131,6 +1164,7 @@ const Student = ({
               explorerData={explorerData}
               owner={owner}
               currentDirectory={currentDirectory}
+              setCurrentDirectory={setCurrentDirectory}
             />
           ) : currentFile ? (
             <FileContent
@@ -1149,6 +1183,7 @@ const Student = ({
               message={message}
               setMessage={setMessage}
               showingLeftPanel={showingLeftPanel}
+              loadingBar={loadingBar}
             />
           ) : (
             <FolderContent
@@ -1178,6 +1213,7 @@ const Student = ({
               setTempFile={setTempFile}
               handleMoveFile={handleMoveFile}
               setTrashItems={setTrashItems}
+              setLoadingBar={setLoadingBar}
             />
           )}
           <TinyFooter
@@ -1200,6 +1236,8 @@ const Student = ({
             explorerData={explorerData}
             setSplashMsg={setSplashMsg}
             message={message}
+            loadingBar={loadingBar}
+            setLoadingBar={setLoadingBar}
           />
         </div>
       </div>

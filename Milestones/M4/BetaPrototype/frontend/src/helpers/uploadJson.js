@@ -1,13 +1,17 @@
 import axios from "../api/axios";
 
-const uploadJsonToS3 = async (bucketName, key, jsonData) => {
+const uploadJson = async (key, jsonData) => {
   const adjustedKey = key + ".json";
+
+  console.log(jsonData);
   const stringifiedData = JSON.stringify(jsonData);
+  console.log(stringifiedData);
+
   const blob = new Blob([stringifiedData], { type: "application/json" });
   const formData = new FormData();
   formData.append("file", blob, adjustedKey);
   try {
-    axios.post(`/uploadJson/${adjustedKey}`, formData, {
+    await axios.post(`/uploadJson/${adjustedKey}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -19,4 +23,4 @@ const uploadJsonToS3 = async (bucketName, key, jsonData) => {
   }
 };
 
-export default uploadJsonToS3;
+export default uploadJson;

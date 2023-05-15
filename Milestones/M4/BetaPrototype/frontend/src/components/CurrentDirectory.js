@@ -17,6 +17,8 @@ import handleDrop from "../helpers/handleDrop";
 import handleDragOver from "../helpers/handleDrag";
 import downloadZip from "../helpers/downloadZip";
 import downloadFile from "../helpers/downloadFile";
+import uploadJson from "../helpers/uploadJson";
+import axios from "../api/axios";
 
 const CurrentDirectory = ({
   currentDirectory,
@@ -59,6 +61,7 @@ const CurrentDirectory = ({
         temp.push(currentDirectory.items[i].name);
       }
     }
+
     setPinnedItems(temp);
   }, [currentDirectory]);
 
@@ -88,9 +91,6 @@ const CurrentDirectory = ({
     if (loadData.type === "Folder") {
       downloadZip(loadData);
     } else {
-      /* send request instead of doing this, 
-      only call this if i already have the data 
-      on the frontend */
       downloadFile(loadData);
     }
   };
@@ -102,6 +102,23 @@ const CurrentDirectory = ({
 
       updatePathname(loadData, currentDirectory.pathname);
       handleSetInputFalse();
+
+      // update in db
+      const res = axios.put(`/file/${loadData.id}`, {
+        id: null,
+        fk_owner_id: null,
+        fk_comments_id: null,
+        fk_chatbot_id: null,
+        filename: adjustedInput,
+        visibility: loadData.visibility,
+      });
+
+      // update in bucket
+      const res1 = uploadJson(data.id, explorerData);
+      if (res1 === -1) {
+        console.log("failed to update home directory");
+        setMessage({ title: "Uh-oh!", body: "Failed to save changes." });
+      }
     }
   };
 
@@ -165,6 +182,13 @@ const CurrentDirectory = ({
         if (currentDirectory.items[index].name != temp[i]) temp2.push(temp[i]);
         setPinnedItems(temp2);
       }
+    }
+
+    console.log(explorerData);
+    const res = uploadJson(data.id, explorerData);
+    if (res === -1) {
+      console.log("failed to update home directory");
+      setMessage({ title: "Uh-oh!", body: "Failed to save changes." });
     }
   };
 

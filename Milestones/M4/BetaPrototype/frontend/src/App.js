@@ -10,8 +10,10 @@ import Student from "./pages/Student";
 import LearnMore from "./pages/LearnMore";
 import Credits from "./pages/Credits";
 import AboutUs from "./pages/AboutUs";
-import retreiveJSON from "./helpers/retreiveS3Bucket";
+import retreiveJSON from "./helpers/retrieveJson";
 import SplashMessage from "./components/SplashMessage";
+import initTrash from "./helpers/initializeTrash";
+import dummyFolder from "./data/dummyFolder";
 
 function App() {
   const [loading, setLoading] = useState(null);
@@ -36,7 +38,7 @@ function App() {
     lastName: "",
     email: "",
     password: "",
-    id: -1,
+    id: -1, // <- replace with generated access token from backend
   });
 
   useEffect(() => {
@@ -45,6 +47,9 @@ function App() {
     if (localStorage.getItem("data")) {
       handleAuthenticate();
     } else {
+      // this is here to prevent null pointer exception, when localhost is cleared
+      setExplorerData(dummyFolder);
+      setCurrentDirectory(dummyFolder);
       setLoading(true);
     }
   }, []);
@@ -55,17 +60,6 @@ function App() {
       element.focus();
     }
   }, [splashMsg]);
-
-  const initTrash = (folderData) => {
-    for (let i = 0; i < folderData.items.length; i++) {
-      if (folderData.items[i].name === "~Trash") {
-        setTrash(folderData.items[i]);
-        return 0;
-      }
-    }
-    console.log("failed to initilize trash");
-    return -1;
-  };
 
   // ------------ authenticate localstorage ----------- //
 
@@ -82,7 +76,7 @@ function App() {
         localStorage.clear();
         window.location.reload();
       } else {
-        retreiveJSON("prototypebucket-1", `${tempData.id}`).then((ret) => {
+        retreiveJSON(`${tempData.id}`).then((ret) => {
           if (ret === -1) {
             console.log("could not get user home directory");
             setLoading(false);
@@ -90,7 +84,7 @@ function App() {
           }
           setExplorerData(ret);
           setCurrentDirectory(ret);
-          const res = initTrash(ret);
+          const res = initTrash(ret, setTrash);
           if (res === -1) {
             setLoading(false);
           } else {
