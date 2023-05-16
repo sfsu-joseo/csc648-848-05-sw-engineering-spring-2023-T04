@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
         String newPassword = encoder.encode(newUser.getPassword());
         newUser.setPassword(newPassword);
+        generateToken(newUser);
         User savedUser = userRepository.save(newUser);
         return savedUser.getId().toString();
     }
@@ -55,6 +56,15 @@ public class UserServiceImpl implements UserService {
             return user.getId().toString(); // Returns true if password matches.
         } else {
             throw new InvalidCredentialsException();
+        }
+    }
+
+    public void generateToken(User user){
+        if(userRepository.findToken(user.getUser()) != null){
+            userRepository.updateUserToken(user.getToken(),user.getId());
+            user.setToken(user.getToken());
+        }else{
+            user.setToken(user.getToken());
         }
     }
 

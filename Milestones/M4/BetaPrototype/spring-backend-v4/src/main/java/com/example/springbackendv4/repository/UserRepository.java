@@ -46,5 +46,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
 
+    @Query(value = "SELECT token FROM registered_user WHERE user LIKE :user ", nativeQuery = true)
+    String findToken(@Param("user") String username);
+
+
+    @Modifying
+    @Query(value = "update registered_user u set u.token = :newtoken where u.id = :userId", nativeQuery = true)
+    void updateUserToken(@Param("newtoken") String newtoken, @Param("userId") Long userId);
 
 }

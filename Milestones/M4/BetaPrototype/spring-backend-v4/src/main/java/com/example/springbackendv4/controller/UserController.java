@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("http://54.215.216.18:3000/")
@@ -128,6 +129,13 @@ public class UserController {
         else {
             return ResponseEntity.status(HttpStatus.OK).body(result).getBody();
         }
+    }
+
+    @GetMapping("/shareLink")
+    public String generateLink(String username){
+        String token = userRepository.findToken(username);
+        String link = "http://www.studentsources.com/sources/" + token;
+        return link;
     }
 
     @GetMapping(value = "/findFriends/{user_id}")

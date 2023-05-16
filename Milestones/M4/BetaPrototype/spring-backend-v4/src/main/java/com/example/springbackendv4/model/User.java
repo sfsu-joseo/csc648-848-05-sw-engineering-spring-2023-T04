@@ -1,5 +1,6 @@
 package com.example.springbackendv4.model;
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Table(name = "RegisteredUser")
@@ -15,6 +16,8 @@ public class User {
     private String email;
     private String password;
     private Integer storageLeftInBytes = 1000_000_000; //1GB default storage space
+
+    private String token;
 
 
     public Long getId() {
@@ -71,6 +74,14 @@ public class User {
 
     public void setStorageLeftInBytes(Integer storageLeftInBytes) {
         this.storageLeftInBytes = storageLeftInBytes;
+    }
+
+    public String getToken() {
+        return UUID.randomUUID().toString();
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
 
