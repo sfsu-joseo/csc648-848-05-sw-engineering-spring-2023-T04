@@ -9,6 +9,7 @@ import com.example.springbackendv4.repository.TrashMasterRepository;
 import com.example.springbackendv4.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -104,6 +105,8 @@ public class StorageService {
         s3Client.deleteObject(bucketName, trashFolderPath);
     }
 
+
+
     public void emptyTrash(){
         //TODO: add logic to decrease storage size after deleting file from trash when implementing delete from trash.
         //Making a list of all the files in the trash bin
@@ -142,16 +145,6 @@ public class StorageService {
         return obj_keys;
     }
 
-    public void moveFile(String oldLocation, String newLocation) {
-        //creating a copy of the original file and placing in the trash folder
-        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(bucketName, oldLocation, bucketName, newLocation);
-        s3Client.copyObject(copyObjectRequest);
-
-        //deleting the original file
-        s3Client.deleteObject(bucketName, oldLocation);
-        //return fileName + " removed";
-    }
-
     public void moveFolder(String oldLocation, String newLocation){
         ObjectListing listings = s3Client.listObjects(bucketName, oldLocation);
         List<S3ObjectSummary> summaries = listings.getObjectSummaries();
@@ -166,6 +159,8 @@ public class StorageService {
 
     }
 
+
+
     private File convertMultiPartFileToFile(MultipartFile file) {
         File convertedFile = new File(file.getOriginalFilename());
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
@@ -175,5 +170,57 @@ public class StorageService {
         }
 
         return convertedFile;
+    }
+
+    //places the file at the specified path
+    public String uploadFileToDestination(MultipartFile file, String filePath)
+    {
+        //convert multipart file to file
+        File fileObject = convertMultiPartFileToFile(file);
+
+        //put object in specified path
+        s3Client.putObject(new PutObjectRequest(bucketName, filePath, fileObject));
+        fileObject.delete();
+        return("File uploaded to " + filePath);
+    }
+
+    //uploads empty folder to specified path
+    public String uploadFolderToDestination(String path){
+        s3Client.putObject(new PutObjectRequest(bucketName, path, "/"));
+        return "Folder created at " + path;
+    }
+
+    //move a file and delete
+    //used for delete
+    public void moveFile(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
+        //delete old file
+        s3Client.deleteObject(bucketName, fileKey);
+    }
+
+    //lists files and folders in a directory
+    //used for loading root dir and to view other dirs
+    public ArrayList<String> listDirectory(String path) {
+
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
+                .withBucketName(bucketName)
+                .withPrefix(path).withDelimiter("");
+
+        ObjectListing objects = s3Client.listObjects(listObjectsRequest);
+
+        List<S3ObjectSummary> summaries = objects.getObjectSummaries();
+        ArrayList<String> obj_keys = new ArrayList<>();
+
+        for (S3ObjectSummary objectSummary : summaries){
+            obj_keys.add(objectSummary.getKey());
+        }
+        return obj_keys;
+    }
+
+    //copy a file
+    public void copyFile(String fileKey, String newFileKey) {
+        //make a copy of the file with a new name
+        s3Client.copyObject(bucketName, fileKey, bucketName, newFileKey);
     }
 }
