@@ -8,7 +8,6 @@ import FileContent from "../components/FileContent";
 import explorer from "../data/folderData";
 import Comments from "../components/Comments";
 import CommentBox from "../components/CommentBox";
-import commentsData from "../data/commentsData";
 import Notes from "../components/Notes";
 import Info from "../components/Info";
 import Trash from "../components/Trash";
@@ -59,7 +58,7 @@ const Student = ({
 
   // const [notesData, setNotesData] = useState("");
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState(commentsData);
+  const [comments, setComments] = useState([]);
   const [files, setFiles] = useState(null);
   // const [loadingPDF, setLoadingPDF] = useState(null);
   const [scale, setScale] = useState({

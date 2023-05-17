@@ -163,7 +163,7 @@ const Signup = ({
         data.id = response.data;
 
         // send request to create root folder in db
-        const res = await axios.post(`/postFile/${data.id}/Home`);
+        const res = await axios.post(`/postFile/${data.id}/Home/Folder`);
 
         const tempExplorer = {
           id: res.data,
