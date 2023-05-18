@@ -95,7 +95,7 @@ const CurrentDirectory = ({
     }
   };
 
-  const handleRename = (e, loadData) => {
+  const handleRename = async (e, loadData) => {
     if (e.keyCode === 13 && e.target.value && validInput) {
       const adjustedInput = input.trim();
       loadData.name = adjustedInput;
@@ -104,7 +104,7 @@ const CurrentDirectory = ({
       handleSetInputFalse();
 
       // update in db
-      const res = axios.put(`/file/${loadData.id}`, {
+      const res = await axios.put(`/file/${loadData.id}`, {
         id: null,
         fk_owner_id: null,
         fk_comments_id: null,

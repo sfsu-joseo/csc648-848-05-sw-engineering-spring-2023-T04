@@ -124,14 +124,6 @@ const Inbox = ({ data }) => {
   const handleCreateChat = async (e) => {
     e.preventDefault();
     try {
-      // const res = await axios.post(
-      //   "/createGroupChat",
-      //   {
-      //     fk_owner_id: data.id,
-      //   },
-      //   chatPool
-      // );
-
       // adding owner to pool
       let adjustedPoolId = chatPoolId.slice();
       let adjustedPoolUser = chatPoolUser.slice();

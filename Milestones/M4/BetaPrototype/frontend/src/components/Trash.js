@@ -14,7 +14,6 @@ import handleDragOver from "../helpers/handleDrag";
 import handleDrop from "../helpers/handleDrop";
 import { useState } from "react";
 import uploadJson from "../helpers/uploadJson";
-import axios from "../api/axios";
 import parseAndDelete from "../helpers/deleteFiles";
 
 const Trash = ({

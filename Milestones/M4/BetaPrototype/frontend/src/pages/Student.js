@@ -123,6 +123,12 @@ const Student = ({
     window.scrollTo(0, 0);
 
     // ---------- request data from backend here ------------ //
+    getComments();
+
+    // set comments data whenever current directory or current file changes
+  }, [currentDirectory, currentFile]);
+
+  async function getComments() {
     let key = "";
     if (currentFile) {
       key = currentFile.id;
@@ -130,17 +136,14 @@ const Student = ({
       key = currentDirectory.id;
     }
     try {
-      axios.get(`getComments/${key}`).then((res) => {
-        setComments(res.data);
-      });
+      const res = await axios.get(`getComments/${key}`);
+      setComments(res.data);
     } catch (error) {
       console.log(error);
       setComments("");
       setSplashMsg({ message: "Failed to load comments." });
     }
-
-    // set comments data whenever current directory or current file changes
-  }, [currentDirectory, currentFile]);
+  }
 
   function getParentPath(pathString) {
     const pathArray = pathString.split("/");
@@ -1208,7 +1211,7 @@ const Student = ({
             style={owner.user !== data.user ? { height: "77.5%" } : {}}
           >
             {/* add COMMENTS components here */}
-            <Comments commentsData={comments} data={data} />
+            <Comments data={data} commentsData={comments} />
           </div>
         </div>
 

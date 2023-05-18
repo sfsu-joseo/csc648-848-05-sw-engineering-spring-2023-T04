@@ -42,7 +42,7 @@ const VisibilityPermissions = ({
       tempFile.content.visibility = visibility;
       tempFile.content.permissions = permissions;
 
-      const res = axios.put(`/file/${tempFile.content.id}`, {
+      const res = await axios.put(`/file/${tempFile.content.id}`, {
         id: null,
         fk_owner_id: null,
         fk_comments_id: null,

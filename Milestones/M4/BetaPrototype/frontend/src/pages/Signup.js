@@ -163,6 +163,7 @@ const Signup = ({
         data.id = response.data;
 
         // send request to create root folder in db
+
         const res = await axios.post(`/postFile/${data.id}/Home/Folder`);
 
         const tempExplorer = {
@@ -192,6 +193,7 @@ const Signup = ({
             },
           ],
         };
+
         const ret = uploadJson(`${data.id}`, tempExplorer);
         if (ret === -1) {
           setErrMsg("Could not create new account.");
