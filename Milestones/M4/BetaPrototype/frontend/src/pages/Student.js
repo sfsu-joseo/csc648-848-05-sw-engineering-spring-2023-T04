@@ -942,20 +942,20 @@ const Student = ({
             </div>
           )} */}
         </div>
-        {owner.user === data.user ? (
-          <div
-            className={
-              windowDimension.winWidth > 1200 && showingLeftPanel
-                ? "left-panel-textbox max-panel-width"
-                : showingLeftPanel
-                ? "left-panel-textbox medium-panel-width"
-                : "left-panel-textbox min-left-panel"
-            }
-          >
-            {/* add INPUT FIELD for CHATBOT here */}
-            {/* chatbot input field */}
-          </div>
-        ) : (
+        {/* {owner.user === data.user ? ( */}
+        <div
+          className={
+            windowDimension.winWidth > 1200 && showingLeftPanel
+              ? "left-panel-textbox max-panel-width"
+              : showingLeftPanel
+              ? "left-panel-textbox medium-panel-width"
+              : "left-panel-textbox min-left-panel"
+          }
+        >
+          {/* add INPUT FIELD for CHATBOT here */}
+          {/* chatbot input field */}
+        </div>
+        {/* ) : (
           <div
             className={
               windowDimension.winWidth > 1200
@@ -965,9 +965,9 @@ const Student = ({
                 : "left-panel-textbox min-left-panel"
             }
           >
-            {/* left empty for visiting users */}
+            
           </div>
-        )}
+        )} */}
 
         <div
           className={
