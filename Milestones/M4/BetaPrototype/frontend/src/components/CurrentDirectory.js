@@ -35,7 +35,6 @@ const CurrentDirectory = ({
   setTempFile,
   handleMoveFile,
   setSplashMsg,
-  setLoadingBar,
 }) => {
   const [pinnedItems, setPinnedItems] = useState([]);
 
@@ -230,8 +229,7 @@ const CurrentDirectory = ({
               setMessage,
               setSplashMsg,
               data,
-              owner,
-              setLoadingBar
+              owner
             )
           }
           onDragOver={(e) =>
@@ -589,8 +587,7 @@ const CurrentDirectory = ({
               setMessage,
               setSplashMsg,
               data,
-              owner,
-              setLoadingBar
+              owner
             )
           }
           onDragOver={(e) =>

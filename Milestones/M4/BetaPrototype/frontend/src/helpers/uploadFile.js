@@ -22,11 +22,21 @@ const uploadFile = async (key, file, setLoadingBar, pathname) => {
   };
 
   try {
-    const res = await axios.post(
-      `/uploadFile/${adjustedKey}`,
-      formData,
-      config
-    );
+    if (type === "mp4" || type === "mov") {
+      console.log("uploading video file");
+      console.log(adjustedKey);
+      const res = await axios.post(
+        `/streamUploadFile/${adjustedKey}`,
+        formData,
+        config
+      );
+    } else {
+      const res = await axios.post(
+        `/uploadFile/${adjustedKey}`,
+        formData,
+        config
+      );
+    }
 
     return 0;
   } catch (error) {

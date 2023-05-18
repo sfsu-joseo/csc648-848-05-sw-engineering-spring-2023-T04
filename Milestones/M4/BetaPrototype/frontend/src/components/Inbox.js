@@ -299,7 +299,7 @@ const Inbox = ({ data }) => {
                   xmlns="http://www.w3.org/2000/svg"
                   id="user-nav-icon"
                   fill="currentColor"
-                  style={{ height: "35px", width: "35px", marginRight: "10px" }}
+                  style={{ height: "25px", width: "25px", marginRight: "10px" }}
                   viewBox="0 0 16 16"
                 >
                   <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
@@ -353,11 +353,13 @@ const Inbox = ({ data }) => {
             </div>
             <div
               style={{
-                marginTop: "45px",
+                marginTop: "50px",
                 padding: "15px",
                 fontSize: "15px",
                 width: "100%",
                 color: "#3d3d3d",
+                height: "400px",
+                overflow: "scroll",
               }}
             >
               {!loadUsers && (
@@ -470,7 +472,7 @@ const Inbox = ({ data }) => {
             </div>
             <div
               className="right-panel-coments"
-              style={{ height: "423px", overflowX: "scroll" }}
+              style={{ height: "375px", marginTop: "50px" }}
             >
               <div className="commentsContainer" id="comment">
                 <ul className="commentList">{messageItems}</ul>
@@ -496,7 +498,7 @@ const Inbox = ({ data }) => {
                 <button
                   className="comment-send-button"
                   type="button"
-                  // onClick={addMessage}
+                  onClick={addMessage}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

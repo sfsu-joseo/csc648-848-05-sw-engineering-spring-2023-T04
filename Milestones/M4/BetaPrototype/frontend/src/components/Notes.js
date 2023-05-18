@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import uploadJson from "../helpers/uploadJson";
 
-const Notes = ({ data, currentDirectory, explorerData, setSplashMsg }) => {
-  const [notes, setNotes] = useState("");
+const Notes = ({
+  data,
+  notes,
+  setNotes,
+  currentDirectory,
+  explorerData,
+  setSplashMsg,
+}) => {
   const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {

@@ -43,6 +43,7 @@ const Student = ({
   const [currentFile, setCurrentFile] = useState(null);
   const [loading, setLoading] = useState(null);
   const [miniPanel, setMiniPanel] = useState("");
+  const [notes, setNotes] = useState("");
 
   const [dataUrl, setDataUrl] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
@@ -447,8 +448,8 @@ const Student = ({
     return `${day} ${month} ${year}`;
   }
 
-  const addComment = async () => {
-    //TODO: Instead of manipulating local data, use api's
+  const addComment = async (e) => {
+    e.preventDefault();
     const commentsCopy = comments.slice();
     const tempCommentInsert = {
       user: data.user,
@@ -1079,12 +1080,12 @@ const Student = ({
                         className="cursor-enabled"
                         onTouchEnd={() => {
                           currentDirectory.notes = "";
-                          // setNotesData("");
+                          setNotes("");
                           setMiniPanel("");
                         }}
                         onClick={() => {
                           currentDirectory.notes = "";
-                          // setNotesData("");
+                          setNotes("");
                           setMiniPanel("");
                         }}
                       >
@@ -1122,12 +1123,12 @@ const Student = ({
               {/* add NOTES components here */}
 
               <Notes
-                // notesData={notesData}
-                // setNotesData={setNotesData}
                 data={data}
                 currentDirectory={currentDirectory}
                 explorerData={explorerData}
                 setSplashMsg={setSplashMsg}
+                notes={notes}
+                setNotes={setNotes}
               />
             </div>
           )}

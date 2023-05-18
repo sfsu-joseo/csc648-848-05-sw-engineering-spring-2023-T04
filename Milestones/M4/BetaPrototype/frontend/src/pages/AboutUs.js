@@ -11,16 +11,17 @@ const AboutUs = ({ windowDimension }) => {
         <h1 className="legal-h1">About Us</h1> <br />
         <h1 className="legal-h2">Team Lead ~ Saru Shrestha</h1>
         <p className="legal-body">
-          Hey there! I am Saru Shrestha pursuing an Undergraduate degree in Computer Science from San Francisco State University.
-          I completed my Associates Degree in Computer Science and Mathematics from the College of San Mateo.
-          It is my last semester here at the SFSU. 
+          Hey there! I am Saru Shrestha pursuing an Undergraduate degree in
+          Computer Science from San Francisco State University. I completed my
+          Associates Degree in Computer Science and Mathematics from the College
+          of San Mateo. It is my last semester here at the SFSU.
           <br /> <br />
-          Connect with me on LinkedIn: {" "}
+          Connect with me on LinkedIn:{" "}
           <Link to={"https://linkedin.com/in/shresthasaru"} target="_blank">
             www.linkedin.com/in/shresthasaru
           </Link>
-          . Don't hesitate to reach out and send me a connection request to
-          stay connected and explore professional opportunities together.
+          . Don't hesitate to reach out and send me a connection request to stay
+          connected and explore professional opportunities together.
         </p>
         <br />
         <h1 className="legal-h2">Backend Lead ~ Elias Abay</h1>
