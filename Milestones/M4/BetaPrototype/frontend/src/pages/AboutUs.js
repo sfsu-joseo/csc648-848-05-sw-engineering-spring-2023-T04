@@ -11,38 +11,15 @@ const AboutUs = ({ windowDimension }) => {
         <h1 className="legal-h1">About Us</h1> <br />
         <h1 className="legal-h2">Team Lead ~ Saru Shrestha</h1>
         <p className="legal-body">
-          Meet Saru, an enthusiastic and driven computer science student who
-          thrives on the challenges and possibilities presented by the digital
-          world. With a deep-rooted passion for technology, she is on a constant
-          quest to expand her knowledge and skills.
+          Hey there! I am Saru Shrestha pursuing an Undergraduate degree in Computer Science from San Francisco State University.
+          I completed my Associates Degree in Computer Science and Mathematics from the College of San Mateo.
+          It is my last semester here at the SFSU. 
           <br /> <br />
-          With a keen interest in problem-solving and a natural curiosity about
-          how things work, Saru embarked on her educational journey in computer
-          science. Throughout her studies, she has delved into various aspects
-          of the field, including programming languages, algorithms, and
-          software development.
-          <br /> <br />
-          Driven by her desire for hands-on experience, Saru actively seeks
-          opportunities to apply her theoretical knowledge in practical
-          settings. She has actively contributed to projects and research,
-          collaborating with professions to gain invaluable real-world insights.
-          <br /> <br />
-          Outside of her computer science pursuits, Saru appreciates the
-          intersection of technology and the humanities. She believes in the
-          importance of combining technical expertise with creative thinking to
-          drive groundbreaking advancements.
-          <br /> <br />
-          As Saru continues her journey as a computer science student, she
-          remains committed to lifelong learning and personal growth. She is
-          eager to explore emerging technologies, stay updated on industry
-          trends, and contribute to the ever-expanding landscape of computer
-          science.
-          <br /> <br />
-          To connect with Saru on LinkedIn, please visit her LinkedIn profile at{" "}
+          Connect with me on LinkedIn: {" "}
           <Link to={"https://linkedin.com/in/shresthasaru"} target="_blank">
             www.linkedin.com/in/shresthasaru
           </Link>
-          . Don't hesitate to reach out and send her a connection request to
+          . Don't hesitate to reach out and send me a connection request to
           stay connected and explore professional opportunities together.
         </p>
         <br />
