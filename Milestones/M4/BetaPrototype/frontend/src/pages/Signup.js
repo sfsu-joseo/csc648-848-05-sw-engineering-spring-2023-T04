@@ -463,7 +463,7 @@ const Signup = ({
                       className="link"
                       target="_blank"
                       id=""
-                      to={"terms"}
+                      to={"/terms"}
                       onClick={() => window.scrollTo(0, 0)}
                     >
                       {" "}
@@ -890,7 +890,7 @@ const Signup = ({
                       className="link"
                       target="_blank"
                       id=""
-                      to={"terms"}
+                      to={"/terms"}
                       onClick={() => window.scrollTo(0, 0)}
                     >
                       {" "}

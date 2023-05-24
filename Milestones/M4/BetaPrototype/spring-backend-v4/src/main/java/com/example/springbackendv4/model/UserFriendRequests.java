@@ -3,8 +3,8 @@ package com.example.springbackendv4.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Requests")
-public class Requests {
+@Table(name = "UserFriendRequests")
+public class UserFriendRequests {
 
     //    NOTE: generic user data... should be updated later
     @Id
@@ -12,6 +12,10 @@ public class Requests {
     private Long id;
     private Long fk_sender_id;
     private Long fk_receiver_id;
+
+
+    // ------------------------------------ GETTERS & SETTERS ------------------------------------------- //
+
 
     public Long getId() {
         return id;

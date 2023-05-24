@@ -6,12 +6,15 @@ import javax.persistence.*;
 @Table(name = "SavedUser")
 public class SavedUser {
 
-    //    NOTE: generic user data... should be updated later
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long fk_user_id;
     private Long fk_item_id;
+
+
+    // ------------------------------------ GETTERS & SETTERS ------------------------------------------- //
+
 
     public Long getId() {
         return id;

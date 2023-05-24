@@ -1,7 +1,7 @@
 package com.example.springbackendv4.controller;
 
 import com.example.springbackendv4.exception.UserNotFoundException;
-import com.example.springbackendv4.model.Friends;
+import com.example.springbackendv4.model.UserFriends;
 import com.example.springbackendv4.repository.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("http://54.215.216.18:3000/")
-public class FriendsController {
+@CrossOrigin("*")
+public class UserFriendsController {
     @Autowired
     private FriendsRepository friendsRepository;
 
@@ -19,17 +19,17 @@ public class FriendsController {
 
 
     @PostMapping("/friend")
-    Friends friends(@RequestBody Friends friends){
-        return friendsRepository.save(friends);
+    UserFriends friends(@RequestBody UserFriends userFriends){
+        return friendsRepository.save(userFriends);
     }
 
     @GetMapping("/friends")
-    List<Friends> getAllFriends(){
+    List<UserFriends> getAllFriends(){
         return friendsRepository.findAll();
     }
 
     @GetMapping("/friends/{id}")
-    Friends getFriendsById(@PathVariable Long id){
+    UserFriends getFriendsById(@PathVariable Long id){
         return  friendsRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
     }

@@ -1,21 +1,19 @@
 package com.example.springbackendv4.service;
 
 
-import com.example.springbackendv4.dto.ResourceCommentRecord;
 import com.example.springbackendv4.model.ResourceComment;
 
 import java.util.List;
 
 public interface ResourceCommentService {
 
-
     List<ResourceComment> getAllCommentByUserId(Long userId);
 
-    List<ResourceComment> getAllCommentByResourceId(int resourceID);
+    List<ResourceComment> getAllCommentByResourceId(Long resourceID);
 
-    List<ResourceCommentRecord> getAllCommentDtoByResourceId(int resourceID);
+    List<ResourceComment> getAllCommentDtoByResourceId(Long resourceID);
 
-    void deleteByResourceId(int resourceID);
+    void deleteByResourceId(Long resourceID);
 
     void deleteByCommentId(Long commentId);
 

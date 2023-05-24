@@ -1,12 +1,10 @@
 package com.example.springbackendv4.model;
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "RegisteredUser")
-public class User {
+public class RegisteredUser {
 
-//    NOTE: generic user data... should be updated later
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,9 +13,9 @@ public class User {
     private String lastName;
     private String email;
     private String password;
-    private Integer storageLeftInBytes = 1000_000_000; //1GB default storage space
 
-    private String token;
+
+    // ------------------------------------ GETTERS & SETTERS ------------------------------------------- //
 
 
     public Long getId() {
@@ -44,14 +42,6 @@ public class User {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -68,20 +58,36 @@ public class User {
         this.password = password;
     }
 
-    public Integer getStorageLeftInBytes() {
-        return storageLeftInBytes;
-    }
+    public String getLastName() {
+       return lastName;
+   }
 
-    public void setStorageLeftInBytes(Integer storageLeftInBytes) {
-        this.storageLeftInBytes = storageLeftInBytes;
-    }
+   public void setLastName(String lastName) {
+       this.lastName = lastName;
+   }
 
-    public String getToken() {
-        return UUID.randomUUID().toString();
-    }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
+    // ------------------------------------ CURRENTLY NOT USED ------------------------------------------- //
+
+
+//    private Integer storageLeftInBytes = 1000_000_000; //1GB default storage space
+
+//    private String token;
+
+//    public Integer getStorageLeftInBytes() {
+//        return storageLeftInBytes;
+//    }
+//
+//    public void setStorageLeftInBytes(Integer storageLeftInBytes) {
+//        this.storageLeftInBytes = storageLeftInBytes;
+//    }
+//
+//    public String getToken() {
+//        return UUID.randomUUID().toString();
+//    }
+//
+//    public void setToken(String token) {
+//        this.token = token;
+//    }
 }
 
