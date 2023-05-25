@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface FriendRequestsRepository extends JpaRepository<UserFriendRequests, Long> {
-    @Query(value = "select * from requests where fk_sender_id like :user_id", nativeQuery = true)
+    @Query(value = "select * from user_friend_requests where fk_sender_id like :user_id", nativeQuery = true)
     List<UserFriendRequests> getSent(@Param("user_id") Long user_id);
 
     @Transactional
     @Modifying
-    @Query(value = "delete from requests where fk_sender_id like :receiver_id and fk_receiver_id like :sender_id", nativeQuery = true)
+    @Query(value = "delete from user_friend_requests where fk_sender_id like :receiver_id and fk_receiver_id like :sender_id", nativeQuery = true)
     void deleteRequest(@Param("receiver_id") Long receiver_id, @Param("sender_id") Long sender_id);
 }

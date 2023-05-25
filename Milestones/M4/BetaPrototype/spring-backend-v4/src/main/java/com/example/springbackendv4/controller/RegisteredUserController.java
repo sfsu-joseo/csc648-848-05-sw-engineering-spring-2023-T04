@@ -73,20 +73,22 @@ public class RegisteredUserController {
     //   --------------------- MODIFIED MAPPING (refer to UserRepository for more info) --------------------
 
     @GetMapping(value = "/login/{user}/{password}")
-    public Long findByName(@PathVariable("user") String user, @PathVariable("password") String password) {
+    public RegisteredUser findByName(@PathVariable("user") String user, @PathVariable("password") String password) {
         RegisteredUser res = registeredUserRepository.findUsers(user);
 
 //        USERNAME OR EMAIL DOES NOT EXIST
         if(res == null) {
-            return -1L;
+            res = new RegisteredUser();
+            res.setId(-1L);
+            return res;
         }
 
 //        PASSWORD DOES NOT MATCH
         else if (!Objects.equals(res.getPassword(), password)) {
-            System.out.println("this is being printed");
-            return -2L;
+            res.setId(-2L);
+            return res;
         } else {
-            return res.getId();
+            return res;
         }
     }
 

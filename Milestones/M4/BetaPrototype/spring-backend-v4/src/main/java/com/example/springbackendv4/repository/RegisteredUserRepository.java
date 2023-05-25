@@ -21,7 +21,7 @@ public interface RegisteredUserRepository extends JpaRepository<RegisteredUser, 
     @Query(value = "SELECT * FROM registered_user WHERE email LIKE :email", nativeQuery = true)
     RegisteredUser checkEmail(@Param("email") String email);
 
-    @Query(value = "SELECT * FROM registered_user WHERE user LIKE :query OR first_name LIKE :query OR last_name LIKE :query", nativeQuery = true)
+    @Query(value = "SELECT * FROM registered_user WHERE user LIKE :query OR first_name LIKE :query OR last_name LIKE :query OR CONCAT(first_name, last_name) like :query", nativeQuery = true)
     List<RegisteredUser> searchUsersByUsername(@Param("query") String query);
 
     @Query(value = "SELECT * FROM registered_user WHERE id IN (SELECT fk_friend_id FROM user_friends WHERE fk_user_id LIKE :user_id)", nativeQuery = true)
