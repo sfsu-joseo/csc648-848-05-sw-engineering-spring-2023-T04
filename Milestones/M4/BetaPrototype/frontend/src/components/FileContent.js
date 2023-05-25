@@ -46,7 +46,7 @@ const FileContent = ({
     } else if (["mp4", "mov"].includes(currentFile.type)) {
       try {
         const adjustedKey = currentFile.id + "." + currentFile.type;
-        setVideoSrc(`http://localhost:8080/streamVideo/${adjustedKey}`);
+        setVideoSrc(`/streamVideo/${adjustedKey}`);
         setLoading(false);
       } catch (err) {
         console.log(
