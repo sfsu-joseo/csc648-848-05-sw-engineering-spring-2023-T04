@@ -1,40 +1,45 @@
-package com.example.springbackendv4.service.impl;
 
-import com.example.springbackendv4.model.Note;
-import com.example.springbackendv4.repository.NoteRepository;
-import com.example.springbackendv4.service.NoteService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+// ------------------------------------ CURRENTLY NOT USED ------------------------------------------- //
 
-@Service
-public class NoteServiceImpl implements NoteService {
 
-    @Autowired
-    NoteRepository repository;
-    @Override
-    public Note getLatestNoteByUserId(Long userId) {
-        return repository.findLatestNoteByUserId(userId);
-    }
-
-    @Override
-    public List<Note> getAllNotesByUserId(Long userId) {
-        return repository.findAllByUserId(userId);
-    }
-
-    @Override
-    public void updateNoteText(Long noteId, String text) {
-        repository.updateNoteTextById(noteId, text);
-    }
-
-    @Override
-    public Note saveOrUpdateNote(Note note) {
-        return repository.save(note);
-    }
-
-    @Override
-    public Note getLatestNoteByResourceId(int resourceID) {
-        return repository.findLatestNoteByResourceId(resourceID);
-    }
-}
+//package com.example.springbackendv4.service.impl;
+//
+//import com.example.springbackendv4.model.Note;
+//import com.example.springbackendv4.repository.NoteRepository;
+//import com.example.springbackendv4.service.NoteService;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.List;
+//
+//@Service
+//public class NoteServiceImpl implements NoteService {
+//
+//    @Autowired
+//    NoteRepository repository;
+//    @Override
+//    public Note getLatestNoteByUserId(Long userId) {
+//        return repository.findLatestNoteByUserId(userId);
+//    }
+//
+//    @Override
+//    public List<Note> getAllNotesByUserId(Long userId) {
+//        return repository.findAllByUserId(userId);
+//    }
+//
+//    @Override
+//    public void updateNoteText(Long noteId, String text) {
+//        repository.updateNoteTextById(noteId, text);
+//    }
+//
+//    @Override
+//    public Note saveOrUpdateNote(Note note) {
+//        return repository.save(note);
+//    }
+//
+//    @Override
+//    public Note getLatestNoteByResourceId(int resourceID) {
+//        return repository.findLatestNoteByResourceId(resourceID);
+//    }
+//}

@@ -150,6 +150,7 @@ const Inbox = ({ data }) => {
       // temp set groups
       let copyGroups = groups.slice();
       copyGroups.push({
+        fk_owner_id: data.id,
         id: res.data.id,
         groupName: groupName,
         totalMembers: adjustedPoolId.length,

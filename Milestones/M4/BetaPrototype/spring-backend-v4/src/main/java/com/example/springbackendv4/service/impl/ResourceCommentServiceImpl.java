@@ -1,6 +1,5 @@
 package com.example.springbackendv4.service.impl;
 
-import com.example.springbackendv4.dto.ResourceCommentRecord;
 import com.example.springbackendv4.model.ResourceComment;
 import com.example.springbackendv4.repository.ResourceCommentRepository;
 import com.example.springbackendv4.service.ResourceCommentService;
@@ -21,17 +20,17 @@ public class ResourceCommentServiceImpl implements ResourceCommentService {
     }
 
     @Override
-    public List<ResourceCommentRecord> getAllCommentDtoByResourceId(int resourceId) {
-        return repository.findAllResourceCommentDTOByResourceID(resourceId);
+    public List<ResourceComment> getAllCommentDtoByResourceId(Long resourceId) {
+        return repository.findAllByFileId(resourceId);
     }
 
     @Override
-    public List<ResourceComment> getAllCommentByResourceId(int resourceId) {
+    public List<ResourceComment> getAllCommentByResourceId(Long resourceId) {
         return repository.findAllByResourceId(resourceId);
     }
 
     @Override
-    public void deleteByResourceId(int resourceId) {
+    public void deleteByResourceId(Long resourceId) {
         repository.deleteByResourceId(resourceId);
     }
 

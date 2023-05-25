@@ -4,14 +4,16 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "UserFriends")
-public class Friends {
+public class UserFriends {
 
-    //    NOTE: generic user data... should be updated later
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long fk_user_id;
     private Long fk_friend_id;
+
+
+    // ------------------------------------ GETTERS & SETTERS ------------------------------------------- //
 
 
     public Long getId() {

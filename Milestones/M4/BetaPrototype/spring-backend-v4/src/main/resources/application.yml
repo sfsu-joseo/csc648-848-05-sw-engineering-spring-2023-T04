@@ -1,19 +1,27 @@
 cloud:
   aws:
     credentials:
-      access-key: AKIAT7XIBPZB52ONWOU4
-      secret-key: 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
+      #      ss-files (bucket containing individual raw files)
+      access-key1:
+      secret-key1:
+
+      #      ss-json (bucket containing JSON of users home directory)
+      access-key2:
+      secret-key2:
     region:
       static: us-west-1
     stack:
       auto: false
 
 application:
-  bucket:
-    name: studentsources
+  bucket1:
+    #    ss-files
+    name1:
+  bucket2:
+    #    ss-json
+    name2:
 
 server:
   tomcat:
     max-swallow-size: -1
     max-http-form-post-size: -1
-

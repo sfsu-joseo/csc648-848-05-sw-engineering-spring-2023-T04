@@ -5,38 +5,44 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 
-// NEW TABLE
 
 @Entity
-@Table(name = "resourceComment")
+@Table(name = "ResourceComments")
 public class ResourceComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "commentID", nullable = false, unique = true)
-    private int commentID;
-
-    @Column(name = "comment", nullable = false, columnDefinition = "TINYTEXT")
-    private String comment;
+    private Long id;
 
     @CreationTimestamp
-    @Column(name = "commentDate", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Temporal(TemporalType.DATE)
-    private Date commentDate;
+    private Date comment_date;
 
-    @Column(name = "resourceID", nullable = false)
-    private int resourceID;
+    private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "userID", nullable = false)
-    private User user;
+    private Long fk_file_id;
 
-    public int getCommentID() {
-        return commentID;
+    private Long fk_user_id;
+
+
+    // ------------------------------------ GETTERS & SETTERS ------------------------------------------- //
+
+
+    public Long getId() {
+        return id;
     }
 
-    public void setCommentID(int commentID) {
-        this.commentID = commentID;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getComment_date() {
+        return comment_date;
+    }
+
+    public void setComment_date(Date comment_date) {
+        this.comment_date = comment_date;
     }
 
     public String getComment() {
@@ -47,27 +53,19 @@ public class ResourceComment {
         this.comment = comment;
     }
 
-    public Date getCommentDate() {
-        return commentDate;
+    public Long getFk_file_id() {
+        return fk_file_id;
     }
 
-    public void setCommentDate(Date commentDate) {
-        this.commentDate = commentDate;
+    public void setFk_file_id(Long fk_file_id) {
+        this.fk_file_id = fk_file_id;
     }
 
-    public int getResourceID() {
-        return resourceID;
+    public Long getFk_user_id() {
+        return fk_user_id;
     }
 
-    public void setResourceID(int resourceID) {
-        this.resourceID = resourceID;
-    }
-
-    public User getRegisteredUser() {
-        return user;
-    }
-
-    public void setRegisteredUser(User registeredUser) {
-        this.user = registeredUser;
+    public void setFk_user_id(Long fk_user_id) {
+        this.fk_user_id = fk_user_id;
     }
 }
